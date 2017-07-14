@@ -216,6 +216,9 @@
     
     
     self.switch_choose.frame = CGRectMake(220, 65, 75, 20);
+//    if ([self.isPartner isEqualToString:@"yes"]) {
+//        self.switch_choose.userInteractionEnabled = NO;
+//    }
     [content addSubview:self.switch_choose];
     
     
@@ -369,15 +372,15 @@
     [backView removeFromSuperview];
 }
 
-- (void)changeAction:(UISwitch *)sender {//本人||非本人
-    //    NSLog(@"%d", sender.on);
+- (void)changeAction:(LQXSwitch *)sender {//本人||非本人
+    if ([self.isPartner isEqualToString:@"yes"]) {
+        sender.on = NO;
+        [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"不能为他人开合伙人" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+        } controller:self];
+        return;
+    }
+    
     if (sender.on) {
-        if ([self.isPartner isEqualToString:@"yes"]) {
-            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"不能为他人开合伙人" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
-                
-            } controller:self];
-            return;
-        }
         self.isReal = YES;
     } else {
         self.isReal = NO;
@@ -397,7 +400,7 @@
     NSLog(@"%@---%@", ttt, ttt.text);
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":self.cashCount,@"subProductId":@"3",@"isSelf":[NSString stringWithFormat:@"%d", !self.switch_choose.on],@"transUserCardInfo":@{@"cardHolderName":@"李四",@"cardIdentityNo":@"440402198800000000",@"cardIdentityType":@"01",@"cardNo":[NSString stringWithFormat:@"62220240000198100%@", ttt.text],@"cardPhoneNo":@"13800130000",@"cvn":@"123",@"expDate":@"22"}}] forKey:@"transc.placeOrder"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":self.cashCount,@"subProductId":[self.isPartner isEqualToString:@"yes"]?@"65502":@"3",@"isSelf":[NSString stringWithFormat:@"%d", !self.switch_choose.on],@"transUserCardInfo":@{@"cardHolderName":@"李四",@"cardIdentityNo":@"440402198800000000",@"cardIdentityType":@"01",@"cardNo":[NSString stringWithFormat:@"62220240000198100%@", ttt.text],@"cardPhoneNo":@"13800130000",@"cvn":@"123",@"expDate":@"22"}}] forKey:@"transc.placeOrder"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {

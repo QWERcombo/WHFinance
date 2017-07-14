@@ -215,7 +215,7 @@
     //subProductId 3 无卡支付
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":self.cashCount,@"subProductId":@"3",@"transUserCardId":self.selectedCard.tid}] forKey:@"transc.placeOrderByCardInfo"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":self.cashCount,@"subProductId":[self.isPartner isEqualToString:@"yes"]?@"65502":@"3",@"transUserCardId":self.selectedCard.tid}] forKey:@"transc.placeOrderByCardInfo"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {

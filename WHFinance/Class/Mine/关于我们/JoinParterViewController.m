@@ -178,6 +178,7 @@
         NoCardPayViewController *no = [NoCardPayViewController new];
         no.isPartner = @"yes";
         no.cashCount = @"399";
+        pay.proudctDetailId = @"65502";
         [self.navigationController pushViewController:no animated:YES];
         return;
     } else {
