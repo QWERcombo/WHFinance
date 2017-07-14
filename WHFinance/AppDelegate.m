@@ -7,9 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import "MainLoginViewController.h"
+#import "ViewController.h"
+
 
 @interface AppDelegate ()
-
+@property(nonatomic,strong)UIImageView *splashImageView;//闪屏页
 @end
 
 @implementation AppDelegate
@@ -17,7 +20,111 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [self theSplashScreen];//加载闪屏页
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:1 animations:^{
+            self.window.rootViewController.view.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            [self.splashImageView removeFromSuperview];
+            
+            [[UtilsData sharedInstance] loginPlan:nil success:^(UserData *user) {//登入
+                TBTabBarController *tabBarC = [[TBTabBarController alloc] init];
+                [tabBarC setupchildVc:nil];
+                self.window.rootViewController = tabBarC;
+            } failure:^(UserData *user) {//登出
+                MainLoginViewController *loginVC = [[MainLoginViewController alloc] init];
+                TBNavigationController *navigat = [[TBNavigationController alloc] initWithRootViewController:loginVC];
+                self.window.rootViewController = navigat;
+            }];
+            
+            [self showGuideView];//加载引导图
+            
+        }];
+    });
+    
+    [self addUmengSocial];//配置友盟
+    
     return YES;
+}
+
+- (void)addUmengSocial {
+    [[UMSocialManager defaultManager] openLog:YES];
+    [[UMSocialManager defaultManager] setUmSocialAppkey:UmengAppkey];
+    
+    /* 设置微信的appKey和appSecret */
+//    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wxdc1e388c3822c80b" appSecret:@"3baf1193c85774b3fd9d18447d76cab0" redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx81c026b3f00ca9c1" appSecret:@"43898ddcbf7279214319a47d20f9957f" redirectURL:@"http://mobile.umeng.com/social"];
+    /*
+     * 移除相应平台的分享，如微信收藏
+     */
+    //[[UMSocialManager defaultManager] removePlatformProviderWithPlatformTypes:@[@(UMSocialPlatformType_WechatFavorite)]];
+    
+    /* 设置分享到QQ互联的appID
+     * U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。
+     */
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105821097"/*设置QQ平台的appID*/  appSecret:nil redirectURL:@"http://mobile.umeng.com/social"];
+    
+    /* 设置新浪的appKey和appSecret */
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"3921700954"  appSecret:@"04b48b094faeb16683c32669824ebdad" redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
+    
+}
+
+//#define __IPHONE_10_0    100000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > 100000
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
+{
+    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响。
+    BOOL result = [[UMSocialManager defaultManager]  handleOpenURL:url options:options];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
+}
+
+#endif
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响
+    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url sourceApplication:sourceApplication annotation:annotation];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
+}
+
+
+- (void)theSplashScreen//闪屏
+{
+    self.window.rootViewController.view.alpha = 0;
+    self.splashImageView = [[UIImageView alloc]initWithImage:IMG(@"Default")];
+    self.splashImageView.frame = [UIScreen mainScreen].bounds;
+    [self.window addSubview:self.splashImageView];
+    
+}
+-(void)showGuideView{//加载引导图
+    NSMutableArray *images = [NSMutableArray new];
+    for (int i = 0; i < 3; i ++) {
+        NSString *imgStr  = [NSString stringWithFormat:@"guide_%d",i];
+        UIImage *IMG = IMG(imgStr);
+        if (IMG) {
+            [images addObject:IMG];
+        }
+    }
+    if (images.count > 0) {
+        [[TBGuideViewManager sharedInstance] showGuideViewWithImages:images andButtonTitle:@"立即进入" andButtonTitleColor:[UIColor whiteColor] andButtonBGColor:[UIColor mianColor:1] andButtonBorderColor:[UIColor whiteColor]];
+    }
 }
 
 

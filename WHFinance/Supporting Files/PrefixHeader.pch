@@ -1,0 +1,127 @@
+//
+//  PrefixHeader.pch
+//  WHFinance
+//
+//  Created by wanhong on 2017/6/22.
+//  Copyright © 2017年 wanhong. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import "Defines.h"
+
+//Frameworks
+#import "AFNetworking.h"
+#import "Masonry.h"
+#import "UIImageView+WebCache.h"
+#import "MBProgressHUD.h"
+#import "JSONModel.h"
+#import "MJRefresh.h"
+#import "MHTextField.h"
+#import <FMDB.h>
+
+//Categories
+#import "UIColor+YXP.h"
+#import "UIButton+YXP.h"
+#import "UIFont+YXP.h"
+#import "UILabel+YXP.h"
+#import "UIImageView+YXP.h"
+#import "UIImage+YXP.h"
+#import "UIView+UIViewAddition.h"
+#import "NSMutableDictionary+YXP.h"
+#import "PlistManager.h"
+#import "NSString+MD5.h"
+#import "UITableView+TB.h"
+#import "UICollectionView+TB.h"
+#import "UITabBar+TB.h"
+#import "NSData+NEUAES.h"
+#import "UIBarButtonItem+Badge.h"
+#import "UIButton+Badge.h"
+
+
+
+//Extension
+#import "CIImage+Extension.h"
+#import "UITextField+Extension.h"
+
+
+//Base
+#import "BaseCell.h"
+#import "BaseViewController.h"
+#import "BaseModel.h"
+#import "TBNavigationController.h"
+#import "TBTabBarController.h"
+
+
+//Utils
+#import "YXPUtil.h"
+#import "UserData.h"
+#import "UtilsData.h"
+#import "DataSend.h"
+#import "UtilsMold.h"
+#import "NEUSecurityUtil.h"
+#import "NEUBase64.h"
+#import "NEUDefines.h"
+#import "NSData+NEUAES.h"
+#import "PublicFuntionTool.h"
+#import "DataForFMDB.h"
+#import "RSAEncryptor.h"
+
+//Vender
+#import <UMSocialCore/UMSocialCore.h>
+
+
+//Tool
+#import "ChooseView.h"
+#import "JXButton.h"
+#import "TBGuideView.h"
+#import "ZZPhotoKit.h"
+//二维码
+#import <CoreImage/CoreImage.h>
+#import "PellTableViewSelect.h"
+#import "CustomTextField.h"
+#import "ZLDashboardView.h"
+#import "WebViewController.h"
+#import "LQXSwitch.h"
+#import "SharePopView.h"
+#import "LineView.h"
+
+
+
+
+
+//Model
+#import "MessageModel.h"
+#import "IconModel.h"
+#import "PayModeModel.h"
+#import "BillModel.h"
+#import "TransOrder.h"
+#import "SettlementOrder.h"
+#import "BankModel.h"
+#import "BankCardModel.h"
+#import "MyProfitModel.h"
+
+
+
+
+
+
+//Cell
+#import "PayTypeCollectionViewCell.h"
+
+
+
+
+
+#define DEVICE_TYPE_IPAD  ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+
+#endif
+//代码添加后 真机不再输出Nslog 以节省时间和内存占有量（nslog 开关）
+#ifndef __OPTIMIZE__
+#define NSLog(...) NSLog(__VA_ARGS__)
+#else
+#define NSLog(...) {}
+
+
+#endif /* PrefixHeader_pch */
