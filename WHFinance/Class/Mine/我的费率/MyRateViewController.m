@@ -66,6 +66,10 @@
     
     
     UIButton *join = [UIButton buttonWithTitle:@"更多利润返佣？快速加入创业合伙人 >>" andFont:FONT_ArialMT(12) andtitleNormaColor:[UIColor Grey_OrangeColor] andHighlightedTitle:[UIColor Grey_OrangeColor] andNormaImage:nil andHighlightedImage:nil];
+    if ([[UserData currentUser].isPartner integerValue]==1) {
+        [join addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [join setTitle:@"已是合伙人" forState:UIControlStateNormal];
+    }
     [mainView addSubview:join];
     [join mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(imgv.mas_bottom);
@@ -77,7 +81,7 @@
         }
         
     }];
-    [join addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
     
     UILabel *label = [UILabel lableWithText:@"如果每月交易五万，预计一年可节省1020元" Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
     [mainView addSubview:label];

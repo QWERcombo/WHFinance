@@ -12,10 +12,11 @@
 #import "BindedCardViewController.h"
 #import "JoinParterViewController.h"
 
-@interface NoCardPayViewController () {
+@interface NoCardPayViewController ()<RadioSelectDelegate> {
     NSIndexPath* preSelect;
 }
-@property (nonatomic, strong) BankCardModel *selectedCard;//选中的银行卡tid
+@property (nonatomic, strong) BankCardModel *selectedCard;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;//选中的银行卡tid
 @end
 
 @implementation NoCardPayViewController
@@ -24,7 +25,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"无卡支付";
-//    preSelect = -1;
     
     [self setUpSubviews];
     [self getCardInfomationList];
@@ -46,30 +46,15 @@
         return 0;
     }
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BankCardModel *model = [self.dataMuArr objectAtIndex:indexPath.row];
-    return [UtilsMold creatCell:@"BankCardChooseCell" table:tableView deledate:self model:model data:indexPath andCliker:^(NSDictionary *clueDic) {
-        if ([clueDic[@"clueStr"] isEqualToString:@"1"]) {
-            self.selectedCard = model;
-            //获取选中的银行卡
-            model.isSelectedCard = YES;
-            [self.dataMuArr removeObjectAtIndex:indexPath.row];
-            [self.dataMuArr insertObject:model atIndex:indexPath.row];
-            NSIndexPath *tmpIndexpath=[NSIndexPath indexPathForRow:indexPath.row inSection:0];
-            [self.tabView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:tmpIndexpath, nil] withRowAnimation:UITableViewRowAnimationNone];
-            //取消之前选中
-//            if (preSelect != -1) {
-//                BankCardModel *preModel = [self.dataMuArr objectAtIndex:preSelect];
-//                preModel.isSelectedCard = NO;
-//                [self.dataMuArr removeObjectAtIndex:preSelect];
-//                [self.dataMuArr insertObject:preModel atIndex:preSelect];
-//                NSIndexPath *pretmpIndexpath=[NSIndexPath indexPathForRow:preSelect inSection:0];
-//                [self.tabView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:pretmpIndexpath, nil] withRowAnimation:UITableViewRowAnimationNone];
-//            }
-//             preSelect = indexPath;
-            
-        }
+    BankCardChooseCell *cell = (BankCardChooseCell *)[UtilsMold creatCell:@"BankCardChooseCell" table:tableView deledate:self model:model data:indexPath andCliker:^(NSDictionary *clueDic) {
+
     }];
+    cell.delegate = self;
+    cell.tableView = tableView;
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -94,10 +79,23 @@
         return 60;
     }
 }
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+#pragma mark - RadioSelectDelegate
+- (void)radioSelectedWithIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *tempIndexPath = self.lastIndexPath;
+    // 改变上一次的
+    if (tempIndexPath && tempIndexPath != indexPath) {
+        BankCardModel *model =  self.dataMuArr[tempIndexPath.row];
+        model.isSelectedCard = NO;
+        [self.tabView reloadRowsAtIndexPaths:@[tempIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    // 记住这一次的
+    BankCardModel *model =  self.dataMuArr[indexPath.row];
+    model.isSelectedCard = YES;
+    [self.tabView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    self.lastIndexPath = indexPath;
+    //接下来可以保存你选中的做需要做的事情。
     
-    
+    self.selectedCard = model;
 }
 
 #pragma mark - init subviews
@@ -160,7 +158,7 @@
         make.left.top.right.equalTo(content);
     }];
     
-    UIView *vvv = [UIView joinUsWithStatus:YES];
+    UIView *vvv = [UIView joinUsWithStatus:[[UserData currentUser].isPartner integerValue]==1?YES:NO];
     [topView addSubview:vvv];
     [vvv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(topView.mas_centerY);
@@ -230,8 +228,10 @@
 }
 
 - (void)vvvTap:(UITapGestureRecognizer *)sender {//加入创业合伙人
-    JoinParterViewController *join = [JoinParterViewController new];
-    [self.navigationController pushViewController:join animated:YES];
+    if (![[UserData currentUser].isPartner isEqualToString:@"1"]) {
+        JoinParterViewController *join = [JoinParterViewController new];
+        [self.navigationController pushViewController:join animated:YES];
+    }
 }
 
 

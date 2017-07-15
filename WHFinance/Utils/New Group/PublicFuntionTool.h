@@ -26,4 +26,8 @@ AS_SINGLETON(PublicFuntionTool);
 //图片转base64字符串
 - (NSString *)getBase64StringFrom:(UIImage *)image;
 
+//获取实名认证的状态 YES是NO否
+- (BOOL)getRealName;
+
+
 @end

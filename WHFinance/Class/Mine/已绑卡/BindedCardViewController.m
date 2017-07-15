@@ -126,7 +126,7 @@
         make.left.top.right.equalTo(content);
     }];
     
-    UIView *vvv = [UIView joinUsWithStatus:NO];
+    UIView *vvv = [UIView joinUsWithStatus:[[UserData currentUser].isPartner integerValue]==1?YES:NO];
     [topView addSubview:vvv];
     [vvv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(topView.mas_centerY);
@@ -216,9 +216,6 @@
     
     
     self.switch_choose.frame = CGRectMake(220, 65, 75, 20);
-//    if ([self.isPartner isEqualToString:@"yes"]) {
-//        self.switch_choose.userInteractionEnabled = NO;
-//    }
     [content addSubview:self.switch_choose];
     
     
@@ -439,8 +436,10 @@
     dispatch_resume(_timer);
 }
 - (void)vvvTap:(UITapGestureRecognizer *)sender {//加入创业合伙人
-    JoinParterViewController *join = [JoinParterViewController new];
-    [self.navigationController pushViewController:join animated:YES];
+    if (![[UserData currentUser].isPartner isEqualToString:@"1"]) {
+        JoinParterViewController *join = [JoinParterViewController new];
+        [self.navigationController pushViewController:join animated:YES];
+    }
 }
 
 - (void)payAction:(UIButton *)sender {

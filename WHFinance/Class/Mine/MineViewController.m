@@ -50,27 +50,10 @@
     self.nameArray2 = @[@[@"mine_choose_0",@"实名认证"],@[@"mine_choose_1",@"客服电话"],@[@"mine_choose_2",@"设置"]];
     self.nameArr = @[@"享受收款超低费率",@"享受100元每人直推返佣",@"办大额信用卡快速贷款",@"享受客服热线等更多服务"];
     
-    
-    if ([[UserData currentUser].isPartner integerValue]!=1) {
-        [self setUpBarItems];
-    }
     [self setUpSubviews];
-    [self getRealName];
 }
 
 #pragma mark - SetUpSubViews
-- (void)setUpBarItems {
-    UIButton *right_f = [UIButton buttonWithTitle:@"加入合伙人" andFont:FONT_ArialMT(13) andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:nil andHighlightedImage:nil];
-    right_f.frame = CGRectMake(0, 0, 75, 30);
-    [right_f setImage:IMG(@"mine_join") forState:UIControlStateNormal];
-    right_f.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
-    right_f.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [right_f addTarget:self action:@selector(right_f_Action:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *right_first = [[UIBarButtonItem alloc] initWithCustomView:right_f];
-    self.navigationItem.rightBarButtonItems = @[right_first];
-    
-}
-
 - (void)setUpSubviews {
     [self.view addSubview:self.tabView];
     self.tabView.backgroundColor = [UIColor Grey_BackColor1];
@@ -145,6 +128,7 @@
         SettingViewController *newcard = [SettingViewController new];
         [self.navigationController pushViewController:newcard animated:YES];
     }
+    
 }
 
 
@@ -165,20 +149,22 @@
         make.height.equalTo(@(18));
         make.top.equalTo(mainView.mas_top).offset(33);
     }];
-    UIButton *right_f = [UIButton buttonWithTitle:@"加入合伙人" andFont:FONT_ArialMT(13) andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:nil andHighlightedImage:nil];
-    [right_f setImage:IMG(@"mine_join") forState:UIControlStateNormal];
-    right_f.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
-    right_f.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [right_f addTarget:self action:@selector(right_f_Action:) forControlEvents:UIControlEventTouchUpInside];
-    [mainView addSubview:right_f];
-    [right_f mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@(90));
-        make.height.equalTo(@(20));
-        make.right.equalTo(mainView.mas_right).offset(-10);
-        make.centerY.equalTo(titleLab.mas_centerY);
-    }];
-    
-    
+    if ([[UserData currentUser].isPartner integerValue]!=1) {
+        
+        UIButton *right_f = [UIButton buttonWithTitle:@"加入合伙人" andFont:FONT_ArialMT(13) andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:nil andHighlightedImage:nil];
+        [right_f setImage:IMG(@"mine_join") forState:UIControlStateNormal];
+        right_f.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
+        right_f.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [right_f addTarget:self action:@selector(right_f_Action:) forControlEvents:UIControlEventTouchUpInside];
+        [mainView addSubview:right_f];
+        [right_f mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(90));
+            make.height.equalTo(@(20));
+            make.right.equalTo(mainView.mas_right).offset(-10);
+            make.centerY.equalTo(titleLab.mas_centerY);
+        }];
+        
+    }
     
     UIImageView *infoView = [UIImageView new];
     [mainView addSubview:infoView];
@@ -210,8 +196,8 @@
         make.left.equalTo(mainView.mas_left).offset(10);
         make.bottom.equalTo(infoView.mas_top).offset(-15);
     }];
-    UITapGestureRecognizer *changeHeader = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeHeaderAction:)];
-    [_headerImgv addGestureRecognizer:changeHeader];
+//    UITapGestureRecognizer *changeHeader = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeHeaderAction:)];
+//    [_headerImgv addGestureRecognizer:changeHeader];
     
     _nameLab = [UILabel lableWithText:[UserData currentUser].readName.length>0?[UserData currentUser].readName:@"未认证" Font:FONT_Helvetica(15) TextColor:[UIColor whiteColor]];
     [mainView addSubview:_nameLab];
@@ -270,7 +256,6 @@
 #pragma mark - CreateCellView
 - (UIView *)getInfomationLabWithName:(NSString *)name imageName:(NSString *)count {
     UIView *tempView = [[UIView alloc] init];
-//    tempView.backgroundColor = [UIColor purpleColor];
     UIImageView *imgv = [UIImageView new];
     imgv.image = IMG(count);
     [tempView addSubview:imgv];
@@ -294,11 +279,12 @@
 
 #pragma mark - Action
 - (void)right_f_Action:(UIButton *)sender {
+//    [[UtilsData sharedInstance] postCertificateNotice];
     JoinParterViewController *join = [JoinParterViewController new];
     [self.navigationController pushViewController:join animated:YES];
 }
 
-- (void)changeHeaderAction:(UITapGestureRecognizer *)sender {
+//- (void)changeHeaderAction:(UITapGestureRecognizer *)sender {
 //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"更换照片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 //    UIAlertAction *cerma = [UIAlertAction actionWithTitle:@"照相机" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 //
@@ -314,8 +300,8 @@
 //    [alert addAction:cancel];
 //
 //    [self presentViewController:alert animated:YES completion:nil];
-}
-
+//}
+    
 - (void)titleButtonClick:(UIButton *)sender {
     if ([sender.currentTitle isEqualToString:@"分享推广"]) {
         [SharePopView addSharePopViewTo:self];
@@ -334,23 +320,6 @@
     }
     
 }
-
-
-- (void)getRealName {//获取实名认证
-    //status  0待审核 1成功 2审核中
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
-    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
-    [dict setObject:json forKey:@"key"];
-    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"%@", resultDic);
-        
-    } failure:^(NSString *error, NSInteger code) {
-        
-    }];
-}
-
 
 
 - (void)didReceiveMemoryWarning {

@@ -333,7 +333,7 @@
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"transc.getProducts"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"time":MilliSecondTimesTamp}] forKey:@"transc.getProducts"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {

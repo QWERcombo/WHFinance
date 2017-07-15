@@ -9,6 +9,7 @@
 #import "UtilsData.h"
 #import "MainLoginViewController.h"
 #import <Photos/Photos.h>
+#import "CertificateListViewController.h"
 
 @interface UtilsData ()
 @property(nonatomic,assign)BOOL isFinish;//动画是否完成
@@ -27,12 +28,13 @@ DEF_SINGLETON(UtilsData);
 
 -(MJRefreshGifHeader *)MJRefreshNormalHeaderTarget:(id)target table:(UIScrollView *)scrollView actionSelector:(SEL)action
 {
-    //    http://www.jianshu.com/p/80f0a274de23
+    //http://www.jianshu.com/p/80f0a274de23
     MJRefreshGifHeader *header = [MJRefreshGifHeader  headerWithRefreshingTarget:target refreshingAction:action];
     scrollView.mj_header = header;
-    NSArray *idleImages = @[IMG(@"Refres_down0"),IMG(@"Refres_down1"),IMG(@"Refres_down2")];
-    // 设置普通状态的动画图片
-    //    [header setImages:idleImages forState:MJRefreshStateIdle];
+    NSArray *idleImages = @[IMG(@"Refres_up0"),IMG(@"Refres_up1"),IMG(@"Refres_up2"),IMG(@"Refres_up3"),IMG(@"Refres_up4"),IMG(@"Refres_up5"),IMG(@"Refres_up6"),IMG(@"Refres_up7")];
+    //NSArray *idleImages = @[IMG(@"Refres_down0"),IMG(@"Refres_down1"),IMG(@"Refres_down2")];
+    //设置普通状态的动画图片
+//    [header setImages:idleImages forState:MJRefreshStateIdle];
     //设置即将刷新状态的动画图片（一松开就会刷新的状态）
     [header setImages:idleImages forState:MJRefreshStatePulling];
     // 设置正在刷新状态的动画图片
@@ -48,14 +50,14 @@ DEF_SINGLETON(UtilsData);
 {
     MJRefreshAutoGifFooter *footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:target refreshingAction:action];
     scrollView.mj_footer = footer;
-//    NSArray *idleImages = @[IMG(@"Refres_up0"),IMG(@"Refres_up1"),IMG(@"Refres_up2"),IMG(@"Refres_up3"),IMG(@"Refres_up4"),IMG(@"Refres_up5"),IMG(@"Refres_up6"),IMG(@"Refres_up7")];
     NSArray *idleImages = @[IMG(@"Refres_down0"),IMG(@"Refres_down1"),IMG(@"Refres_down2")];
 
-    //    // 设置普通状态的动画图片
-    //    [footer setImages:idleImages forState:MJRefreshStateIdle];
+    // 设置普通状态的动画图片
+    // [footer setImages:idleImages forState:MJRefreshStateIdle];
     // 设置即将刷新状态的动画图片（一松开就会刷新的状态）
     // 设置正在刷新状态的动画图片
     [footer setImages:idleImages forState:MJRefreshStateRefreshing];
+    
 //    [footer setTitle:@"" forState:MJRefreshStateIdle];
 //    [footer setTitle:@"" forState:MJRefreshStateRefreshing];
 //    [footer setTitle:@"" forState:MJRefreshStateNoMoreData];
@@ -69,7 +71,6 @@ DEF_SINGLETON(UtilsData);
     collectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:target refreshingAction:action];
 }
 -(void)MJRefreshAutoNormalCollectionViewHeaderTarget:(id)target table:(UICollectionView *)collectionView actionSelector:(SEL)action{
-
     
 }
 
@@ -112,32 +113,15 @@ DEF_SINGLETON(UtilsData);
     return version;
 }
 
-//- (void)showAlertSheetControllerWithTitle:(NSString *)titleString detailsText:(NSString *)detailsString type:(NSString *)typeString dele:(BaseViewController *)dele block:(parameterBlcok)paramB{
-//    _parameterBlock = paramB;
-//    _parameterController = dele;
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:titleString message:detailsString preferredStyle:UIAlertControllerStyleAlert];
-//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//
-//    }];
-//    UIAlertAction *done = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        _parameterBlock();
-//    }];
-//    UIAlertAction *single = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-//    if ([typeString isEqualToString:@"single"]) {
-//        [alert addAction:single];
-//    } else {
-//        [alert addAction:cancel];
-//        [alert addAction:done];
-//    }
-//    [_parameterController presentViewController:alert animated:YES completion:nil];
-//    
-//}
 
+//实名认证通知
+- (void)postCertificateNotice {
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTICE_USER_Certificate object:nil];
+}
 //登入通知
 - (void)postLoginNotice
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTICE_USER_LOGIN object:nil];
-    
 }
 //登出通知
 - (void)postLogoutNotice
@@ -145,6 +129,36 @@ DEF_SINGLETON(UtilsData);
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTICE_USER_LOGOUT object:nil];
 }
 
+//实名认证
+- (void)certificateController:(UIViewController *)delegate success:(GoCertificateBlock)success {
+    _goCertificateBlock = success;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTICE_USER_Certificate object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(CertificateNotice) name:NOTICE_USER_Certificate object:nil];//实名认证
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+//        NSLog(@"---real---%@", resultDic);
+        if ([resultDic[@"resultData"][@"status"] integerValue]==1) {
+             _goCertificateBlock();
+        } else {
+            [self showAlertControllerWithTitle:@"提示" detail:@"请先进行实名认证" doneTitle:@"确定" cancelTitle:@"取消" haveCancel:YES doneAction:^{
+                CertificateListViewController *cer = [CertificateListViewController new];
+                [delegate.navigationController pushViewController:cer animated:YES];
+            } controller:delegate];
+        }
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+    
+}
+
+//登录登出
 - (void)loginPlan:(UIViewController *)delegate success:(LoginSuccessBlock)success failure:(LoginFailureBlock)failure
 {
     __loginSuccessBlock = success;
@@ -157,30 +171,23 @@ DEF_SINGLETON(UtilsData);
         MainLoginViewController *loginVC = [[MainLoginViewController alloc] init];
         TBNavigationController *navigat = [[TBNavigationController alloc] initWithRootViewController:loginVC];
         MY_WINDOW.rootViewController = navigat;
-        
     }
-//    MainLoginViewController *loginVC = [[MainLoginViewController alloc] init];
-//    loginVC.dataSource = @[@"777"];
-//    TBNavigationController *navigat = [[TBNavigationController alloc] initWithRootViewController:loginVC];
-//    [MY_WINDOW.rootViewController presentViewController:navigat animated:YES completion:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTICE_USER_LOGIN object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(LogInTorefresh) name:NOTICE_USER_LOGIN object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(LogInTorefresh) name:NOTICE_USER_LOGIN object:nil];//登入
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTICE_USER_LOGOUT object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(LoginDismiss) name:NOTICE_USER_LOGOUT object:nil];
-    
-    
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(LoginDismiss) name:NOTICE_USER_LOGOUT object:nil];//登出
 }
 
-
+-(void)CertificateNotice{
+    _goCertificateBlock();
+}
 -(void)LoginDismiss{
     __loginFailureBlock([UserData currentUser]);
 }
 
 -(void)LogInTorefresh
 {
-    
     __loginSuccessBlock([UserData currentUser]);
 }
 
@@ -212,14 +219,12 @@ DEF_SINGLETON(UtilsData);
         
     }];
 //    [cancel setValue:[UIColor Grey_WordColor] forKey:@"titleTextColor"];
-    
     if (have) {
         [alert addAction:confirm];
         [alert addAction:cancel];
     } else {
         [alert addAction:confirm];
     }
-    
     
     //修改标题
 //    NSMutableAttributedString *alertControllerStr = [[NSMutableAttributedString alloc] initWithString:title];
@@ -228,7 +233,6 @@ DEF_SINGLETON(UtilsData);
 //    if (title.length) {
 //        [alert setValue:alertControllerStr forKey:@"attributedTitle"];
 //    }
-    
     //修改提示
 //    NSMutableAttributedString *alertControllerMessageStr = [[NSMutableAttributedString alloc] initWithString:detail];
 //    [alertControllerMessageStr addAttribute:NSForegroundColorAttributeName value:[UIColor Grey_WordColor] range:NSMakeRange(0, detail.length)];
@@ -236,9 +240,6 @@ DEF_SINGLETON(UtilsData);
 //    if (detail.length) {
 //        [alert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
 //    }
-    
-    
-    
     [viewc presentViewController:alert animated:YES completion:nil];
 }
 

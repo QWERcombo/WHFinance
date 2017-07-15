@@ -136,11 +136,12 @@
     if ([sender.currentTitle isEqualToString:@"加入合伙人"]) {
         [self.navigationController pushViewController:join animated:YES];
     } else {
-        [self.navigationController pushViewController:detail animated:YES];
+        if ([sender.currentTitle isEqualToString:@"已是合伙人"]) {
+        } else {
+            [self.navigationController pushViewController:detail animated:YES];
+        }
     }
-    
-    
-    
+//    NSLog(@"%@", MilliSecondTimesTamp);
 }
 
 
@@ -151,7 +152,8 @@
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-//        NSLog(@"%@", resultDic);
+        NSLog(@"%@", resultDic);
+        
         MyProfitViewController *profit = [MyProfitViewController new];
         // 前一个表示三级分润    后一个表示代理分润
         NSArray *dataArr = resultDic[@"resultData"];

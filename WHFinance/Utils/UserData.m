@@ -32,6 +32,8 @@
         _agentId=[aDecoder decodeObjectForKey:@"agentId"];
         _referenceId=[aDecoder decodeObjectForKey:@"referenceId"];
         _isPartner=[aDecoder decodeObjectForKey:@"isPartner"];
+        _Random_Key=[aDecoder decodeObjectForKey:@"Random_Key"];
+        _Active_Head=[aDecoder decodeObjectForKey:@"Active_Head"];
         
         
         
@@ -57,7 +59,8 @@
     if(_agentId) [aCoder encodeObject:_agentId forKey:@"agentId"];
     if(_referenceId) [aCoder encodeObject:_referenceId forKey:@"referenceId"];
     if(_isPartner) [aCoder encodeObject:_isPartner forKey:@"isPartner"];
-    
+    if(_Random_Key) [aCoder encodeObject:_Random_Key forKey:@"Random_Key"];
+    if(_Active_Head) [aCoder encodeObject:_Active_Head forKey:@"Active_Head"];
     
     
  }

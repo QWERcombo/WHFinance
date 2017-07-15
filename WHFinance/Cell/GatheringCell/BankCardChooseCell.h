@@ -8,6 +8,8 @@
 
 #import "BaseCell.h"
 
+@protocol RadioSelectDelegate;
+
 @interface BankCardChooseCell : BaseCell
 @property (nonatomic, copy) ClikBlock clikBlock;
 @property (nonatomic, strong) UIImageView *bankImgv;
@@ -16,6 +18,14 @@
 @property (nonatomic, strong) UILabel *cardLab;
 @property (nonatomic, strong) UIButton *selectBtn;
 
+@property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, weak) id <RadioSelectDelegate> delegate;
 
 - (void)loadData:(NSObject *)model index:(NSString *)index andCliker:(ClikBlock)clue;
+@end
+
+@protocol RadioSelectDelegate <NSObject>
+
+- (void)radioSelectedWithIndexPath:(NSIndexPath *)indexPath;
+
 @end

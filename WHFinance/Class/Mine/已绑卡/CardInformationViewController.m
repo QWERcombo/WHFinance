@@ -24,7 +24,12 @@
     self.title = @"修改结算卡";
     self.nameArr = @[@"姓        名:",@"身份证号:",@"结算卡号:",@"选择银行:",@"银行支行:"];
     self.tempArr = @[@"张三",@"151515151515151551515115",@"￥200.00",@"6677 8899 8888 0090",@"招商银行"];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"修改" style:UIBarButtonItemStylePlain target:self action:@selector(ediAction:)];
+    
+    UIButton *right_f = [UIButton buttonWithTitle:@"" andFont:nil andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:IMG(@"") andHighlightedImage:IMG(@"")];
+    right_f.frame = CGRectMake(0, 0, 30, 30);
+    right_f.backgroundColor = [UIColor whiteColor];
+    [right_f addTarget:self action:@selector(ediAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:right_f];
     
     [self setUpSubviews];
 }
@@ -187,12 +192,6 @@
         
     }
     
-    
-    
-    
-    
-    
-    
     return mainView;
 }
 
@@ -200,9 +199,11 @@
 
 
 - (void)ediAction:(UIBarButtonItem *)sender {
-    NSLog(@"修改");
-    self.isEdite = YES;
-    [self.tabView reloadData];
+    [[UtilsData sharedInstance] certificateController:self success:^{
+        NSLog(@"修改");
+        self.isEdite = YES;
+        [self.tabView reloadData];
+    }];
 }
 
 - (void)buttonClick:(UIButton *)sender {

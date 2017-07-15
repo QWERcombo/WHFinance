@@ -1,3 +1,4 @@
+
 //
 //  AppDelegate.m
 //  WHFinance
@@ -45,6 +46,7 @@
     });
     
     [self addUmengSocial];//配置友盟
+    
     
     return YES;
 }
@@ -147,6 +149,43 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSString *randomStr = [NSString return32LetterAndNumber];
+    NSLog(@"%@", randomStr);
+    NSString *passValue = @"";
+//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//    [dic setObject:randomStr forKey:@"Random_Key"];
+    [[NSUserDefaults standardUserDefaults] setObject:randomStr forKey:@"secret_key"];
+//    [[PublicFuntionTool sharedInstance] setValue:randomStr forKey:@"secret_key"];
+//    [[UserData currentUser] giveData:dic];
+//    NSLog(@"%@", [UserData currentUser].Random_Key);
+    NSString *public_key_path = [[NSBundle mainBundle] pathForResource:@"rsa_public_key.der" ofType:nil];
+    NSString *secret_key = [[NSUserDefaults standardUserDefaults] objectForKey:@"request_head"];
+    
+    if (secret_key.length) {
+        NSLog(@"%@", secret_key);
+        NSString *secret = [NSString stringWithFormat:@"%@%@", secret_key, randomStr];
+        passValue = [RSAEncryptor encryptString:secret publicKey:public_key_path];
+        
+    } else {
+        passValue = [RSAEncryptor encryptString:randomStr publicKeyWithContentsOfFile:public_key_path];
+    }
+    [dict setObject:passValue forKey:@"key"];
+    
+    [DataSend sendPostRequestToHandShakeWithBaseURL:base_ii Dictionary:dict WithType:@"" showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"-----%@", resultDic);
+//        NSLog(@"***%@", [UserData currentUser].Random_Key);
+        NSString *head = [NEUSecurityUtil neu_decryptAESData:resultDic[@"head"]];
+        NSLog(@"+++++%@", head);
+        [[NSUserDefaults standardUserDefaults] setObject:head forKey:@"request_head"];
+        NSLog(@"%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"request_head"]);
+        
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+    
 }
 
 

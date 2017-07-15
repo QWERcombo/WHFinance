@@ -88,10 +88,6 @@
     [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
     cancleBtn.titleLabel.font = FONT_ArialMT(14);
     
-    cancleBtn.backgroundColor = [UIColor yellowColor];
-    
-    
-    
     return mainView;
     
 }
@@ -107,10 +103,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [bar resignFirstResponder];
 }
-//- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-//    self.keyWord = searchBar.text;
-//    [self searchBrandBank];
-//}
+
 
 - (void)loadFooterNewData {
     if (self.dataMuArr.count) {

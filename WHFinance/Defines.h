@@ -35,7 +35,7 @@
 #define NOTICE_USER_LOGIN           @"user_login"
 #define NOTICE_USER_LOGOUT          @"user_logout"
 #define NOTICE_PUSH                 @"user_push"
-
+#define NOTICE_USER_Certificate     @"user_certificate"//用户实名认证
 
 //*************************************************************⬅️
 
@@ -43,9 +43,9 @@
 //**************    地址   ***********************1️⃣
 
 //《测试环境》
-//#define  BASE_URL    @"http://192.168.0.113:10100/api/excute"
-#define  BASE_URL    @"http://192.168.0.3:10100/api/excute"
-//#define  BASE_URL    @"http://s1.gogotree.com"
+#define  BASE_URL    @"http://192.168.0.3:10101/api/excute"
+//#define  BASE_URL    @"http://192.168.0.3:10100/api/excute"
+#define  base_ii     @"http://192.168.0.3:10101/api/handshake"
 
 //《正式环境》
 //#define  BASE_URL    @"https://app.gogotree.com"
@@ -60,31 +60,6 @@
 //#define AUDIT_UP @"1"//测试版
 
 //*************************************************************➡️
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #define REQ_KEY_VERSION    @"ver"
 #define REQ_KEY_PLATFORM   @"platform"
@@ -123,6 +98,9 @@ return __singleton__; \
 #define SINTEGER(int) [NSString stringWithFormat:@"%d",[int integerValue]]
 #define SFLOAT(float) [NSString stringWithFormat:@"%f",float]
 #define SFLOAT1(float) [NSString stringWithFormat:@"%.0f",float]
+#define MilliSecondTimesTamp   [NSString stringWithFormat:@"%ld",(long)[[NSDate date] timeIntervalSince1970]*1000]//获取毫秒时间戳
+
+
 
 //默认图片
 #define DEDINES_IMAGE [UIImage imageWithColor:[UIColor lightGrayColor]]

@@ -11,6 +11,9 @@
 @implementation PublicFuntionTool
 DEF_SINGLETON(PublicFuntionTool);
 
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+    
+}
 
 - (void)getSmsCodeByPhoneString:(NSString *)phone {
     
@@ -133,5 +136,29 @@ DEF_SINGLETON(PublicFuntionTool);
     NSString *imageBase64Str = [NEUSecurityUtil encodeBase64Data:imageData];
     return imageBase64Str;
 }
+
+- (BOOL)getRealName {//获取实名认证
+    //status  0待审核 1成功 2审核中
+    __block BOOL isReal=NO;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"---real---%@", resultDic);
+        if ([resultDic[@"resultData"][@"status"] integerValue]==1) {
+            isReal = YES;
+        } else {
+            isReal = NO;
+        }
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+    return isReal;
+}
+
+
 
 @end

@@ -25,6 +25,10 @@
 @property (nonatomic,strong)NSString        *agentId;//
 @property (nonatomic,strong)NSString        *referenceId;//
 @property (nonatomic,strong)NSString        *isPartner;//是否是合伙人
+@property (nonatomic,strong)NSString        *Random_Key;//AES解密key
+@property (nonatomic,strong)NSString        *Active_Head;//激活app拼接head
+
+
 
 
 //赋值

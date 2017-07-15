@@ -186,12 +186,12 @@
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"password":self.codeTF.text,@"userName":self.phoneTF.text}] forKey:@"user.login"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"password":self.codeTF.text,@"userName":self.phoneTF.text,@"time":MilliSecondTimesTamp}] forKey:@"user.login"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"---%@", resultDic);
+//        NSLog(@"---%@", resultDic);
         [[UserData currentUser] giveData:resultDic[@"resultData"]];
         [[UserData currentUser] giveData:@{@"uid":resultDic[@"resultData"][@"id"]}];
         [[UtilsData sharedInstance] postLoginNotice];

@@ -12,6 +12,8 @@
 
 #define Iv          @"" //偏移量,可自行修改
 #define KEY         @"12345678901234567890123456789012" //key，可自行修改
+//#define KEY      [UserData currentUser].Random_Key
+
 
 @implementation NEUSecurityUtil
 
@@ -19,6 +21,7 @@
 + (NSString*)encodeBase64String:(NSString * )input { 
     NSData *data = [input dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; 
     data = [NEUBase64 encodeData:data];
+    
     NSString *base64String = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	return base64String;
     
@@ -51,8 +54,10 @@
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     //使用密码对nsdata进行加密
 //    NSData *encryptedData = [data AES128EncryptWithKey:KEY gIv:Iv];
+    NSLog(@"6*******%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]);
+//    NSData *encryptedData = [data AES256EncryptWithKey:KEY];
+    NSData *encryptedData = [data AES256EncryptWithKey:[[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]];
     
-    NSData *encryptedData = [data AES256EncryptWithKey:KEY];
     //返回进行base64进行转码的加密字符串
     return [self encodeBase64Data:encryptedData];
 }
@@ -66,11 +71,17 @@
     //使用密码对data进行解密
 //    NSData *decryData = [decodeBase64Data AES128DecryptWithKey:KEY gIv:Iv];
     
+    NSLog(@"7*******%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]);
     
     //256解密
-    NSData *decryData = [decodeBase64Data AES256DecryptWithKey:KEY];
+//    NSData *decryData = [decodeBase64Data AES256DecryptWithKey:KEY];
+    NSData *decryData = [decodeBase64Data AES256DecryptWithKey:[[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]];
+    
     //将解了密码的nsdata转化为nsstring
     NSString *str = [[NSString alloc] initWithData:decryData encoding:NSUTF8StringEncoding];
+    
+    
+//    NSLog(@"wwwwww%@", [[PublicFuntionTool sharedInstance] valueForKey:@"secret_key"]);
     return str;
 }
 #pragma  mark - RSA加密
@@ -83,5 +94,22 @@
     
     return JSONString;
 }
+
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
+    if(err) {
+        NSLog(@"json解析失败：%@",err);
+        return nil;
+    }
+    return dic;
+}
+
 
 @end

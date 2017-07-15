@@ -118,8 +118,6 @@
 		DA7A56CC1F0A42C500B2DAC9 /* ZZPhotoPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7A56A21F0A42C500B2DAC9 /* ZZPhotoPickerCell.m */; };
 		DA7A56CD1F0A42C500B2DAC9 /* ZZPhotoPickerFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7A56A41F0A42C500B2DAC9 /* ZZPhotoPickerFooterView.m */; };
 		DA84A0741F18C2A10040E23B /* RSAEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84A0721F18C2A00040E23B /* RSAEncryptor.m */; };
-		DA84A07C1F18C3900040E23B /* private_key.p12 in Resources */ = {isa = PBXBuildFile; fileRef = DA84A07B1F18C3850040E23B /* private_key.p12 */; };
-		DA84A07D1F18C3900040E23B /* public_key.der in Resources */ = {isa = PBXBuildFile; fileRef = DA84A07A1F18C3850040E23B /* public_key.der */; };
 		DA9F3DD41F009CDF0002BE29 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9F3DD21F009CDE0002BE29 /* WebViewController.m */; };
 		DA9F3DEA1F009DFA0002BE29 /* KeyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9F3DE81F009DFA0002BE29 /* KeyTextView.m */; };
 		DA9F3DEB1F00A1CC0002BE29 /* UserData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9F3DCA1F009C430002BE29 /* UserData.m */; };
@@ -168,6 +166,7 @@
 		DAECF3C31F0098B00046ECF1 /* TBNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAECF3C01F0098B00046ECF1 /* TBNavigationController.m */; };
 		DAECF3C41F0098B00046ECF1 /* TBTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DAECF3C11F0098B00046ECF1 /* TBTabBar.m */; };
 		DAECF3D31F009B490046ECF1 /* SlideSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAECF3D21F009B490046ECF1 /* SlideSwitchView.m */; };
+		DAF313911F19AF8B006E0426 /* rsa_public_key.der in Resources */ = {isa = PBXBuildFile; fileRef = DAF313901F19AF81006E0426 /* rsa_public_key.der */; };
 		DAF48F1D1F0F16F100A98794 /* FixCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF48F1C1F0F16F100A98794 /* FixCodeViewController.m */; };
 		DAF48F221F0F1B1200A98794 /* ChoosePayWaysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF48F211F0F1B1200A98794 /* ChoosePayWaysViewController.m */; };
 		DAF48F251F0F1B2000A98794 /* NoCardPayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF48F241F0F1B2000A98794 /* NoCardPayViewController.m */; };
@@ -423,8 +422,6 @@
 		DA84A0721F18C2A00040E23B /* RSAEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAEncryptor.m; sourceTree = "<group>"; };
 		DA84A0731F18C2A10040E23B /* RSAEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAEncryptor.h; sourceTree = "<group>"; };
 		DA84A0791F18C3170040E23B /* WHFinance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WHFinance.entitlements; sourceTree = "<group>"; };
-		DA84A07A1F18C3850040E23B /* public_key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = public_key.der; sourceTree = "<group>"; };
-		DA84A07B1F18C3850040E23B /* private_key.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = private_key.p12; sourceTree = "<group>"; };
 		DA9F3DCA1F009C430002BE29 /* UserData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserData.m; sourceTree = "<group>"; };
 		DA9F3DCB1F009C430002BE29 /* YXPUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXPUtil.m; sourceTree = "<group>"; };
 		DA9F3DCC1F009C430002BE29 /* UtilsData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UtilsData.m; sourceTree = "<group>"; };
@@ -515,6 +512,7 @@
 		DAECF3CF1F009B290046ECF1 /* BannerPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BannerPageControl.m; sourceTree = "<group>"; };
 		DAECF3D11F009B490046ECF1 /* SlideSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideSwitchView.h; sourceTree = "<group>"; };
 		DAECF3D21F009B490046ECF1 /* SlideSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideSwitchView.m; sourceTree = "<group>"; };
+		DAF313901F19AF81006E0426 /* rsa_public_key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = rsa_public_key.der; sourceTree = "<group>"; };
 		DAF48F1B1F0F16F100A98794 /* FixCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FixCodeViewController.h; sourceTree = "<group>"; };
 		DAF48F1C1F0F16F100A98794 /* FixCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FixCodeViewController.m; sourceTree = "<group>"; };
 		DAF48F201F0F1B1200A98794 /* ChoosePayWaysViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChoosePayWaysViewController.h; sourceTree = "<group>"; };
@@ -1307,7 +1305,6 @@
 				DAFF8E901F0E276500963AC0 /* 我的费率 */,
 				DAA6670B1F04AABA00D6E9A5 /* 设置 */,
 				DAA667041F049A3A00D6E9A5 /* 关于我们 */,
-				DAFFEF6A1F03B4C700817E6B /* 常见产品 */,
 				DAFFEF611F03B4C700817E6B /* 分享推广 */,
 				DAFFEF631F03B4C700817E6B /* 开通产品 */,
 				DAFFEF6B1F03B4C700817E6B /* 客服中心 */,
@@ -1352,8 +1349,7 @@
 				56E26CED1F0150E400182BA2 /* NSData+NEUAES.m */,
 				DA84A0731F18C2A10040E23B /* RSAEncryptor.h */,
 				DA84A0721F18C2A00040E23B /* RSAEncryptor.m */,
-				DA84A07B1F18C3850040E23B /* private_key.p12 */,
-				DA84A07A1F18C3850040E23B /* public_key.der */,
+				DAF313901F19AF81006E0426 /* rsa_public_key.der */,
 			);
 			path = WHSecurity;
 			sourceTree = "<group>";
@@ -1589,13 +1585,6 @@
 			path = "实名认证";
 			sourceTree = "<group>";
 		};
-		DAFFEF6A1F03B4C700817E6B /* 常见产品 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "常见产品";
-			sourceTree = "<group>";
-		};
 		DAFFEF6B1F03B4C700817E6B /* 客服中心 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1735,8 +1724,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA84A07C1F18C3900040E23B /* private_key.p12 in Resources */,
-				DA84A07D1F18C3900040E23B /* public_key.der in Resources */,
+				DAF313911F19AF8B006E0426 /* rsa_public_key.der in Resources */,
 				DA7A56B11F0A42C500B2DAC9 /* select_no.png in Resources */,
 				DA7A56AA1F0A42C500B2DAC9 /* camera_focus_pic.png in Resources */,
 				DA7A56AF1F0A42C500B2DAC9 /* photo_add.png in Resources */,

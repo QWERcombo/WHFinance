@@ -27,5 +27,5 @@
 
 #pragma  mark - Json字符串
 + (NSString *)FormatJSONString:(id)ob;
-
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 @end

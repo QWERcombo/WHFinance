@@ -41,8 +41,13 @@
         [self setUpBarItems];
     }
     
-    
-    [self getProfitDataListWithStatus:NO];// NO代理分润 YES三级分润
+    if ([self.titleName isEqualToString:@"代理分润"]) {
+        [self getProfitDataListWithStatus:NO];// NO代理分润 YES三级分润
+    } else if ([self.titleName isEqualToString:@"三级分润"]) {
+        [self getProfitDataListWithStatus:YES];// NO代理分润 YES三级分润
+    } else {
+        [self getProfitDataListWithStatus:NO];// NO代理分润 YES三级分润
+    }
     [self getProfitWithdraw];
 }
 

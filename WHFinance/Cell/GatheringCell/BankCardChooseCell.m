@@ -40,7 +40,10 @@
         make.top.equalTo(self.bankLab.mas_bottom).offset(5);
     }];
     
-    self.selectBtn = [UIButton buttonWithTitle:nil andFont:nil andtitleNormaColor:nil andHighlightedTitle:nil andNormaImage:IMG(@"bankcard_no") andHighlightedImage:IMG(@"bankcard_yes")];
+//    self.selectBtn = [UIButton buttonWithTitle:nil andFont:nil andtitleNormaColor:nil andHighlightedTitle:nil andNormaImage:IMG(@"bankcard_no") andHighlightedImage:IMG(@"bankcard_yes")];
+    self.selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.selectBtn setImage:[UIImage imageNamed:@"bankcard_no"] forState:UIControlStateNormal];
+    [self.selectBtn setImage:[UIImage imageNamed:@"bankcard_yes"] forState:UIControlStateSelected];
     [self.contentView addSubview:self.selectBtn];
     self.selectBtn.backgroundColor = [UIColor whiteColor];
     self.selectBtn.layer.borderColor = [UIColor Grey_WordColor].CGColor;
@@ -71,12 +74,15 @@
 
 - (void)selecAction:(UIButton *)sender {
     sender.selected = !sender.selected;
+    // 当被选中的时候
     if (sender.selected) {
-        [sender setBackgroundImage:IMG(@"bankcard_yes") forState:UIControlStateNormal];
-        _clikBlock(@"1");
-    } else {
-        [sender setBackgroundImage:IMG(@"bankcard_no") forState:UIControlStateNormal];
+        // 获取 indexPath
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:self];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(radioSelectedWithIndexPath:)]) {
+            [self.delegate radioSelectedWithIndexPath:indexPath];
+        }
     }
+    
 }
 
 
@@ -105,11 +111,8 @@
     self.bankLab.text = data.cardBankName;
     self.cardLab.text = data.cardNo;
     self.userLab.text = data.cardHolderName;
-    if (data.isSelectedCard) {
-        [self.selectBtn setBackgroundImage:IMG(@"bankcard_yes") forState:UIControlStateNormal];
-    } else {
-        [self.selectBtn setBackgroundImage:IMG(@"bankcard_no") forState:UIControlStateNormal];
-    }
+    self.selectBtn.selected = data.isSelectedCard;
+    
 }
 
 
