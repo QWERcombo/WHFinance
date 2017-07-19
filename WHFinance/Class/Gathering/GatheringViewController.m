@@ -13,7 +13,7 @@
 #import "PayWaysViewController.h"
 #import "ChoosePayWaysViewController.h"
 #import "BindedCardViewController.h"
-
+#import "TradeResultViewController.h"
 
 
 @interface GatheringViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>{
@@ -204,8 +204,8 @@
 - (void)titleButtonClick:(UIButton *)sender {
 //    [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"敬请期待..." doneTitle:@"确定" cancelTitle:nil haveCancel:NO doneAction:nil controller:self];
     
-//    BindedCardViewController *bank = [BindedCardViewController new];
-    NoCardInfamationViewController *bank = [NoCardInfamationViewController new];
+    TradeResultViewController *bank = [TradeResultViewController new];
+//    NoCardInfamationViewController *bank = [NoCardInfamationViewController new];
     [self.navigationController pushViewController:bank animated:YES];
     
 }

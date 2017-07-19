@@ -10,7 +10,7 @@
 #import "TradeDetailViewController.h"
 
 @interface TradeResultViewController ()
-
+@property (nonatomic, strong) TransOrder *orderModel;
 @end
 
 @implementation TradeResultViewController
@@ -20,6 +20,8 @@
     // Do any additional setup after loading the view.
     self.title = @"支付提示";
     
+    
+    [self checkStatus];
     [self setUpSubviews];
 }
 
@@ -57,15 +59,25 @@
     line.backgroundColor = [UIColor Grey_LineColor];
     [content addSubview:line];
     
+    
     UIImageView *imgv = [UIImageView new];
     [content addSubview:imgv];
-    imgv.image = IMG(@"Success_Out");
+    imgv.image = IMG(@"");
     [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@(20));
         make.left.equalTo(content.mas_left).offset(13);
         make.top.equalTo(content.mas_top).offset(15);
     }];
-    UILabel *label = [UILabel lableWithText:@"交易成功" Font:FONT_ArialMT(18) TextColor:[UIColor mianColor:1]];
+    NSString *status = @"";
+    if ([self.orderModel.orderStatus integerValue]==2) {
+        status = @"交易成功";
+        imgv.image = IMG(@"Success_Out");
+    }
+    if ([self.orderModel.orderStatus integerValue]==3) {
+        status = @"交易失败";
+        imgv.image = IMG(@"Failure_Out");
+    }
+    UILabel *label = [UILabel lableWithText:status Font:FONT_ArialMT(18) TextColor:[UIColor mianColor:1]];
     [content addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(imgv.mas_centerY);
@@ -73,7 +85,8 @@
         make.height.equalTo(@(18));
     }];
     
-    UILabel *hint = [UILabel lableWithText:[NSString stringWithFormat:@"已成功收款%@元", self.cashStr] Font:FONT_ArialMT(13) TextColor:[UIColor Grey_WordColor]];
+    
+    UILabel *hint = [UILabel lableWithText:[NSString stringWithFormat:@"已成功收款%@元", self.orderModel.orderAmount.length ?self.orderModel.orderAmount:self.cashStr] Font:FONT_ArialMT(13) TextColor:[UIColor Grey_WordColor]];
     [content addSubview:hint];
     [hint mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(label.mas_bottom);
@@ -84,7 +97,13 @@
     
     
     NSArray *hintArr = @[@"交易单号",@"交易方式",@"手续费",@"交易时间"];
-    NSArray *tempArr = @[@"JIHUHUGYFYT2546987",@"微信支付",@"￥200.00",@"2017-06-21  18:18:18"];
+    NSArray *tempArr = nil;
+    if (self.orderModel) {
+        tempArr = @[self.orderModel.orderNo,self.orderModel.orderTypeCn,[NSString stringWithFormat:@"￥%@", [self.orderModel.orderFee handleDataSourceTail]],[self.orderModel.orderCreateTime NSTimeIntervalTransToYear_Month_Day]];
+    } else {
+        tempArr = @[@"",@"",@"",@""];
+    }
+    
     for (NSInteger i=0; i<4; i++) {
         UIView *blank = [[UIView alloc] initWithFrame:CGRectMake(15, 60+22*i, SCREEN_WIGHT-25, 12)];
         UILabel *titleLab = [UILabel lableWithText:[hintArr objectAtIndex:i] Font:FONT_ArialMT(12) TextColor:[UIColor mianColor:2]];
@@ -160,6 +179,22 @@
     }
 }
 
+- (void)checkStatus {//查询订单状态 2秒一次
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"orderId":@"2551683"}] forKey:@"transc.queryOrder"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"-----%@", resultDic);
+        self.orderModel = [[TransOrder alloc] initWithDictionary:resultDic[@"resultData"] error:nil];
+        [self.tabView reloadData];
+        NSLog(@"-----%@", [self.orderModel.orderCreateTime NSTimeIntervalTransToYear_Month_Day]);
+        //status  0等待支付 1支付中 2支付成功 3支付失败
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+}
 
 
 - (void)didReceiveMemoryWarning {
