@@ -11,7 +11,7 @@
 #import "ZZCameraFocusView.h"
 #import "ZZCameraBrowerViewController.h"
 #import "ZZCamera.h"
-#import "SendCircleViewController.h"
+//#import "SendCircleViewController.h"
 typedef void(^codeBlock)();
 
 @interface ZZCameraPickerViewController()<UICollectionViewDelegate,UICollectionViewDataSource,ZZCameraFocusDelegate,ZZCameraBrowerDataSource>
@@ -148,8 +148,8 @@ typedef void(^codeBlock)();
 }
 
 - (void)takePhoto{
-    if (_cameraArray.count == (9-[SendCircleViewController shareSendCircleViewController].selectModelArray.count)) {
-        [self showAlertView:9-[SendCircleViewController shareSendCircleViewController].selectModelArray.count];
+    if (_cameraArray.count) {
+//        [self showAlertView:9-[SendCircleViewController shareSendCircleViewController].selectModelArray.count];
     }else{
         [self Captureimage];
         UIView *lightScreenView = [[UIView alloc] init];

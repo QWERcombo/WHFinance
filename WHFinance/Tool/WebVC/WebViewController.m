@@ -7,7 +7,6 @@
 //
 
 #import "WebViewController.h"
-#import "MyConsumeViewController.h"
 
 @interface WebViewController ()
 @property (nonatomic,strong)UIWebView *webView;
@@ -46,20 +45,9 @@
         [[UtilsData sharedInstance]showAlertTitle:@"网页链接异常" detailsText:nil time:1.5 aboutType:MBProgressHUDModeIndeterminate state:NO];
     }
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setTitle:@"用户协议" forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor Grey_CommentColor] forState:UIControlStateNormal];
-    btn.frame = CGRectMake(0, 0, 80, 20);
-    btn.titleLabel.font = FONT_ArialMT(15);
-    [btn addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
     
 }
 
-- (void)btnAction:(UIButton *)sender {
-    MyConsumeViewController *ccc = [MyConsumeViewController new];
-    [self.navigationController pushViewController:ccc animated:YES];
-}
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{
     

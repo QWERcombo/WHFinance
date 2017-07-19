@@ -9,7 +9,7 @@
 #import "BottomArticleView.h"
 //#import "EditorTopicViewController.h"
 //#import "ShareSheetView.h"
-#import "SYFavoriteButton.h"
+//#import "SYFavoriteButton.h"
 //#import "DetailsModel.h"
 //#import "TopicDetailViewController.h"
 //#import "PostsDetailViewController.h"
@@ -21,7 +21,7 @@
 @property(nonatomic,strong) UILabel *praiseNumLab;
 @property(nonatomic,strong) UILabel *commentNumLab;
 @property(nonatomic,strong) NSString *abID;
-@property(nonatomic,strong) DetailsModel *detailsModel;
+//@property(nonatomic,strong) DetailsModel *detailsModel;
 @property (nonatomic, strong) UIButton *goBtn;
 @property (nonatomic, strong) UIButton * shareBtn;
 @property (nonatomic, strong) UIButton * commentBtn;
@@ -34,9 +34,9 @@
 - (id)initWithData:(BaseModel *)date {
     if(self=[super init])
     {
-        DetailsModel *detailsM = (DetailsModel *)date;
-        self.detailsModel = detailsM;
-        self.abID = SINT(detailsM.data.iid);
+//        DetailsModel *detailsM = (DetailsModel *)date;
+//        self.detailsModel = detailsM;
+//        self.abID = SINT(detailsM.data.iid);
         self.backgroundColor = [UIColor whiteColor];
         
         UIView *line = [[UIView alloc] init];
@@ -60,12 +60,12 @@
             make.height.equalTo(@30);
         }];
         
-        self.commentBtn = [UIButton buttonWithTitle:nil andtitleNormaColor:nil andHighlightedTitle:nil andNormaImage:IMG(@"comments_D") andHighlightedImage:IMG(@"comments_D")];
+//        self.commentBtn = [UIButton buttonWithTitle:nil andtitleNormaColor:nil andHighlightedTitle:nil andNormaImage:IMG(@"comments_D") andHighlightedImage:IMG(@"comments_D")];
         [self.commentBtn addTarget:self action:@selector(commentBtnAction:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.commentBtn];
         
         self.commentNumLab = [UILabel lableWithText:@"" Font:FONT_ArialMT(11) TextColor:[UIColor whiteColor]];
-        self.commentNumLab.text = [NSString stringWithFormat:@" %@ ",[SINT(detailsM.data.remarkCount) configeMiriade]];
+//        self.commentNumLab.text = [NSString stringWithFormat:@" %@ ",[SINT(detailsM.data.remarkCount) configeMiriade]];
         self.commentNumLab.backgroundColor = [UIColor mianColor:2];
         [self.commentNumLab setCheekWithColor:nil borderWidth:0 roundedRect:12/2];
         [self addSubview:self.commentNumLab];

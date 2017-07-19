@@ -121,11 +121,11 @@
     [self makeCollectionViewUI];
     
     if (self.hasDelete) {
-        UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        deleteBtn.frame = CGRectMake(0, 0, 20, 20);
-        [deleteBtn addTarget:self action:@selector(deleAction:) forControlEvents:UIControlEventTouchUpInside];
-        [deleteBtn setBackgroundImage:IMG(@"delete_s") forState:UIControlStateNormal];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:deleteBtn];
+//        UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//        deleteBtn.frame = CGRectMake(0, 0, 20, 20);
+//        [deleteBtn addTarget:self action:@selector(deleAction:) forControlEvents:UIControlEventTouchUpInside];
+//        [deleteBtn setBackgroundImage:IMG(@"delete_s") forState:UIControlStateNormal];
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:deleteBtn];
     }
     if (self.hasCheck) {
         back_btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -143,6 +143,7 @@
         }
     }
 }
+/*
 - (void)deleAction:(UIButton *)sender {
     [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"是否确定删除" haveCancel:YES doneAction:^{
         if ([[_photoData objectAtIndex:0] isKindOfClass:[NSDictionary class]]) {
@@ -173,6 +174,7 @@
         }
     } controller:self];
 }
+*/
 
 - (void)initPageControl {
     if (self.photoData.count==0) {

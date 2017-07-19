@@ -7,7 +7,7 @@
 //
 
 #import "KeyTextView.h"
-#import "CommentsVC.h"
+//#import "CommentsVC.h"
 
 static CGFloat ious_h = 160.0f;
 
@@ -17,7 +17,7 @@ static CGFloat ious_h = 160.0f;
 @property (strong, nonatomic) UIView *blackView;
 @property (strong, nonatomic) UILabel *numLab;
 @property (assign, nonatomic) id model;
-
+////
 @end
 
 
@@ -33,7 +33,7 @@ static CGFloat ious_h = 160.0f;
         
         self.backgroundColor = [UIColor clearColor];
         
-        self.blackView = [UIView viewWithBackgroudColor:[[UIColor blackColor]colorWithAlphaComponent:0.5]];
+//        self.blackView = [UIView viewWithBackgroudColor:[[UIColor blackColor]colorWithAlphaComponent:0.5]];
         self.blackView.alpha = 0;
         UITapGestureRecognizer *tapPP = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPPAction:)];
         [self.blackView addGestureRecognizer:tapPP];
@@ -222,24 +222,24 @@ static CGFloat ious_h = 160.0f;
         }
     }
     
-    KeyTextView *textView = nil;
-    if ([surView isKindOfClass:[ClubCircleListViewController class]]) {
-        textView = [[KeyTextView alloc] initWithFrame:CGRectMake(0, 50, vc.view.width, vc.view.height-50)];
-    } else {
-        textView = [[KeyTextView alloc] initWithFrame:CGRectMake(0, 0, vc.view.width, vc.view.height)];
-    }
-    textView.tag = tag;
-    textView.deleagte = surView;
-    if(date)textView.model = date;
-    if (date) {
-        CommentData *dic = (CommentData *)date;
-        if(dic.userName)textView.label.text = [NSString stringWithFormat:@"@%@", dic.userName];
-    }else{
-        textView.label.text = @"发表自己的评论";
-    }
-    textView.superHight = vc.view.height;
-    [textView.textView becomeFirstResponder];
-    [vc.view addSubview:textView];
+//    KeyTextView *textView = nil;
+//    if ([surView isKindOfClass:[ClubCircleListViewController class]]) {
+//        textView = [[KeyTextView alloc] initWithFrame:CGRectMake(0, 50, vc.view.width, vc.view.height-50)];
+//    } else {
+//        textView = [[KeyTextView alloc] initWithFrame:CGRectMake(0, 0, vc.view.width, vc.view.height)];
+//    }
+//    textView.tag = tag;
+//    textView.deleagte = surView;
+//    if(date)textView.model = date;
+//    if (date) {
+//        CommentData *dic = (CommentData *)date;
+//        if(dic.userName)textView.label.text = [NSString stringWithFormat:@"@%@", dic.userName];
+//    }else{
+//        textView.label.text = @"发表自己的评论";
+//    }
+//    textView.superHight = vc.view.height;
+//    [textView.textView becomeFirstResponder];
+//    [vc.view addSubview:textView];
     
 }
 

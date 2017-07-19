@@ -7,7 +7,7 @@
 //
 
 #import "ZZPhotoBrowerCell.h"
-#import "PhotoSaveView.h"
+//#import "PhotoSaveView.h"
 #import "ZZPhotoAlert.h"
 #import "ZZPhotoDatas.h"
 
@@ -155,34 +155,34 @@
 - (void)longPress:(UILongPressGestureRecognizer *)sender {
     if (self.isShow) {
     } else {
-        [PhotoSaveView showPhotoSaveView:nil delegate:self andCliker:^(NSString *clueStr) {
-            if ([clueStr isEqualToString:@"0"]) {
-                self.isShow = NO;
-            }
-            if ([clueStr isEqualToString:@"1"]) {
-                NSURL *url = [NSURL URLWithString:self.imgurl];
-                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-                [[PayManager sharedInstance] saveImage:image andBlock:^(NSString *clueStr) {
-                    if ([clueStr isEqualToString:@"1"]) {
-                        [self showWith:@"保存成功" andAnnimation:YES];
-                    } else {
-                        [self showWith:@"保存失败" andAnnimation:NO];
-                    }
-                }];
-            }
-        }];
-        self.isShow = YES;
+//        [PhotoSaveView showPhotoSaveView:nil delegate:self andCliker:^(NSString *clueStr) {
+//            if ([clueStr isEqualToString:@"0"]) {
+//                self.isShow = NO;
+//            }
+//            if ([clueStr isEqualToString:@"1"]) {
+//                NSURL *url = [NSURL URLWithString:self.imgurl];
+//                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+//                [[PayManager sharedInstance] saveImage:image andBlock:^(NSString *clueStr) {
+//                    if ([clueStr isEqualToString:@"1"]) {
+//                        [self showWith:@"保存成功" andAnnimation:YES];
+//                    } else {
+//                        [self showWith:@"保存失败" andAnnimation:NO];
+//                    }
+//                }];
+//            }
+//        }];
+//        self.isShow = YES;
     }
 }
 - (void)showWith:(NSString *)text andAnnimation:(BOOL)anni {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UtilsData sharedInstance] showAlertTitle:nil detailsText:text time:1.5 aboutType:MBProgressHUDModeText state:anni];
-        for (UIView *sub in MY_WINDOW.subviews) {
-            if ([sub isKindOfClass:[PhotoSaveView class]]) {
-                [sub removeFromSuperview];
-                self.isShow = NO;
-            }
-        }
+//        for (UIView *sub in MY_WINDOW.subviews) {
+//            if ([sub isKindOfClass:[PhotoSaveView class]]) {
+//                [sub removeFromSuperview];
+//                self.isShow = NO;
+//            }
+//        }
     });
 }
 @end

@@ -17,11 +17,11 @@
 #import "ZZAlumAnimation.h"
 #import "ZZPhoto.h"
 #import "ZZPhotoPickerFooterView.h"
-#import "SendCircleViewController.h"
-#import "WCLPictureViewController.h"
-#import "CropImageViewController.h"
+//#import "SendCircleViewController.h"
+//#import "WCLPictureViewController.h"
+//#import "CropImageViewController.h"
 
-@interface ZZPhotoPickerViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,WCLCutPictureDelegate>
+@interface ZZPhotoPickerViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic,   copy) NSArray                     *photoArray;
 @property (nonatomic, strong) NSMutableArray              *selectArray;
@@ -116,7 +116,7 @@
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    _totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)([SendCircleViewController shareSendCircleViewController].selectModelArray.count+self.selectArray.count)];
+    _totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)self.selectArray.count];
     [self.picsCollection reloadData];
     
 }
@@ -132,7 +132,7 @@
         _totalRound.layer.masksToBounds = YES;
         _totalRound.textAlignment = NSTextAlignmentCenter;
         _totalRound.textColor = [UIColor whiteColor];
-        _totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)([SendCircleViewController shareSendCircleViewController].selectModelArray.count)];
+//        _totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)([SendCircleViewController shareSendCircleViewController].selectModelArray.count)];
         _totalRound.font = FONT_ArialMT(15);
         [_totalRound.layer setCornerRadius:5];
     }
@@ -331,7 +331,7 @@
     if (photo != nil) {
         if (photo.isSelect == NO) {
             
-            if ((self.selectArray.count+[SendCircleViewController shareSendCircleViewController].selectModelArray.count) > 8) {
+            if (self.selectArray.count > 8) {
                 
                 [self showSelectPhotoAlertView:9];
                 
@@ -345,7 +345,7 @@
                     [self changeSelectButtonStateAtIndex:index withPhoto:photo];
                     [self.selectArray insertObject:[self.photoArray objectAtIndex:index] atIndex:self.selectArray.count];
                     
-                    self.totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)(self.selectArray.count+[SendCircleViewController shareSendCircleViewController].selectModelArray.count)];
+                    self.totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)(self.selectArray.count)];
                 }
             }
             
@@ -354,7 +354,7 @@
             [self changeSelectButtonStateAtIndex:index withPhoto:photo];
             [self.selectArray removeObject:[self.photoArray objectAtIndex:index]];
             [[ZZAlumAnimation sharedAnimation] roundAnimation:self.totalRound];
-            self.totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)(self.selectArray.count+[SendCircleViewController shareSendCircleViewController].selectModelArray.count)];
+            self.totalRound.text = [NSString stringWithFormat:@"%lu/9",(unsigned long)self.selectArray.count];
         }
     }
     
@@ -399,13 +399,13 @@
 }
 
 #pragma WCLCutPictureDelegate
-- (void)imageCropper:(WCLPictureViewController *)cropperViewController didFinished:(UIImage *)editedImage{
-     self.PhotoResult(editedImage);
-     [self dismissViewControllerAnimated:YES completion:nil];
-}
-- (void)imageCropperDidCancel:(WCLPictureViewController *)cropperViewController {
-    
-}
+//- (void)imageCropper:(WCLPictureViewController *)cropperViewController didFinished:(UIImage *)editedImage{
+//     self.PhotoResult(editedImage);
+//     [self dismissViewControllerAnimated:YES completion:nil];
+//}
+//- (void)imageCropperDidCancel:(WCLPictureViewController *)cropperViewController {
+//
+//}
 #pragma UICollectionView --- Delegate
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 
@@ -435,9 +435,9 @@
                     if (result==nil) {
                         [[ZZPhotoAlert sharedAlert] showPhotoAlert];
                     } else {
-                        WCLPictureViewController *imageCropperController = [[WCLPictureViewController alloc] initWithImage:result cropFrame:CGRectMake((SCREEN_WIGHT-300)/2, (SCREEN_HEIGHT-SCREEN_WIGHT)/2, 300, 300)];
-                        imageCropperController.delegate = self;
-                        [self.navigationController pushViewController:imageCropperController animated:YES];
+//                        WCLPictureViewController *imageCropperController = [[WCLPictureViewController alloc] initWithImage:result cropFrame:CGRectMake((SCREEN_WIGHT-300)/2, (SCREEN_HEIGHT-SCREEN_WIGHT)/2, 300, 300)];
+//                        imageCropperController.delegate = self;
+//                        [self.navigationController pushViewController:imageCropperController animated:YES];
                     }
                 }];
             }
@@ -453,9 +453,9 @@
                     if (result==nil) {
                         [[ZZPhotoAlert sharedAlert] showPhotoAlert];
                     } else {
-                        WCLPictureViewController *imageCropperController = [[WCLPictureViewController alloc] initWithImage:result cropFrame:CGRectMake((SCREEN_WIGHT-300)/2, (SCREEN_HEIGHT-SCREEN_WIGHT)/2, 300, 300)];
-                        imageCropperController.delegate = self;
-                        [self.navigationController pushViewController:imageCropperController animated:YES];
+//                        WCLPictureViewController *imageCropperController = [[WCLPictureViewController alloc] initWithImage:result cropFrame:CGRectMake((SCREEN_WIGHT-300)/2, (SCREEN_HEIGHT-SCREEN_WIGHT)/2, 300, 300)];
+//                        imageCropperController.delegate = self;
+//                        [self.navigationController pushViewController:imageCropperController animated:YES];
                     }
                 }];
             }
