@@ -153,6 +153,7 @@
     if ([sender.currentTitle isEqualToString:@"查看结算详情"]) {
         TradeDetailViewController *deta = [TradeDetailViewController new];
         deta.cashStr = self.cashStr;
+        deta.orderID = self.orderID;
         [self.navigationController pushViewController:deta animated:YES];
     } else {
         [self.navigationController popToRootViewControllerAnimated:YES];

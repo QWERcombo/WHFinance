@@ -21,6 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"设置";
+    [self.dataMuArr addObjectsFromArray:@[@[@"setting_0",@"修改密码"],@[@"setting_1",@"关于我们"],@[@"setting_2",@"推送通知"]]];
     
     [self setupSubViews];
 }
@@ -39,44 +40,23 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section==0) {
-        return 3;
+        return self.dataMuArr.count;
     } else {
         return 0;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    }
-    cell.textLabel.font = FONT_ArialMT(18);
-    cell.textLabel.textColor = [UIColor Grey_WordColor];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    if (indexPath.row==0) {
-        cell.textLabel.text = @"修改密码";
-        cell.imageView.image = IMG(@"setting_0");
-    } else if (indexPath.row==1) {
-        cell.textLabel.text = @"关于我们";
-        cell.imageView.image = IMG(@"setting_1");
-    } else {
-        cell.textLabel.text = @"推送通知";
-        cell.imageView.image = IMG(@"setting_2");
-    }
-    
-    UIView *line = [UIView new];
-    [cell.contentView addSubview:line];
-    line.backgroundColor = [UIColor Grey_LineColor];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(cell.contentView.mas_left).offset(15);
-        make.right.equalTo(cell.contentView.mas_right).offset(15);
-        make.bottom.equalTo(cell.contentView.mas_bottom);
-        make.height.equalTo(@(1));
+    NSArray *namestr = [self.dataMuArr objectAtIndex:indexPath.row];
+    MineListCell *cell = (MineListCell *)[UtilsMold creatCell:@"MineListCell" table:tableView deledate:self model:namestr data:nil andCliker:^(NSDictionary *clueDic) {
+        
     }];
-    if (indexPath.row==2) {
-        [line removeFromSuperview];
-    }
-    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    [cell.line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(cell.contentView.mas_left).offset(12.5);
+        make.bottom.equalTo(cell.contentView.mas_bottom);
+        make.right.equalTo(cell.contentView.mas_right).offset(17.5);
+        make.centerX.equalTo(cell.contentView.mas_centerX);
+    }];
     return cell;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -134,8 +114,25 @@
 
 - (void)buttonAction:(UIButton *)sender {
     NSLog(@"退出登录");
-    [[UserData currentUser] removeMe];
-    [[UtilsData sharedInstance] postLogoutNotice];
+//    [[UserData currentUser] removeMe];
+//    [[UtilsData sharedInstance] postLogoutNotice];
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.loginOut"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+//        NSLog(@"%@", resultDic);
+        if (resultDic) {
+            [[UserData currentUser] removeMe];
+            [[UtilsData sharedInstance] postLogoutNotice];
+            [[PublicFuntionTool sharedInstance] hangShake];//握手
+        }
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
 }
 
 

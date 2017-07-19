@@ -50,7 +50,7 @@
         self.title = @"忘记密码";
     }
     
-    self.codeToken = @"aaaaaaaaaaaaaaaaaaaaaaaaa";
+    self.codeToken = @"";
     UIBarButtonItem *backButton = [[UtilsData sharedInstance] itemWithImageName:@"MGoBack" highImageName:@"MGoBack" target:self action:@selector(backAction:)];
     self.navigationItem.leftBarButtonItems = @[backButton];
     self.nameArray = [NSArray arrayWithObjects:@"login_phone",@"login_code",@"login_phone",@"login_code",@"login_phone", nil];
@@ -168,38 +168,6 @@
         tempStr = @"确定，请重新登录";
     }
     
-    if ([self.nameType isEqualToString:@"register"]) {
-//        UIView *protocolsView = [[UIView alloc] initWithFrame:CGRectMake(15, 205, 110, 13)];
-//         [self.mainView addSubview:protocolsView];
-//        checkImgv = [UIImageView new];
-//        checkImgv.image = IMG(@"login_check_y");
-//        [protocolsView addSubview:checkImgv];
-//        [checkImgv mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.width.height.equalTo(@(13));
-//            make.centerY.left.equalTo(protocolsView);
-//        }];
-//
-//        UILabel *hintLab = [YXPUtil creatUILable:@"本人同意并确认" Font:FONT_ArialMT(12) TextColor:[UIColor colorWithR:102 G:102 B:102 A:1]];
-//        [protocolsView addSubview:hintLab];
-//        [hintLab mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerY.equalTo(protocolsView);
-//            make.left.equalTo(checkImgv.mas_right).offset(8);
-//        }];
-//
-//        UITapGestureRecognizer *checkTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(chechAction:)];
-//        [protocolsView addGestureRecognizer:checkTap];
-//
-//        UIButton *protoBtn = [UIButton buttonWithTitle:@"《用户协议》" andFont:FONT_ArialMT(12) andtitleNormaColor:[UIColor colorWithR:85 G:166 B:229 A:1] andHighlightedTitle:[UIColor colorWithR:185 G:166 B:229 A:1] andNormaImage:nil andHighlightedImage:nil];
-//        [protoBtn addTarget:self action:@selector(proBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-//        protoBtn.userInteractionEnabled = YES;
-//        [_mainView addSubview:protoBtn];
-//        [protoBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.equalTo(protocolsView.mas_right).offset(0);
-//            make.centerY.equalTo(protocolsView.mas_centerY);
-//            make.height.equalTo(@(13));
-//        }];
-        
-    }
     
     
     UIButton *doneBtn = [UIButton buttonWithTitle:tempStr andFont:FONT_ArialMT(19) andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:nil andHighlightedImage:nil];
@@ -245,26 +213,30 @@
 }
 
 - (void)doneAction:(UIButton *)sender {
-    NSLog(@"\n%@--\n%@--\n%@--\n%@", self.phone, self.checkcode, self.code, self.confirmcode);
-//    if (![self.phone isValidateMobile]) {//验证手机号
-//        [[UtilsData sharedInstance] showAlertTitle:@"请输入正确的手机号" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
-//        return;
-//    }
-//    if (self.checkcode.length!=4) {//验证验证码
-//        [[UtilsData sharedInstance] showAlertTitle:@"请输入正确的验证码" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
-//        return;
-//    }
-//    if (![self.code isEqualToString:self.confirmcode]) {//验证密码是否一样
-//        [[UtilsData sharedInstance] showAlertTitle:@"两次输入的密码不一致" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
-//        return;
-//    }
-//    if (![self.confirmcode judgePassWordLegal]) {
-//        [[UtilsData sharedInstance] showAlertTitle:@"请输入8-12位数字与字母的组合" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
-//        return;
-//    }
+    NSLog(@"\n%@--\n%@--\n%@--\n%@--\n%@", self.phone, self.checkcode, self.code, self.confirmcode,self.referphone);
+    if (![self.phone isValidateMobile]) {//验证手机号
+        [[UtilsData sharedInstance] showAlertTitle:@"请输入正确的手机号" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        return;
+    }
+    if (self.checkcode.length!=4) {//验证验证码
+        [[UtilsData sharedInstance] showAlertTitle:@"请输入正确的验证码" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        return;
+    }
+    if (![self.code isEqualToString:self.confirmcode]) {//验证密码是否一样
+        [[UtilsData sharedInstance] showAlertTitle:@"两次输入的密码不一致" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        return;
+    }
+    if (![self.confirmcode judgePassWordLegal]) {
+        [[UtilsData sharedInstance] showAlertTitle:@"请输入8-12位数字与字母的组合" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        return;
+    }
+    if (![self.referphone isValidateMobile]) {//验证手机号
+        [[UtilsData sharedInstance] showAlertTitle:@"请输入正确的邀请人手机号" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        return;
+    }
+    
     
     if ([self.nameType isEqualToString:@"register"]) {//注册
-        //key={"user.regin":{"userInfo":{"mobileNumber":"13631233543","password":"123456","userName":"sujianfei"},"smsCode":"123456","token":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}}
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
         [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"smsCode":self.checkcode,@"token":self.codeToken,@"referenceMobileNumber":self.referphone,@"userInfo":@{@"mobileNumber":self.phone,@"password":self.confirmcode,@"userName":self.phone}}] forKey:@"user.regin"];
@@ -273,6 +245,7 @@
         [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
             NSLog(@"+++++%@", resultDic);
             [[UtilsData sharedInstance] showAlertTitle:@"注册成功,请登录" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+            
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
             });
@@ -281,7 +254,6 @@
             
         }];
     } else {//忘记密码
-//        key={"user.forgetPassword":{"smsCode":"1234","newPassword":"123455","userName":"sujianfei","token":"12a4309795c0ba2e8f370b4db3367bfbebdf3eb39ae76e4006f5723b4ab06a8a"}}
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
         [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"smsCode":@"1234",@"token":[UserData currentUser].userToken, @"userName":self.phone, @"newPassword":self.code}] forKey:@"user.forgetPassword"];
@@ -310,7 +282,10 @@
 - (void)codeAction:(UIButton *)sender {
     [self.view endEditing:YES];
     [[PublicFuntionTool sharedInstance] getSmsCodeByPhoneString:self.phone];
-    [self startTimer:sender];
+    [[PublicFuntionTool sharedInstance] setClikBlock:^(NSString *clueStr) {
+        self.codeToken = clueStr;
+        [self startTimer:sender];
+    }];
 }
 
 - (void)startTimer:(UIButton *)btnCoder

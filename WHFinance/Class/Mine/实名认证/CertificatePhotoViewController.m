@@ -23,7 +23,7 @@
     // Do any additional setup after loading the view.
     self.title = @"实名认证";
     self.nameArr = @[@"身份证正面",@"手持身份证照片",@"付款信用卡",@"付款人身份证照片"];
-    self.detailArr = @[@[@"身份证照片要求：",@"1.请按照示例图提交身份证照片；\n\n2.照片需要清晰标识身份证上的相片、身份证号码和证件有效期。"],@[@"身份证照片要求：",@"1.请按照实例图提交身份证照片；\n\n2.照片需要清晰标识身份证上的相片、身份证号码和证件有效期。"],@[@"照片要求：",@"1.请按照示例提交手持信用卡半身照片；\n\n2.照片需露出头、肩膀、手臂以及卡片内容清晰可辨认。"],@[@"照片要求：",@"1.请按照示例提交储蓄卡信用卡照片；\n\n2.拍摄时请将储蓄卡和信用卡上下放置拍摄于同一张照片内，确保边框完整、字体清晰。"]];
+    self.detailArr = @[@[@"温馨提示：",@"1.请确保“身份证”相关信息全部清晰\n2.身份证请保证平铺效果\n3.支持JPG图片格式，大小不要超过500KB\n4.可以通过相机拍摄或者扫描方式获得照片"],@[@"温馨提示：",@"1.请按照示例提交手持信用卡半身照片；\n2.照片需露出头、肩膀、手臂以及卡片内容清晰可辨认。"],@[@"温馨提示：",@"1.请按照示例提交储蓄卡信用卡照片；\n2.拍摄时请将储蓄卡和信用卡上下放置拍摄于同一张照片内，确保边框完整、字体清晰。"],@[@"温馨提示：",@"1.请确保“身份证”相关信息全部清晰\n2.身份证请保证平铺效果\n3.支持JPG图片格式，大小不要超过500KB\n4.可以通过相机拍摄或者扫描方式获得照片"]];
     self.selectPhotoArr = [NSMutableArray array];
     [self setUpSubviews];
 }
@@ -76,7 +76,7 @@
             tempstr = [self.nameArr objectAtIndex:j];
         }
         
-        UIView *blank = [self createCellViewWithImage:IMG(@"") andTittle:tempstr];
+        UIView *blank = [self createCellViewWithImage:IMG(@"certificate_add") andTittle:tempstr];
         blank.tag = 1000+j;
         blank.frame = CGRectMake(25+(ww+15)*j, 60, ww, hh);
         [mainView addSubview:blank];
@@ -133,7 +133,6 @@
     UIImageView *imgv = [UIImageView new];
     imgv.contentMode = UIViewContentModeScaleAspectFill;
     [blank addSubview:imgv];
-    imgv.backgroundColor = COLOR_TEMP;
     imgv.image = image;
     [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.equalTo(blank);
@@ -165,7 +164,7 @@
     [content mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(mainView);
         make.width.equalTo(@(SCREEN_WIGHT-25));
-        make.height.equalTo(@(450));
+        make.height.equalTo(@(460));
     }];
     
     UILabel *hint = [UILabel lableWithText:title Font:FONT_ArialMT(15) TextColor:[UIColor Grey_WordColor]];
@@ -191,7 +190,6 @@
     }];
     
     UIImageView *imgview = [UIImageView new];
-    imgview.backgroundColor = COLOR_TEMP;
     imgview.image = image;
     [content addSubview:imgview];
     [imgview mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -215,11 +213,19 @@
     [detailLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(titlelab.mas_bottom).offset(15);
         make.centerX.equalTo(content.mas_centerX);
-        make.width.equalTo(@(SCREEN_WIGHT-55));
+        make.width.equalTo(@(SCREEN_WIGHT-80));
     }];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:detailLab.text];
+    NSMutableParagraphStyle *para = [[NSMutableParagraphStyle alloc] init];
+    para.lineSpacing = 5;
+    [attStr addAttribute:NSParagraphStyleAttributeName value:para range:NSMakeRange(0, detailLab.text.length)];
+    detailLab.attributedText = attStr;
+    
     
     UIButton *doneBtn = [UIButton buttonWithTitle:@"知道了，我要上传图片" andFont:FONT_ArialMT(18) andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:IMG(@"") andHighlightedImage:IMG(@"")];
     doneBtn.backgroundColor = [UIColor mianColor:1];
+    doneBtn.layer.cornerRadius = 5;
+    doneBtn.clipsToBounds = YES;
     [doneBtn addTarget:self action:@selector(buttonCliked:) forControlEvents:UIControlEventTouchUpInside];
     doneBtn.tag = [self.nameArr indexOfObject:title]+2000;
     [content addSubview:doneBtn];
@@ -267,16 +273,19 @@
 - (void)blankTapAction:(UITapGestureRecognizer *)sender {//点击事件
     NSString *title = @"";
     NSArray *detailArr = [NSArray array];
+    NSString *imageName = @"";
     if ([self.fromController isEqualToString:@"no_card"]) {
         title = [self.nameArr objectAtIndex:sender.view.tag-998];
         detailArr = [self.detailArr objectAtIndex:sender.view.tag-998];
+        imageName = [NSString stringWithFormat:@"certificate_%ld", sender.view.tag-998];
     } else {
         title = [self.nameArr objectAtIndex:sender.view.tag-1000];
         detailArr = [self.detailArr objectAtIndex:sender.view.tag-1000];
+        imageName = [NSString stringWithFormat:@"certificate_%ld", sender.view.tag-1000];
     }
-//    NSLog(@"%@", [self.nameArr objectAtIndex:sender.view.tag-1000]);
-    UIView *back = [self createDetailViewWith:IMG(@"") andTitle:title detailContent:detailArr];
     
+//    NSLog(@"%@", [self.nameArr objectAtIndex:sender.view.tag-1000]);
+    UIView *back = [self createDetailViewWith:IMG(imageName) andTitle:title detailContent:detailArr];
     [MY_WINDOW addSubview:back];
 }
 - (void)mainTapAction:(UITapGestureRecognizer *)sender {

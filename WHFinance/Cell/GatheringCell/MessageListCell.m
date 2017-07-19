@@ -56,15 +56,6 @@
     }];
     
     
-    self.line = [UIView new];
-    [contentView addSubview:self.line];
-    self.line.backgroundColor = [UIColor Grey_LineColor];
-    [self.line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(1));
-        make.bottom.equalTo(contentView.mas_bottom);
-        make.width.equalTo(@(SCREEN_WIGHT-10));
-        make.centerX.equalTo(contentView.mas_centerX);
-    }];
     
 }
 

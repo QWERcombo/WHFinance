@@ -13,6 +13,6 @@
 @property (nonatomic, strong) NSString *moneyStr;//金额
 @property (nonatomic, strong) NSString *proudctDetailId;//支付方式的id
 @property (nonatomic, strong) NSString *payWay;//支付方式 0微信1QQ2支付宝3银联
-//@property (nonatomic, assign) BOOL isFromParter;
+@property (nonatomic, strong) NSString *isParter;
 
 @end

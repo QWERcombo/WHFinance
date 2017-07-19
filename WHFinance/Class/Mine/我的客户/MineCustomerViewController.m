@@ -27,7 +27,9 @@
         [self setUpBarItems];
     }
     
-    
+    for (NSInteger i=0; i<3; i++) {
+        [self.dataMuArr addObject:@"1"];
+    }
     [self getProfitWithdraw];
 }
 
@@ -58,12 +60,19 @@
     if (section==0) {
         return 0;
     } else {
-        return 3;
+        return self.dataMuArr.count;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MineCustomerCell *cell = (MineCustomerCell *)[UtilsMold creatCell:@"MineCustomerCell" table:tableView deledate:self model:nil data:nil andCliker:^(NSDictionary *clueDic) {
+    MineCustomerCell *cell = (MineCustomerCell *)[UtilsMold creatCell:@"MineCustomerCell" table:tableView deledate:self model:nil data:SINT(indexPath.row) andCliker:^(NSDictionary *clueDic) {
         
+    }];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    [cell.line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(cell.contentView.mas_left).offset(12.5);
+        make.bottom.equalTo(cell.contentView.mas_bottom);
+        make.right.equalTo(cell.contentView.mas_right).offset(17.5);
+        make.centerX.equalTo(cell.contentView.mas_centerX);
     }];
     return cell;
 }
@@ -151,6 +160,7 @@
         NSInteger totalnew = [resultDic[@"resultData"][@"firstCustomersNum"] integerValue]+[resultDic[@"resultData"][@"seconedCustomersNum"] integerValue]+[resultDic[@"resultData"][@"thirdCustomersNum"] integerValue];
         self.todayAddNew = SINT(todaynew);
         self.totalAddNew = SINT(totalnew);
+        
         
         [self.tabView reloadData];
     } failure:^(NSString *error, NSInteger code) {

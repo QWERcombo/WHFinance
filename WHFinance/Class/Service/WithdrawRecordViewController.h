@@ -10,4 +10,6 @@
 
 @interface WithdrawRecordViewController : BaseViewController
 @property (nonatomic, strong) NSString *orderID;
+@property (nonatomic, strong) NSString *cashStr;
+@property (nonatomic, strong) NSString *isPartner;//支付合伙人
 @end

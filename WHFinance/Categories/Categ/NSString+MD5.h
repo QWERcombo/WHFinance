@@ -74,10 +74,21 @@
 //返回32位大小写字母和数字
 +(NSString *)return32LetterAndNumber;
 
-// /100处理返回数据
+//除以100处理返回数据
 - (NSString *)handleDataSourceTail;
 
-// 精确到毫秒的时间戳转年月日
+//精确到毫秒的时间戳转年月日
 - (NSString *)NSTimeIntervalTransToYear_Month_Day;
+
+//检查银行卡
+- (BOOL)checkBankCardNumber:(NSString* )cardNo;
+//输入的是否都是中文
+- (BOOL)IsChinese;
+
+
+
+
+
+
 
 @end

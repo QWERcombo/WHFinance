@@ -32,6 +32,11 @@
     return _segment;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    [self getProfitWithdraw];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -42,13 +47,12 @@
     }
     
     if ([self.titleName isEqualToString:@"代理分润"]) {
-        [self getProfitDataListWithStatus:NO];// NO代理分润 YES三级分润
+        [self getProfitDataListWithStatus:NO];// NO代理分润(代理商) YES三级分润(合伙人)
     } else if ([self.titleName isEqualToString:@"三级分润"]) {
         [self getProfitDataListWithStatus:YES];// NO代理分润 YES三级分润
     } else {
         [self getProfitDataListWithStatus:NO];// NO代理分润 YES三级分润
     }
-    [self getProfitWithdraw];
 }
 
 - (void)setUpSubviews {
@@ -143,7 +147,11 @@
     self.dashboardView.bgImage = [UIImage imageNamed:@"dial_index"];
     [content addSubview:self.dashboardView];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.dashboardView refreshJumpNOFromNO:@"0" toNO:[self.todayBalance handleDataSourceTail]];
+//        if ([self.todayBalance integerValue]>10000) {
+//            [self.dashboardView refreshJumpNOFromNO:@"0" toNO:@"99"];
+//        } else {
+//        }
+//            [self.dashboardView refreshJumpNOFromNO:@"0" toNO:[self.todayBalance handleDataSourceTail]];
     });
     
     
@@ -158,7 +166,7 @@
     }];
     
     
-    UILabel *totalCount = [UILabel lableWithText:[NSString stringWithFormat:@"账户累计利润 ￥%@", [[NSString stringWithFormat:@"%@",self.totalBalance] handleDataSourceTail]] Font:FONT_ArialMT(14) TextColor:[UIColor whiteColor]];
+    UILabel *totalCount = [UILabel lableWithText:[NSString stringWithFormat:@"账户累计利润 ￥%@", [[NSString stringWithFormat:@"%@",self.balance] handleDataSourceTail]] Font:FONT_ArialMT(14) TextColor:[UIColor whiteColor]];
     [content addSubview:totalCount];
     [totalCount mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@(20));
@@ -203,8 +211,11 @@
 
 //切换数据源
 - (void)bill_segmentAction:(UISegmentedControl *)sender {
-//    [self getProfitDataListWithStatus:YES];
-    
+    if (sender.selectedSegmentIndex==0) {
+        [self getProfitDataListWithStatus:NO];
+    } else {
+        [self getProfitDataListWithStatus:YES];
+    }
 }
 
 - (void)caskBtnAction:(UIButton *)sender {
@@ -214,14 +225,21 @@
 
 #pragma mark - getDataSource
 - (void)getProfitDataListWithStatus:(BOOL)status {//获取分润数据列表
+    NSString *url_key = @"";
+    if (status) {
+        url_key = @"transqury.selectProfitaccountDetailList";
+    } else {
+        url_key = @"transqury.selectAgentAccountDetailList";
+    }
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
     //    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"aa":@"bb"}] forKey:@"transqury.test"];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"pageNumber":@"1"}] forKey:@"transqury.selectAgentAccountDetailList"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"pageNumber":@"1"}] forKey:url_key];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
 //        NSLog(@"%@", resultDic);
+        
         NSArray *dataSourceArr = resultDic[@"resultData"];
         for (NSDictionary *dataDic in dataSourceArr) {
             MyProfitModel *model = [[MyProfitModel alloc] initWithDictionary:dataDic error:nil];
@@ -240,7 +258,7 @@
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-//        NSLog(@"----%@", resultDic);
+        NSLog(@"----%@", resultDic);
         NSDictionary *data = resultDic[@"resultData"];
         self.balance = [NSString stringWithFormat:@"%@",data[@"balance"]];
         self.todayBalance = [NSString stringWithFormat:@"%@",data[@"todayBalance"]];

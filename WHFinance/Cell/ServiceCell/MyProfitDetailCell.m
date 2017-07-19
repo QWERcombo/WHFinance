@@ -23,15 +23,6 @@
 
 - (void)initSubView {
     self.backgroundColor = [UIColor whiteColor];
-    self.line = [UIView new];
-    [self.contentView addSubview:self.line];
-    self.line.backgroundColor = [UIColor Grey_LineColor];
-    [self.line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(1));
-        make.bottom.equalTo(self.contentView.mas_bottom);
-        make.left.equalTo(self.contentView.mas_left).offset(15);
-        make.right.equalTo(self.contentView.mas_right).offset(-15);
-    }];
     
     self.timeLab = [UILabel lableWithText:@"周五\n06-30" Font:FONT_ArialMT(12) TextColor:[UIColor mianColor:2]];
     self.timeLab.numberOfLines = 2;

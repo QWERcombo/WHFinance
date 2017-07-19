@@ -11,7 +11,6 @@
 @interface MyProfitDetailCell : BaseCell
 @property (nonatomic, copy) ClikBlock clikBlock;
 @property (nonatomic, strong) UILabel *detailLab;
-@property (nonatomic, strong) UIView *line;
 @property (nonatomic, strong) UILabel *timeLab;
 @property (nonatomic, strong) UILabel *MoneyLab;
 

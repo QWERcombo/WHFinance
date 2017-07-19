@@ -12,6 +12,11 @@
 
 @interface PublicFuntionTool : NSObject
 
+typedef void (^PassRealStatusBlock)(NSString *status);
+@property (nonatomic, copy) ClikBlock clikBlock;
+@property (nonatomic, copy) PassRealStatusBlock statusBlock;
+
+
 AS_SINGLETON(PublicFuntionTool);
 
 //发送验证码
@@ -27,7 +32,10 @@ AS_SINGLETON(PublicFuntionTool);
 - (NSString *)getBase64StringFrom:(UIImage *)image;
 
 //获取实名认证的状态 YES是NO否
-- (BOOL)getRealName;
+- (void)getRealName:(PassRealStatusBlock)block;
+
+//握手
+- (void)hangShake;
 
 
 @end

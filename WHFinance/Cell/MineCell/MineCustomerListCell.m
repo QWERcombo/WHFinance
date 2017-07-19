@@ -13,19 +13,10 @@
 
 - (void)initSubView {
     self.contentView.backgroundColor = [UIColor whiteColor];
-    self.line = [UIView new];
-    [self.contentView addSubview:self.line];
-    self.line.backgroundColor = [UIColor Grey_LineColor];
-    [self.line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(1));
-        make.left.equalTo(self.contentView.mas_left).offset(12.5);
-        make.right.equalTo(self.contentView.mas_right).offset(-12.5);
-        make.bottom.equalTo(self.contentView.mas_bottom);
-    }];
     
     self.typeImgv = [UIImageView new];
     [self.contentView addSubview:self.typeImgv];
-    self.typeImgv.backgroundColor = COLOR_TEMP;
+    self.typeImgv.image = IMG(@"customer_0");
     [self.typeImgv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@(30));
         make.left.equalTo(self.contentView.mas_left).offset(12.5);

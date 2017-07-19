@@ -16,7 +16,6 @@
 @property (nonatomic, strong) UILabel *timeLab;
 @property (nonatomic, strong) UILabel *nameLab;
 @property (nonatomic, strong) UIButton *statusBtn;
-@property (nonatomic, strong) UIView *line;
 
 - (void)loadData:(NSObject *)model andCliker:(ClikBlock)clue;
 @end

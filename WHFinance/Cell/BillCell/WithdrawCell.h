@@ -13,7 +13,6 @@
 @property (nonatomic, strong) UIImageView *payImgv;
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UILabel *numLab;
-@property (nonatomic, strong) UIView *line;
 
 
 - (void)loadData:(NSObject *)model andCliker:(ClikBlock)clue;

@@ -43,9 +43,12 @@
 //**************    地址   ***********************1️⃣
 
 //《测试环境》
-#define  BASE_URL    @"http://192.168.0.3:10101/api/excute"
-//#define  BASE_URL    @"http://192.168.0.3:10100/api/excute"
-#define  base_ii     @"http://192.168.0.3:10101/api/handshake"
+#define  BASE_URL    @"http://192.168.0.3:10102/api/excute"//加密测试
+#define  base_ii     @"http://192.168.0.3:10102/api/handshake"
+
+//#define  BASE_URL    @"http://115.182.112.97:10102/api/excute"
+//#define  BASE_URL    @"http://192.168.0.3:10101/api/excute"//不加密
+//#define  base_ii     @"http://115.182.112.97:10102/api/handshake"//加密正式
 
 //《正式环境》
 //#define  BASE_URL    @"https://app.gogotree.com"

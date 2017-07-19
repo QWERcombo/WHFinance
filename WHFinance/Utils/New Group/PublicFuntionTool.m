@@ -16,7 +16,6 @@ DEF_SINGLETON(PublicFuntionTool);
 }
 
 - (void)getSmsCodeByPhoneString:(NSString *)phone {
-    
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
     [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"param":@{@"mobile":phone,@"type":@"register"}}] forKey:@"common.sendMsgCode"];
@@ -25,9 +24,8 @@ DEF_SINGLETON(PublicFuntionTool);
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         if (resultDic) {
             [[UtilsData sharedInstance] showAlertTitle:@"短信验证码" detailsText:@" 已发送!" time:2 aboutType:MBProgressHUDModeText state:YES];
-//            self.codeToken = resultDic[@"resultData"];
+            _clikBlock(resultDic[@"resultData"]);
         }
-        
     } failure:^(NSString *error, NSInteger code) {
         
     }];
@@ -44,8 +42,8 @@ DEF_SINGLETON(PublicFuntionTool);
 //    NSString* thumbURL =  IMG(@"");
     UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:@"贪财猫" descr:@"贪财猫贪财猫" thumImage:IMG(@"login_logo")];
     //设置网页地址
-    shareObject.webpageUrl = @"http://www.wanhongpay.com";
-    
+//    shareObject.webpageUrl = @"http://www.wanhongpay.com";
+    shareObject.webpageUrl = @"http://115.182.112.97:10001/evolution-merchant-service/app_regin.jsp";
     //分享消息对象设置分享内容对象
     messageObject.shareObject = shareObject;
     
@@ -137,26 +135,55 @@ DEF_SINGLETON(PublicFuntionTool);
     return imageBase64Str;
 }
 
-- (BOOL)getRealName {//获取实名认证
+- (void)getRealName:(PassRealStatusBlock)block {//获取实名认证
+    _statusBlock = block;
     //status  0待审核 1成功 2审核中
-    __block BOOL isReal=NO;
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
     [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"---real---%@", resultDic);
-        if ([resultDic[@"resultData"][@"status"] integerValue]==1) {
-            isReal = YES;
-        } else {
-            isReal = NO;
-        }
+//        NSLog(@"---real---%@", resultDic);
+        NSString *statusNo = resultDic[@"resultData"][@"status"];
+        _statusBlock(statusNo);
     } failure:^(NSString *error, NSInteger code) {
         
     }];
     
-    return isReal;
+}
+
+- (void)hangShake {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSString *randomStr = [NSString return32LetterAndNumber];
+    //    NSLog(@"random---%@", randomStr);
+    NSString *passValue = @"";
+    [[NSUserDefaults standardUserDefaults] setObject:randomStr forKey:@"secret_key"];
+    NSString *public_key_path = [[NSBundle mainBundle] pathForResource:@"rsa_public_key.der" ofType:nil];
+    NSString *secret_key = [[NSUserDefaults standardUserDefaults] objectForKey:@"request_head"];
+    
+    if (secret_key.length) {
+        NSString *random = [RSAEncryptor encryptString:randomStr publicKeyWithContentsOfFile:public_key_path];
+        passValue = [NSString stringWithFormat:@"%@%@", secret_key, random];
+        
+    } else {
+        passValue = [RSAEncryptor encryptString:randomStr publicKeyWithContentsOfFile:public_key_path];
+        
+    }
+    [dict setObject:passValue forKey:@"key"];
+    
+    [DataSend sendPostRequestToHandShakeWithBaseURL:base_ii Dictionary:dict WithType:@"" showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+        
+        //        NSLog(@"-----%@", resultDic);
+        NSString *sss = [NSString stringWithFormat:@"%@",resultDic[@"head"]];
+        NSString *head = [NEUSecurityUtil neu_decryptAESData:sss];
+        //        NSLog(@"+++++%@", head);
+        [[NSUserDefaults standardUserDefaults] setObject:head forKey:@"request_head"];
+        //        NSLog(@"%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"request_head"]);
+        
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
 }
 
 

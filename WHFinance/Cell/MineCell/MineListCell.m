@@ -25,23 +25,14 @@
     [self.contentView addSubview:content];
     content.backgroundColor = [UIColor whiteColor];
     [content mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.top.equalTo(self.contentView);
+        make.left.top.equalTo(self.contentView);
         make.right.equalTo(self.mas_right).offset(50);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-1);
     }];
     
-    _line = [[UIView alloc] init];
-    _line.backgroundColor = [UIColor Grey_LineColor];
-    [self.contentView addSubview:_line];
-    [_line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(1));
-        make.left.equalTo(self.contentView.mas_left).offset(15);
-        make.right.equalTo(self.contentView.mas_right).offset(-15);
-        make.bottom.equalTo(self.contentView.mas_bottom);
-    }];
     
     self.typeImgv = [UIImageView new];
     [content addSubview:self.typeImgv];
-//    self.typeImgv.backgroundColor = COLOR_TEMP;
     [self.typeImgv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@(20));
         make.left.equalTo(self.contentView.mas_left).offset(15);
@@ -56,6 +47,12 @@
         make.left.equalTo(self.typeImgv.mas_right).offset(10);
     }];
     
+    self.rightLab = [UILabel lableWithText:@"" Font:FONT_ArialMT(13) TextColor:[UIColor Grey_WordColor]];
+    [self.contentView addSubview:self.rightLab];
+    [self.rightLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView.mas_right).offset(-5);
+        make.centerY.equalTo(self.typeImgv.mas_centerY);
+    }];
     
 }
 

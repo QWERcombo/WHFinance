@@ -15,12 +15,18 @@
 
 @interface BindedCardViewController (){
     UIButton *codeBtn;
-    UIDatePicker *datap;
-    UIView *backView;
 }
 @property (nonatomic, strong) LQXSwitch *switch_choose;
 @property (nonatomic, assign) BOOL isReal; //是否是本人
 @property (nonatomic, strong) NSString *orderID;
+@property (nonatomic, strong) NSString *cardHolder;//持卡人
+@property (nonatomic, strong) NSString *identiCardNo;//身份证号
+@property (nonatomic, strong) NSString *creditCardNo;//信用卡号
+@property (nonatomic, strong) NSString *creditCardDate;//信用阿卡有效期
+@property (nonatomic, strong) NSString *CVV2No;//cvv2
+@property (nonatomic, strong) NSString *phoneNo;//手机号
+@property (nonatomic, strong) NSString *codeNo;//验证码
+@property (nonatomic, strong) RealCertificateModel *model;
 @end
 
 @implementation BindedCardViewController
@@ -36,9 +42,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     self.title = @"无卡支付";
     
+    [self getRealName];//获取持卡人信息
     [self setUpSubviews];
 }
 
@@ -166,24 +172,7 @@
         make.left.equalTo(content.mas_left).offset(10);
         make.height.equalTo(@(12));
     }];
-    if (!_isReal) {
-        UILabel *nameLab = [UILabel lableWithText:[UserData currentUser].userName Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
-        [content addSubview:nameLab];
-        [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(content.mas_left).offset(90);
-            make.height.equalTo(@(12));
-            make.top.equalTo(cardHolder.mas_top);
-        }];
-        
-        UILabel *numberLab = [UILabel lableWithText:@"858585858585858585" Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
-        [content addSubview:numberLab];
-        [numberLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(content.mas_left).offset(90);
-            make.height.equalTo(@(12));
-            make.top.equalTo(cardNum.mas_top);
-        }];
-        
-    } else {
+    if (self.isPartner) {
         UITextField *nameLab = [UITextField new];
         [content addSubview:nameLab];
         nameLab.placeholder = @"姓名";
@@ -210,8 +199,54 @@
             make.centerY.equalTo(cardNum.mas_centerY);
             make.width.equalTo(@(150));
         }];
-        
-        
+    } else {
+        if (!_isReal) {
+            UILabel *nameLab = [UILabel lableWithText:self.model.realName Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
+            [content addSubview:nameLab];
+            [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(content.mas_left).offset(90);
+                make.height.equalTo(@(12));
+                make.top.equalTo(cardHolder.mas_top);
+            }];
+            
+            UILabel *numberLab = [UILabel lableWithText:self.model.identityCardNo Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
+            [content addSubview:numberLab];
+            [numberLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(content.mas_left).offset(90);
+                make.height.equalTo(@(12));
+                make.top.equalTo(cardNum.mas_top);
+            }];
+            
+        } else {
+            UITextField *nameLab = [UITextField new];
+            [content addSubview:nameLab];
+            nameLab.placeholder = @"姓名";
+            nameLab.tag = 1011;
+            nameLab.font = FONT_ArialMT(12);
+            nameLab.borderStyle = UITextBorderStyleRoundedRect;
+            [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(content.mas_left).offset(90);
+                make.height.equalTo(@(30));
+                make.centerY.equalTo(cardHolder.mas_centerY);
+                make.width.equalTo(@(120));
+            }];
+            
+            UITextField *numberLab = [UITextField new];
+            numberLab.keyboardType = UIKeyboardTypeNumberPad;
+            numberLab.borderStyle = UITextBorderStyleRoundedRect;
+            [content addSubview:numberLab];
+            numberLab.placeholder = @"请输入持卡人身份证号";
+            numberLab.tag = 1012;
+            numberLab.font = FONT_ArialMT(12);
+            [numberLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(content.mas_left).offset(90);
+                make.height.equalTo(@(30));
+                make.centerY.equalTo(cardNum.mas_centerY);
+                make.width.equalTo(@(150));
+            }];
+            
+            
+        }
     }
     
     
@@ -233,16 +268,11 @@
     
     UIView *lastView = nil;
     for (NSInteger i=0; i<5; i++) {
-        NSArray *placeholder = @[@"请输入卡号",@"信用卡有效期",@"信用卡背面后三位数",@"信用银行预留手机号",@"请输入短信验证码"];
-        UITextField *tf = [[UITextField alloc] init];
-        tf.font = FONT_ArialMT(12);
-        tf.tag = 1000+i;
-        tf.borderStyle = UITextBorderStyleRoundedRect;
-        tf.keyboardType = UIKeyboardTypeNumberPad;
-        tf.placeholder = [placeholder objectAtIndex:i];
-        if (i==1) {
-            tf.userInteractionEnabled = NO;
-        }
+        NSArray *placeholder = @[@"请输入信用卡号",@"信用卡有效期",@"信用卡背面后三位数",@"信用银行预留手机号",@"请输入短信验证码"];
+        UITextField *tf = nil;
+        
+        
+        tf = [[UITextField alloc] init];
         [content addSubview:tf];
         [tf mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.equalTo(@(30));
@@ -261,6 +291,18 @@
         }];
         
         lastView = tf;
+        tf.font = FONT_ArialMT(12);
+        tf.tag = 1000+i;
+        tf.borderStyle = UITextBorderStyleRoundedRect;
+        tf.keyboardType = UIKeyboardTypeNumberPad;
+        tf.placeholder = [placeholder objectAtIndex:i];
+        if (i==1) {
+            tf.userInteractionEnabled = NO;
+        }
+        
+        
+        
+        
         
         NSArray *array = @[@"信用卡号",@"信用卡有效期",@"CVV2",@"手机号码",@"验证码"];
         UILabel *label = [UILabel lableWithText:[array objectAtIndex:i] Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
@@ -312,62 +354,18 @@
     return mainView;
 }
 
-- (void)dateAction:(UIButton *)sender {//获取日期
-    backView = [[UIView alloc] initWithFrame:self.view.bounds];
-    backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
-    
-    datap = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-200, SCREEN_WIGHT, 200)];
-    datap.datePickerMode = UIDatePickerModeDate;
-    datap.locale = [NSLocale localeWithLocaleIdentifier:@"zh"];
-    [backView addSubview:datap];
-    datap.backgroundColor = [UIColor whiteColor];
-    UITapGestureRecognizer *dataTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dataTapAction:)];
-    UIView *actionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-240, SCREEN_WIGHT, 40)];
-    actionView.backgroundColor = [UIColor whiteColor];
-    [backView addSubview:actionView];
-    UIButton *cancel = [UIButton buttonWithTitle:@"取消" andFont:FONT_ArialMT(14) andtitleNormaColor:[UIColor mianColor:1] andHighlightedTitle:[UIColor mianColor:1] andNormaImage:nil andHighlightedImage:nil];
-    cancel.frame = CGRectMake(15, 10, 50, 20);
-    [actionView addSubview:cancel];
-    UIButton *done = [UIButton buttonWithTitle:@"确定" andFont:FONT_ArialMT(14) andtitleNormaColor:[UIColor mianColor:1] andHighlightedTitle:[UIColor mianColor:1] andNormaImage:nil andHighlightedImage:nil];
-    done.frame = CGRectMake(SCREEN_WIGHT-65, 10, 50, 20);
-    [actionView addSubview:done];
-    [cancel addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
-    [done addTarget:self action:@selector(doneAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UILabel *hintlab = [UILabel lableWithText:@"选择信用卡有效期" Font:FONT_ArialMT(14) TextColor:[UIColor Grey_WordColor]];
-    [actionView addSubview:hintlab];
-    [hintlab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(actionView.mas_centerY);
-        make.centerX.equalTo(actionView.mas_centerX);
-        make.height.equalTo(@(14));
+- (void)dateAction:(UIButton *)sender {//获取日期(年/月)
+    [self.view endEditing:YES];
+    //typePickerID == 1表示只有年显示
+    //typePickerID == 2表示年和月显示
+    //typePickerID == 3表示年,月,日显示
+    //typePickerID == 4表示年,周显示
+    [PickerView showPickerView:MY_WINDOW componentNum:2 typePickerID:2 selectStr:nil StrBlock:^(NSString *string) {
+        UITextField *dateTF = [self.view viewWithTag:1001];
+        dateTF.text = string;
     }];
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 39, SCREEN_WIGHT, 1)];
-    line.backgroundColor = [UIColor Grey_LineColor];
-    [actionView addSubview:line];
-    
-    
-    [backView addGestureRecognizer:dataTap];
-    [self.view addSubview:backView];
-    
 }
-- (void)dataTapAction:(UITapGestureRecognizer *)sender {
-    [datap removeFromSuperview];
-    [backView removeFromSuperview];
-}
-- (void)cancelAction:(UIButton *)sender {
-    [datap removeFromSuperview];
-    [backView removeFromSuperview];
-}
-- (void)doneAction:(UIButton *)sender {
-    NSDateFormatter *fomatter = [NSDateFormatter new];
-    fomatter.dateFormat = @"yyyy/MM/dd";
-    NSString *dateStr = [fomatter stringFromDate:datap.date];
-    UITextField *tf = [self.view viewWithTag:1001];
-    tf.text = dateStr;
-    [datap removeFromSuperview];
-    [backView removeFromSuperview];
-}
+
 
 - (void)changeAction:(LQXSwitch *)sender {//本人||非本人
     if ([self.isPartner isEqualToString:@"yes"]) {
@@ -391,13 +389,15 @@
 
 //获取验证码
 - (void)codeAction:(UIButton *)sender {
-    //    [[PublicFuntionTool sharedInstance] getSmsCodeByPhoneString:@""];
+    if (![self checkInfomation]) {
+        return;
+    }
+    
     [self startTimer:sender];
-    UITextField *ttt = [self.view viewWithTag:1000];
-    NSLog(@"%@---%@", ttt, ttt.text);
+    
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":self.cashCount,@"subProductId":[self.isPartner isEqualToString:@"yes"]?@"65502":@"3",@"isSelf":[NSString stringWithFormat:@"%d", !self.switch_choose.on],@"transUserCardInfo":@{@"cardHolderName":@"李四",@"cardIdentityNo":@"440402198800000000",@"cardIdentityType":@"01",@"cardNo":[NSString stringWithFormat:@"62220240000198100%@", ttt.text],@"cardPhoneNo":@"13800130000",@"cvn":@"123",@"expDate":@"22"}}] forKey:@"transc.placeOrder"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":self.cashCount,@"subProductId":[self.isPartner isEqualToString:@"yes"]?@"65502":@"3",@"isSelf":[NSString stringWithFormat:@"%d", !self.switch_choose.on],@"transUserCardInfo":@{@"cardHolderName":self.cardHolder,@"cardIdentityNo":self.identiCardNo,@"cardIdentityType":@"01",@"cardNo":self.creditCardNo,@"cardPhoneNo":self.phoneNo,@"cvn":self.CVV2No,@"expDate":self.creditCardDate}}] forKey:@"transc.placeOrder"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
@@ -443,10 +443,16 @@
 }
 
 - (void)payAction:(UIButton *)sender {
+    UITextField *codetf = [self.view viewWithTag:1004];
+    self.codeNo = codetf.text = @"0000";
+    if (codetf.text.length!=4) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确输入验证码" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return;
+    }
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"orderId":self.orderID,@"smsCode":@"000000"}] forKey:@"transc.doQuickPayment"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"orderId":self.orderID,@"smsCode":self.codeNo}] forKey:@"transc.doQuickPayment"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
@@ -456,13 +462,89 @@
             infa.orderID = self.orderID;
             [self.navigationController pushViewController:infa animated:YES];
         } else {//本人
-//            [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"交易成功" time:2.0 aboutType:MBProgressHUDModeCustomView state:YES];
             if ([resultDic[@"resultData"] integerValue]==2) {//成功
                 TradeResultViewController *result = [TradeResultViewController new];
+                result.cashStr = self.cashCount;
+                result.orderID = self.orderID;
                 [self.navigationController pushViewController:result animated:YES];
             }
         }
         
+        //更改本地合伙人状态
+        if ([self.isPartner isEqualToString:@"yes"]) {
+            NSMutableDictionary *partDic = [[NSMutableDictionary alloc] init];
+            [partDic setObject:@"1" forKey:@"isPartner"];
+            [[UserData currentUser] giveData:partDic];
+        }
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+}
+
+- (BOOL)checkInfomation {
+    NSLog(@"%d", self.switch_choose.on);
+    UITextField *cardtf = [self.view viewWithTag:1000];
+    UITextField *datetf = [self.view viewWithTag:1001];
+    UITextField *cvvvtf = [self.view viewWithTag:1002];
+    UITextField *phonetf = [self.view viewWithTag:1003];
+    UITextField *holder = [self.view viewWithTag:1011];
+    UITextField *holderIdenno = [self.view viewWithTag:1012];
+    NSLog(@"%@\n%@\n%@\n%@", cardtf.text,datetf.text,cvvvtf.text,phonetf.text);
+    if (self.isPartner) {
+        self.cardHolder = holder.text;
+        self.identiCardNo = holderIdenno.text;
+    } else {
+        if (self.switch_choose.on) {//非本人
+            self.cardHolder = holder.text;
+            self.identiCardNo = holderIdenno.text;
+            NSLog(@"%@++++%@", self.cardHolder,self.identiCardNo);
+        } else {//本人
+            self.cardHolder = self.model.realName;
+            self.identiCardNo = self.model.identityCardNo;
+//        self.cardHolder = @"王五";
+//        self.identiCardNo = @"440402198800000000";
+        }
+    }
+    
+    
+    if (!cardtf.text.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确输入信用卡号" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    if (!datetf.text.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确输入信用卡有效期" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    if (cvvvtf.text.length!=3) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确输入CVV2号" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    if (![phonetf.text isValidateMobile]) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确输入手机号码" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    
+    self.creditCardNo = cardtf.text;
+    self.creditCardDate = datetf.text;
+    self.CVV2No = cvvvtf.text;
+    self.phoneNo = phonetf.text;
+    
+//    self.creditCardNo = @"6222024000019810099";
+    return YES;
+}
+
+- (void)getRealName {//获取实名认证
+    //status  0待审核 1成功 2审核中
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"---real---%@", resultDic);
+        self.model = [[RealCertificateModel alloc] initWithDictionary:resultDic[@"resultData"] error:nil];
+        [self.tabView reloadData];
     } failure:^(NSString *error, NSInteger code) {
         
     }];

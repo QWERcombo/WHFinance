@@ -105,19 +105,19 @@
     [mainView addSubview:line_c];
     
     UIView *rememberCode = [[UIView alloc] initWithFrame:CGRectMake(37.5, CGRectGetMaxY(line_c.frame)+15, 75, 14)];
-    self.remCode = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
-    [rememberCode addSubview:self.remCode];
-    if (self.isRemember) {
-        self.remCode.image = IMG(@"login_check_y");
-    } else {
-        self.remCode.image = IMG(@"login_check");
-    }
-    self.codeBtn_reme = [UIButton buttonWithTitle:@"记住密码" andFont:FONT_ArialMT(14) andtitleNormaColor:[UIColor colorWithR:102 G:102 B:102 A:1] andHighlightedTitle:nil andNormaImage:nil andHighlightedImage:nil];
-    self.codeBtn_reme.userInteractionEnabled = NO;
-    self.codeBtn_reme.frame = CGRectMake(19, 0, 56, 14);
-    [rememberCode addSubview:self.codeBtn_reme];
-    UITapGestureRecognizer *checkCode = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(checkTap:)];
-    [rememberCode addGestureRecognizer:checkCode];
+//    self.remCode = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
+//    [rememberCode addSubview:self.remCode];
+//    if (self.isRemember) {
+//        self.remCode.image = IMG(@"login_check_y");
+//    } else {
+//        self.remCode.image = IMG(@"login_check");
+//    }
+//    self.codeBtn_reme = [UIButton buttonWithTitle:@"记住密码" andFont:FONT_ArialMT(14) andtitleNormaColor:[UIColor colorWithR:102 G:102 B:102 A:1] andHighlightedTitle:nil andNormaImage:nil andHighlightedImage:nil];
+//    self.codeBtn_reme.userInteractionEnabled = NO;
+//    self.codeBtn_reme.frame = CGRectMake(19, 0, 56, 14);
+//    [rememberCode addSubview:self.codeBtn_reme];
+//    UITapGestureRecognizer *checkCode = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(checkTap:)];
+//    [rememberCode addGestureRecognizer:checkCode];
     [mainView addSubview:rememberCode];
     
     self.codeBtn_forg = [UIButton buttonWithTitle:@"忘记密码?" andFont:FONT_ArialMT(14) andtitleNormaColor:[UIColor mianColor:1] andHighlightedTitle:nil andNormaImage:nil andHighlightedImage:nil];
@@ -142,17 +142,6 @@
     
     return mainView;
 }
-
-#pragma mark - UITextField
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    if (textField==self.phoneTF) {
-//        NSLog(@"---%@", textField.text);
-    } else {
-//        NSLog(@"+++%@", textField.text);
-    }
-}
-
-
 
 #pragma mark - Action
 - (void)tapAction:(UITapGestureRecognizer *)sender {
@@ -179,8 +168,7 @@
 - (void)login_action:(UIButton *)sender {
     NSLog(@"登录---%@-----%@", self.phoneTF.text, self.codeTF.text);
 //     [[UtilsData sharedInstance] postLoginNotice];
-    if (!self.phoneTF.text.length || !self.codeTF.text.length) {
-        [[UtilsData sharedInstance] showAlertTitle:@"请正确填写用户名或密码!" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+    if (![self checkInfomation]) {
         return;
     }
     
@@ -191,15 +179,37 @@
     [dict setObject:json forKey:@"key"];
     
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        if (resultDic) {
+            [[UserData currentUser] giveData:resultDic[@"resultData"]];
+            [[UserData currentUser] giveData:@{@"uid":resultDic[@"resultData"][@"id"]}];
+            [[UtilsData sharedInstance] postLoginNotice];
+        } else {
+            MainLoginViewController *loginVC = [[MainLoginViewController alloc] init];
+            TBNavigationController *navigat = [[TBNavigationController alloc] initWithRootViewController:loginVC];
+            MY_WINDOW.rootViewController = navigat;
+        }
 //        NSLog(@"---%@", resultDic);
-        [[UserData currentUser] giveData:resultDic[@"resultData"]];
-        [[UserData currentUser] giveData:@{@"uid":resultDic[@"resultData"][@"id"]}];
-        [[UtilsData sharedInstance] postLoginNotice];
-        
     } failure:^(NSString *error, NSInteger code) {
         
     }];
     
+}
+
+//验证信息格式
+- (BOOL)checkInfomation {
+    if (!self.phoneTF.text.length || !self.codeTF.text.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"请正确填写用户名或密码!" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        return NO;
+    }
+    if (![self.phoneTF.text isValidateMobile]) {
+        [[UtilsData sharedInstance] showAlertTitle:@"请正确填写手机号!" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        return NO;
+    }
+//    if (![self.codeTF.text judgePassWordLegal]) {
+//        [[UtilsData sharedInstance] showAlertTitle:@"请正确填写密码!" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+//        return NO;
+//    }
+    return YES;
 }
 
 - (void)register_action:(UIButton *)sender {

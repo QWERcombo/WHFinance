@@ -12,6 +12,7 @@
 @interface WithdrawViewController ()<UITextFieldDelegate>
 @property (nonatomic, strong) MHTextField *moneyTF;
 @property (nonatomic, strong) UIButton *moneyBtn;
+@property (nonatomic, strong) WithdrawModel *dataModel;
 @end
 
 @implementation WithdrawViewController
@@ -20,8 +21,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"提现";
-    [self.dataMuArr addObjectsFromArray:@[@"姓名",@"会员等级",@"提取金额",@"结算卡号",@"所属银行"]];
+    [self.dataMuArr addObjectsFromArray:@[@"姓        名:",@"会员等级:",@"提取金额:",@"提现手续费:",@"结算卡号:",@"所属银行:"]];
     [self setupSubViews];
+    [self getWithdrawDataSource];
 }
 
 - (void)setupSubViews {
@@ -69,18 +71,18 @@
     [content mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(mainView);
         make.top.equalTo(hintLab.mas_bottom);
-        make.height.equalTo(@(225));
+        make.height.equalTo(@(270));
     }];
     
     
-    for (NSInteger i=0; i<5; i++) {
+    for (NSInteger i=0; i<6; i++) {
         
         UIView *blank = [[UIView alloc] initWithFrame:CGRectMake(0, 45*i, SCREEN_WIGHT, 45)];
         [content addSubview:blank];
         
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10, 44, SCREEN_WIGHT-20, 1)];
         line.backgroundColor = [UIColor Grey_LineColor];
-        if (i!=4) {
+        if (i!=5) {
             [blank addSubview:line];
         }
         
@@ -92,7 +94,12 @@
             make.left.equalTo(blank.mas_left).offset(10);
         }];
         
-        NSArray *temp = @[@"张三",@"普通会员",@"20.00",@"2656523131313(中国招商银行)",@"中国招商银行"];
+        NSArray *temp = nil;
+        if (self.dataModel) {
+            temp = @[self.dataModel.userName,self.dataModel.userLeve,[self.dataModel.withdrawCashAmount handleDataSourceTail], [self.dataModel.withdrawCashFee handleDataSourceTail],self.dataModel.withdrawCashCard,self.dataModel.withdrawCashBankName];
+        } else {
+            temp = @[@"",@"",@"",@"",@"",@""];
+        }
         UILabel *right = [UILabel lableWithText:[temp objectAtIndex:i] Font:FONT_ArialMT(14) TextColor:[UIColor Grey_WordColor]];
         [blank addSubview:right];
         right.textAlignment = NSTextAlignmentRight;
@@ -100,7 +107,7 @@
             make.height.equalTo(@(14));
             make.centerY.equalTo(blank.mas_centerY);
             make.right.equalTo(blank.mas_right).offset(-10);
-            make.left.equalTo(left.mas_left).offset(20);
+            make.left.equalTo(blank.mas_left).offset(90);
         }];
         
         
@@ -126,14 +133,47 @@
 
 
 - (void)buttonAction:(UIButton *)sender {
-    [[UtilsData sharedInstance] showAlertTitle:@"已提现" detailsText:nil time:2.0 aboutType:MBProgressHUDModeCustomView state:YES];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":@"20"}] forKey:@"transc.doWithdrawCash"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"++++%@", resultDic);
+        if ([resultDic[@"resultCode"] isEqualToNumber:@0]) {
+            [[UtilsData sharedInstance] showAlertTitle:@"提现成功" detailsText:nil time:2.0 aboutType:MBProgressHUDModeCustomView state:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+        
+        [self.tabView reloadData];
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.navigationController popViewControllerAnimated:YES];
-    });
     
 }
 
+
+- (void)getWithdrawDataSource {
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"transc.withdrawCash"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+//        NSLog(@"++++%@", resultDic);
+        self.dataModel = [[WithdrawModel alloc] initWithDictionary:resultDic[@"resultData"] error:nil];
+        NSLog(@"%@", self.dataModel);
+        
+        [self.tabView reloadData];
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+}
 
 
 

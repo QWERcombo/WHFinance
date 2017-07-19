@@ -15,14 +15,31 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor whiteColor];
+        
+        self.line = [UIView new];
+        _line.backgroundColor = [UIColor Grey_LineColor];
+        [self.contentView addSubview:_line];
+        [_line mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@(1));
+            make.bottom.equalTo(self.mas_bottom);
+            make.width.equalTo(@(SCREEN_WIGHT-25));
+            make.centerX.equalTo(self.contentView.mas_centerX);
+        }];
         
         [self initSubView];
     }
     return self;
 }
 
+- (void)setHidenLine:(BOOL)hidenLine{
+    _hidenLine= hidenLine;
+    self.line.hidden= hidenLine;
+}
+
 - (void)initSubView{
+    
+    
     
 }
 

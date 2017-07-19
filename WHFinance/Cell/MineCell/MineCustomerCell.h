@@ -12,9 +12,8 @@
 @property (nonatomic, copy) ClikBlock clikBlock;
 @property (nonatomic, strong) UIImageView *typeImgv;
 @property (nonatomic, strong) UILabel *typeTitle;
-@property (nonatomic, strong) UIView *line;
 @property (nonatomic, strong) UILabel *newsCountLab;
 
-- (void)loadData:(NSObject *)model andCliker:(ClikBlock)clue;
+- (void)loadData:(NSObject *)model index:(NSString *)indexpath andCliker:(ClikBlock)clue;
 
 @end

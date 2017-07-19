@@ -60,7 +60,7 @@ DEF_SINGLETON(UtilsData);
     
 //    [footer setTitle:@"" forState:MJRefreshStateIdle];
 //    [footer setTitle:@"" forState:MJRefreshStateRefreshing];
-//    [footer setTitle:@"" forState:MJRefreshStateNoMoreData];
+    [footer setTitle:@"no more" forState:MJRefreshStateNoMoreData];
     footer.refreshingTitleHidden = YES;
     footer.stateLabel.hidden = YES;
     return footer;
@@ -83,7 +83,7 @@ DEF_SINGLETON(UtilsData);
     [self hideAlert];
     MBProgressHUD *hud =[MBProgressHUD showHUDAddedTo:MY_WINDOW animated:YES];
     hud.removeFromSuperViewOnHide = YES;
-    hud.bezelView.color = [UIColor colorWithR:60 G:61 B:62 A:1];
+    hud.bezelView.color = [UIColor whiteColor];
     
     if (mode == MBProgressHUDModeCustomView) {
         if (isSuccess) {
@@ -96,9 +96,9 @@ DEF_SINGLETON(UtilsData);
     if (titleString)hud.label.text = titleString;
     if (detailsString)hud.detailsLabel.text = detailsString;
     hud.label.font = FONT_ArialMT(13);
-    hud.label.textColor = [UIColor whiteColor];
-    hud.detailsLabel.font = FONT_ArialMT(16);
-    hud.detailsLabel.textColor = [UIColor whiteColor];
+    hud.label.textColor = [UIColor Grey_WordColor];
+    hud.detailsLabel.font = FONT_ArialMT(14);
+    hud.detailsLabel.textColor = [UIColor Grey_WordColor];
     if (time > 0){
         [hud hideAnimated:YES afterDelay:time];
     }else{
@@ -141,9 +141,9 @@ DEF_SINGLETON(UtilsData);
     [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
-    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
-//        NSLog(@"---real---%@", resultDic);
-        if ([resultDic[@"resultData"][@"status"] integerValue]==1) {
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"---real---%@", resultDic);
+        if ([resultDic[@"resultData"][@"status"] integerValue]>0) {
              _goCertificateBlock();
         } else {
             [self showAlertControllerWithTitle:@"提示" detail:@"请先进行实名认证" doneTitle:@"确定" cancelTitle:@"取消" haveCancel:YES doneAction:^{

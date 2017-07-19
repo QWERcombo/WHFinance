@@ -12,10 +12,10 @@
 @property (nonatomic, copy) ClikBlock clikBlock;
 @property (nonatomic, strong) UIImageView *payImgv;//支付方式
 @property (nonatomic, strong) UILabel *detailLab;
-@property (nonatomic, strong) UIView *line;
 @property (nonatomic, strong) UILabel *timeLab;
 @property (nonatomic, strong) UILabel *MoneyLab;
 @property (nonatomic, strong) UIImageView *status;//支付状态
+
 
 - (void)loadData:(NSObject *)model andCliker:(ClikBlock)clue;
 @end

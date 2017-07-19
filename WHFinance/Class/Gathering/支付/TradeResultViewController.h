@@ -10,4 +10,5 @@
 
 @interface TradeResultViewController : BaseViewController
 @property (nonatomic, strong) NSString *cashStr;
+@property (nonatomic, strong) NSString *orderID;
 @end

@@ -98,6 +98,8 @@
 + (UIView *)addLineViewWithStatus:(NSString *)status andTime:(NSString *)time {
     LineView *mainview = [[LineView alloc] initWithFrame:CGRectMake(0, 0, 150, 110)];
     mainview.creatTime = time;
+    
+    NSLog(@"****///**%@", status);
     if ([status integerValue]!=2) {
         UILabel *lastlab = [mainview viewWithTag:102];
         lastlab.textColor = [UIColor mianColor:2];

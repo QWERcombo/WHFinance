@@ -24,15 +24,6 @@
         make.top.left.right.equalTo(self.contentView);
         make.bottom.equalTo(self.contentView.mas_bottom).offset(-10);
     }];
-    self.line = [UIView new];
-    [contentView addSubview:self.line];
-    self.line.backgroundColor = [UIColor Grey_LineColor];
-    [self.line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(1));
-        make.left.equalTo(contentView.mas_left).offset(15);
-        make.right.equalTo(contentView.mas_right).offset(-15);
-        make.top.equalTo(contentView.mas_top).offset(50);
-    }];
     
     
     self.typeImgv = [UIImageView new];

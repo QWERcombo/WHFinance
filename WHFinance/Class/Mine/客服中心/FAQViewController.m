@@ -43,9 +43,9 @@
     return self.dataMuArr.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    BaseCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        cell = [[BaseCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     }
     cell.contentView.backgroundColor = [UIColor whiteColor];
     cell.textLabel.text = [self.dataMuArr objectAtIndex:indexPath.row];
@@ -53,19 +53,13 @@
     cell.textLabel.textColor = [UIColor Grey_WordColor];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    UIView *line = [UIView new];
-    [cell.contentView addSubview:line];
-    line.backgroundColor = [UIColor Grey_LineColor];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(cell.contentView.mas_left).offset(15);
-        make.right.equalTo(cell.contentView.mas_right).offset(15);
+    [cell.line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(cell.contentView.mas_left).offset(12.5);
         make.bottom.equalTo(cell.contentView.mas_bottom);
         make.height.equalTo(@(1));
+        make.right.equalTo(cell.contentView.mas_right).offset(17.5);
     }];
-    if (indexPath.row==self.dataMuArr.count-1) {
-        [line removeFromSuperview];
-    }
+    
     return cell;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

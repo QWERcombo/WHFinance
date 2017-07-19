@@ -13,6 +13,7 @@
 @property (nonatomic, strong) SettlementOrder *settlementOrder;
 @property (nonatomic, strong) TransOrder *transOrder;
 @property (nonatomic, strong) NSString *uploadAuditing;//显示图片按钮
+@property (nonatomic, strong) NSString *payStatus;//支付状态
 @end
 
 @implementation TradeDetailViewController
@@ -74,7 +75,22 @@
     
     UIImageView *imgv = [UIImageView new];
     [content addSubview:imgv];
-    imgv.image = IMG(@"Success_Out");
+    switch ([self.payStatus integerValue]) {
+        case 0:
+            imgv.image = IMG(@"bill_wait");
+            break;
+        case 1:
+            imgv.image = IMG(@"bill_wait");
+            break;
+        case 2:
+            imgv.image = IMG(@"bill_success");
+            break;
+        case 3:
+            imgv.image = IMG(@"bill_wrong");
+            break;
+        default:
+            break;
+    }
     [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@(20));
         make.left.equalTo(content.mas_left).offset(13);
@@ -100,7 +116,7 @@
     
     
     NSArray *hintArr = @[@"交易单号",@"交易方式",@"手续费",@"交易时间"];
-    NSArray *tempArr = @[self.transOrder.orderNo,self.transOrder.orderTypeCn,[NSString stringWithFormat:@"%@  ( + 提现费:  %@ )",[self.transOrder.orderSettlementFee handleDataSourceTail], [self.transOrder.orderFee handleDataSourceTail]],[self.transOrder.orderCreateTime NSTimeIntervalTransToYear_Month_Day]];
+    NSArray *tempArr = @[self.transOrder.orderNo,self.transOrder.orderTypeCn,[NSString stringWithFormat:@"%@  ( + 提现费:  %@ )",[self.transOrder.orderFee handleDataSourceTail], [self.transOrder.orderSettlementFee handleDataSourceTail]],[self.transOrder.orderCreateTime NSTimeIntervalTransToYear_Month_Day]];
     
     for (NSInteger i=0; i<4; i++) {
         UIView *blank = [[UIView alloc] initWithFrame:CGRectMake(15, 65+22*i, SCREEN_WIGHT-25, 12)];
@@ -151,7 +167,7 @@
         
         
         NSArray *statusArr = @[@"结算金额",@"进度处理",@"结算到",@"创建时间"];
-        NSArray *tempArr2 = @[[NSString pointTailTwo:self.settlementOrder.settleAmount],@"",self.settlementOrder.settlementCardNo,[self.settlementOrder.settleTime NSTimeIntervalTransToYear_Month_Day]];
+        NSArray *tempArr2 = @[[self.settlementOrder.settleAmount handleDataSourceTail],@"",self.settlementOrder.settlementCardNo,[self.settlementOrder.settleTime NSTimeIntervalTransToYear_Month_Day]];
         
         UIView *lastview = nil;
         for (NSInteger i=0; i<4; i++) {
@@ -240,11 +256,11 @@
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"*****%@", resultDic);
+//        NSLog(@"*****%@", resultDic);
         self.settlementOrder = [[SettlementOrder alloc] initWithDictionary:resultDic[@"resultData"][@"settlementOrder"] error:nil];
         self.transOrder = [[TransOrder alloc] initWithDictionary:resultDic[@"resultData"][@"transOrder"] error:nil];
         self.uploadAuditing = [NSString stringWithFormat:@"%@",resultDic[@"resultData"][@"uploadAuditing"]];
-        
+        self.payStatus = STRING(self.transOrder.orderStatus);
         [self.tabView reloadData];
     } failure:^(NSString *error, NSInteger code) {
         

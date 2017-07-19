@@ -45,7 +45,7 @@
     }];
     
     [[UtilsData sharedInstance]MJRefreshNormalHeaderTarget:self table:self.tabView actionSelector:@selector(loadHeaderNewData)];
-    [[UtilsData sharedInstance]MJRefreshAutoNormalFooterTarget:self table: self.tabView actionSelector:@selector(loadFooterNewData)];
+    [[UtilsData sharedInstance]MJRefreshAutoNormalFooterTarget:self table:self.tabView actionSelector:@selector(loadFooterNewData)];
 }
 
 #pragma mark - UITableViewDelegate
@@ -89,7 +89,11 @@
     if (section==0) {
         return [self createMainViewSectionOne];
     } else if (section==1){
-        return [self createMainViewSectionTwoWithSection:section];
+        if (self.dataMuArr.count) {
+            return [self createMainViewSectionTwoWithSection:section];
+        } else {
+            return [UIView showNothingViewWith:1];
+        }
     } else {
         if (self.dataMuArr.count) {
             return [self createMainViewSectionTwoWithSection:section];
@@ -122,7 +126,7 @@
     UIView *mainView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIGHT, 50)];
     mainView.backgroundColor = [UIColor whiteColor];
     
-    UILabel *hint = [UILabel lableWithText:@"本日交易总额" Font:FONT_ArialMT(14) TextColor:[UIColor mianColor:1]];
+    UILabel *hint = [UILabel lableWithText:@"本月交易总额" Font:FONT_ArialMT(14) TextColor:[UIColor mianColor:1]];
     [mainView addSubview:hint];
     [hint mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(mainView.mas_left).offset(15);
@@ -142,7 +146,7 @@
         make.height.equalTo(@(14));
     }];
     
-    UILabel *totalLab = [UILabel lableWithText:@"30.00" Font:FONT_ArialMT(14) TextColor:[UIColor Grey_OrangeColor]];
+    UILabel *totalLab = [UILabel lableWithText:@"" Font:FONT_ArialMT(14) TextColor:[UIColor Grey_OrangeColor]];
     [mainView addSubview:totalLab];
     [totalLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@(14));
@@ -227,7 +231,7 @@
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSArray *dataSourceArr = resultDic[@"resultData"];
-        
+//        NSLog(@"%@", dataSourceArr);
         if (dataSourceArr.count) {
             if (self.pageNumber==1) {
                 [self.dataMuArr removeAllObjects];
@@ -240,7 +244,6 @@
             [self.tabView.mj_footer endRefreshing];
         } else {
             [self.tabView.mj_footer endRefreshingWithNoMoreData];
-            [self.tabView.mj_footer endRefreshing];
         }
         
         [self.tabView reloadData];

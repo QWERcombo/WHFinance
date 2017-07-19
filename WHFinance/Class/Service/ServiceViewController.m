@@ -129,7 +129,6 @@
     
 }
 - (void)itemButtonClick:(UIButton *)sender {
-//    NSLog(@"%@", sender.currentTitle);
     ServiceDetailViewController *detail = [ServiceDetailViewController new];
     JoinParterViewController *join = [JoinParterViewController new];
     detail.titleName = sender.currentTitle;
@@ -137,10 +136,17 @@
         [self.navigationController pushViewController:join animated:YES];
     } else {
         if ([sender.currentTitle isEqualToString:@"已是合伙人"]) {
+            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"您已是合伙人！" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+            } controller:self];
         } else {
             [self.navigationController pushViewController:detail animated:YES];
         }
     }
+    
+    
+    
+    
+    
 //    NSLog(@"%@", MilliSecondTimesTamp);
 }
 
@@ -153,27 +159,30 @@
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSLog(@"%@", resultDic);
-        
-        MyProfitViewController *profit = [MyProfitViewController new];
-        // 前一个表示三级分润    后一个表示代理分润
-        NSArray *dataArr = resultDic[@"resultData"];
-        if ([[dataArr firstObject] integerValue]==0&&[[dataArr lastObject] integerValue]==1) {
-            profit.titleName = @"代理分润";
+        if (resultDic) {
+            MyProfitViewController *profit = [MyProfitViewController new];
+            // 前一个表示三级分润(合伙人)    后一个表示代理分润(代理商)
+            NSArray *dataArr = resultDic[@"resultData"];
+            if ([[dataArr firstObject] integerValue]==0&&[[dataArr lastObject] integerValue]==1) {
+                profit.titleName = @"代理分润";
+            }
+            if ([[dataArr firstObject] integerValue]==1&&[[dataArr lastObject] integerValue]==0) {
+                profit.titleName = @"三级分润";
+            }
+            if ([[dataArr firstObject] integerValue]==1&&[[dataArr lastObject] integerValue]==1) {
+                profit.titleName = @"我的分润";
+                profit.isShow = YES;
+            }
+            if ([[dataArr firstObject] integerValue]==0&&[[dataArr lastObject] integerValue]==0) {
+                [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"您还未成为合伙人或代理商" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+                    
+                } controller:self];
+                return;
+            }
+            [self.navigationController pushViewController:profit animated:YES];
+        } else {
+            [[UtilsData sharedInstance] showAlertTitle:@"2" detailsText:@"222" time:1 aboutType:MBProgressHUDModeText state:YES];
         }
-        if ([[dataArr firstObject] integerValue]==1&&[[dataArr lastObject] integerValue]==0) {
-            profit.titleName = @"三级分润";
-        }
-        if ([[dataArr firstObject] integerValue]==1&&[[dataArr lastObject] integerValue]==1) {
-            profit.titleName = @"我的分润";
-            profit.isShow = YES;
-        }
-        if ([[dataArr firstObject] integerValue]==0&&[[dataArr lastObject] integerValue]==0) {
-            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"您还未成为合伙人或代理商" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
-                
-            } controller:self];
-            return ;
-        }
-        [self.navigationController pushViewController:profit animated:YES];
     } failure:^(NSString *error, NSInteger code) {
         
     }];

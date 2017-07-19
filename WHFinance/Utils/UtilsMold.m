@@ -74,7 +74,7 @@ DEF_SINGLETON(UtilsMold);
             cell = [[MineCustomerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:IDs];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell loadData:model andCliker:^(NSString *clueStr) {
+        [cell loadData:model index:data andCliker:^(NSString *clueStr) {
             
         }];
         return cell;

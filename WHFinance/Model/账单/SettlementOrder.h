@@ -8,7 +8,18 @@
 
 #import "BaseModel.h"
 
-@interface SettlementOrder : BaseModel//
+/**订单状态 等待支付*/
+//public static final byte ORDER_STATUS_WAIT_TO_PAY     = 0;
+/**订单状态 支付中*/
+//public static final byte ORDER_STATUS_PAYING          = 1;
+/**订单状态 支付成功*/
+//public static final byte ORDER_STATUS_SUCCESS         = 2;
+/**支付失败*/
+//public static final byte ORDER_STATUS_FAIL            = 3;
+//审核中
+//public static final byte ORDER_STATUS_AUDITION        = 4;
+
+@interface SettlementOrder : BaseModel
 
 @property (nonatomic, strong) NSString *agentId;
 

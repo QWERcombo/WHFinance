@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) UIImageView *typeImgv;
 @property (nonatomic, strong) UILabel *typeTitle;
-@property (nonatomic, strong) UIView *line;
+@property (nonatomic, strong) UILabel *rightLab;
 
 - (void)loadData:(NSObject *)model andCliker:(ClikBlock)clue;
 

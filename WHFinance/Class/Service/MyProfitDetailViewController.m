@@ -9,7 +9,7 @@
 #import "MyProfitDetailViewController.h"
 
 @interface MyProfitDetailViewController ()
-
+@property (nonatomic, strong) MyProfitDetailModel *dataModel;
 @end
 
 @implementation MyProfitDetailViewController
@@ -73,7 +73,7 @@
         [mainview addSubview:blank];
         
         
-        NSArray *nameArr = @[@"交易时间: ",@"商户名称: ",@"交易方式: ",@"交易金额: ",@"手续费: ",@"我的分润: "];
+        NSArray *nameArr = @[@"交易时间: ",@"商户名称: ",@"交易方式: ",@"交易金额: ",@"手  续  费: ",@"我的分润: "];
         UILabel *nameLab = [UILabel lableWithText:[nameArr objectAtIndex:i] Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
         [blank addSubview:nameLab];
         [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -81,14 +81,20 @@
             make.height.equalTo(@(12));
             make.centerY.equalTo(blank.mas_centerY);
         }];
-        UILabel *detailLab = [UILabel lableWithText:[self.dataMuArr objectAtIndex:i] Font:FONT_ArialMT(12) TextColor:[UIColor mianColor:2]];
-        [blank addSubview:detailLab];
-        [detailLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(blank.mas_right).offset(-12.5);
-            make.height.equalTo(@(12));
-            make.centerY.equalTo(blank.mas_centerY);
-            make.left.equalTo(nameLab.mas_right).offset(5);
-        }];
+        
+        
+        if (self.dataModel) {
+            
+            UILabel *detailLab = [UILabel lableWithText:[self.dataMuArr objectAtIndex:i] Font:FONT_ArialMT(12) TextColor:[UIColor mianColor:2]];
+            [blank addSubview:detailLab];
+            [detailLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.right.equalTo(blank.mas_right).offset(-12.5);
+                make.height.equalTo(@(12));
+                make.centerY.equalTo(blank.mas_centerY);
+                make.left.equalTo(nameLab.mas_right).offset(5);
+            }];
+            
+        }
         
         
     }
@@ -105,7 +111,8 @@
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSLog(@"---++%@", resultDic);
-        
+        self.dataModel = [[MyProfitDetailModel alloc] initWithDictionary:resultDic[@"resultData"] error:nil];
+        [self.dataMuArr addObjectsFromArray:@[[self.dataModel.createTime NSTimeIntervalTransToYear_Month_Day],self.dataModel.merchantName,self.dataModel.transTypeCn,[NSString stringWithFormat:@"￥%@",[self.dataModel.transAmount handleDataSourceTail]],[NSString stringWithFormat:@"￥%@",[self.dataModel.transFee handleDataSourceTail]],[NSString stringWithFormat:@"￥%@", [self.dataModel.profitFee handleDataSourceTail]]]];
         
         [self.tabView reloadData];
     } failure:^(NSString *error, NSInteger code) {

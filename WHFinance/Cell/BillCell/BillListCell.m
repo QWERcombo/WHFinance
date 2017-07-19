@@ -14,15 +14,6 @@
 
 - (void)initSubView {
     self.backgroundColor = [UIColor whiteColor];
-    self.line = [UIView new];
-    [self.contentView addSubview:self.line];
-    self.line.backgroundColor = [UIColor Grey_LineColor];
-    [self.line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(1));
-        make.bottom.equalTo(self.contentView.mas_bottom);
-        make.left.equalTo(self.contentView.mas_left).offset(15);
-        make.right.equalTo(self.contentView.mas_right).offset(-15);
-    }];
     
     self.timeLab = [UILabel lableWithText:@"周五\n06-30" Font:FONT_ArialMT(12) TextColor:[UIColor mianColor:2]];
     self.timeLab.numberOfLines = 0;
@@ -108,17 +99,21 @@
     
     NSString *type = [dataModel.orderType substringToIndex:2];
     if ([type isEqualToString:@"00"]) {//微信
-        self.payImgv.image = IMG(@"bill_0");
+        self.payImgv.image = IMG(@"bill_way_0");
     }
     if ([type isEqualToString:@"01"]) {//QQ
-        self.payImgv.image = IMG(@"bill_1");
+        self.payImgv.image = IMG(@"bill_way_1");
     }
     if ([type isEqualToString:@"02"]) {//支付宝
-        self.payImgv.image = IMG(@"bill_2");
+        self.payImgv.image = IMG(@"bill_way_2");
     }
     if ([type isEqualToString:@"80"]) {//银联
-        self.payImgv.image = IMG(@"bill_3");
+        self.payImgv.image = IMG(@"bill_way_3");
     }
+    if ([type isEqualToString:@"FF"]) {//提现
+        self.payImgv.image = IMG(@"bill_way_4");
+    }
+    
     if ([dataModel.orderStatus integerValue]==2) {
         self.status.image = IMG(@"bill_success");
     } else if ([dataModel.orderStatus integerValue]==3) {
@@ -126,11 +121,16 @@
     } else if ([dataModel.orderStatus integerValue]==1) {
         self.status.image = IMG(@"bill_wait");
     } else {
-        
+        self.status.image = IMG(@"bill_wait");
     }
     
     self.MoneyLab.text = [dataModel.orderAmount handleDataSourceTail];
-    self.detailLab.text = [NSString stringWithFormat:@"交易收款  %@", dataModel.orderStatusCn];
+    if (dataModel.orderStatusCn.length>3) {
+        self.detailLab.text = [NSString stringWithFormat:@"交易收款  %@", dataModel.orderStatusCn];
+    } else {
+        self.detailLab.text = [NSString stringWithFormat:@"交易收款      %@", dataModel.orderStatusCn];
+    }
+    
 }
 
 

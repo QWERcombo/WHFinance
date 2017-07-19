@@ -109,6 +109,8 @@
 }
 
 - (NSData *)AES256DecryptWithKey:(NSString *)key {
+    NSLog(@"%@", key);
+    
     // 'key' should be 32 bytes for AES256, will be null-padded otherwise
     char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
     bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
@@ -140,6 +142,7 @@
     free(buffer); //free the buffer;
     return nil;
 }
+
 
 
 

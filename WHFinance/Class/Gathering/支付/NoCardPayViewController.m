@@ -21,13 +21,17 @@
 
 @implementation NoCardPayViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    [self getCardInfomationList];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"无卡支付";
     
     [self setUpSubviews];
-    [self getCardInfomationList];
 }
 
 - (void)setUpSubviews {
@@ -210,6 +214,15 @@
 
 #pragma mark - Action
 - (void)payAction:(UIButton *)sender {//立即支付
+    
+    if (!self.selectedCard) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请选择支付银行卡" time:2.0 aboutType:MBProgressHUDModeCustomView state:YES];
+        return;
+    }
+    if (!self.selectedCard&&!self.dataMuArr.count) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请先添加银行卡" time:2.0 aboutType:MBProgressHUDModeCustomView state:YES];
+        return;
+    }
     //subProductId 3 无卡支付
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
@@ -217,9 +230,11 @@
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"+++***%@", resultDic);
+//        NSLog(@"+++***%@", resultDic);
         WithdrawRecordViewController *with = [WithdrawRecordViewController new];
         with.orderID = resultDic[@"resultData"];
+        with.cashStr = self.cashCount;
+        with.isPartner = self.isPartner;
         [self.navigationController pushViewController:with animated:YES];
         
     } failure:^(NSString *error, NSInteger code) {
@@ -252,6 +267,7 @@
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
 //        NSLog(@"%@", resultDic);
+        [self.dataMuArr removeAllObjects];
         NSArray *dataArr = resultDic[@"resultData"];
         for (NSDictionary *dataDic in dataArr) {
             BankCardModel *model = [[BankCardModel alloc] initWithDictionary:dataDic error:nil];

@@ -48,23 +48,25 @@
 
 - (UIView *)createMainView  {
     UIScrollView *mainView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    NSString *imageName = @"";
     if ([self.titleName isEqualToString:@"新手指引"]) {
-        UIImage *image = IMG(@"new_guide_0");
-        mainView.contentSize = CGSizeMake(image.size.width, image.size.height);
-        UIImageView *imgv = [UIImageView new];
-        [mainView addSubview:imgv];
-        imgv.image = IMG(@"new_guide_0");
-        [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.right.bottom.equalTo(mainView);
-        }];
+        imageName = @"new_guide_0";
+    }
+    if ([self.titleName isEqualToString:@"推广政策"]) {
+        imageName = @"service_spread_2";
     }
     
     
     
     
-    
-    
-    
+    UIImage *image = IMG(imageName);
+    mainView.contentSize = CGSizeMake(image.size.width, image.size.height);
+    UIImageView *imgv = [UIImageView new];
+    [mainView addSubview:imgv];
+    imgv.image = IMG(imageName);
+    [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.bottom.equalTo(mainView);
+    }];
     
     
     return mainView;

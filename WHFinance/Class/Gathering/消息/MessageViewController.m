@@ -38,7 +38,6 @@
     
     
     self.dataMuArr = [[DataForFMDB sharedDataBase] getAllMessage];
-    
     [self setUpSubviews];
     [self getdataSource];
 }

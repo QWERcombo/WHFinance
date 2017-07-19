@@ -9,5 +9,5 @@
 #import "BaseViewController.h"
 
 @interface ShareDetailViewController : BaseViewController
-@property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *type; //1二维码分享 2分享
 @end

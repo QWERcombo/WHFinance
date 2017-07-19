@@ -7,6 +7,7 @@
 //
 
 #import "CardInformationViewController.h"
+#import "BankSearchViewController.h"
 
 @interface CardInformationViewController (){
     CustomTextField *tf;
@@ -14,6 +15,8 @@
 @property (nonatomic, strong) NSArray *nameArr;
 @property (nonatomic, strong) NSArray *tempArr;
 @property (nonatomic, assign) BOOL isEdite;
+@property (nonatomic, strong) NSString *bankNo;
+@property (nonatomic, strong) RealCertificateModel *dataModel;
 @end
 
 @implementation CardInformationViewController
@@ -23,15 +26,14 @@
     // Do any additional setup after loading the view.
     self.title = @"修改结算卡";
     self.nameArr = @[@"姓        名:",@"身份证号:",@"结算卡号:",@"选择银行:",@"银行支行:"];
-    self.tempArr = @[@"张三",@"151515151515151551515115",@"￥200.00",@"6677 8899 8888 0090",@"招商银行"];
     
-    UIButton *right_f = [UIButton buttonWithTitle:@"" andFont:nil andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:IMG(@"") andHighlightedImage:IMG(@"")];
-    right_f.frame = CGRectMake(0, 0, 30, 30);
-    right_f.backgroundColor = [UIColor whiteColor];
+    UIButton *right_f = [UIButton buttonWithTitle:@"" andFont:nil andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:IMG(@"mine_editor") andHighlightedImage:IMG(@"mine_editor")];
+    right_f.frame = CGRectMake(0, 0, 25, 25);
     [right_f addTarget:self action:@selector(ediAction:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:right_f];
     
     [self setUpSubviews];
+    [self getDataSource];
 }
 
 - (void)setUpSubviews {
@@ -81,7 +83,11 @@
     line2.backgroundColor = [UIColor Grey_LineColor];
     [content addSubview:line2];
     
-    
+    if (self.dataModel) {
+        self.tempArr = @[self.dataModel.realName,self.dataModel.identityCardNo,self.dataModel.bankCardNo,self.dataModel.bankName,self.dataModel.bankName];
+    } else {
+        self.tempArr = @[@"",@"",@"",@"",@""];
+    }
     for (NSInteger i=0; i<5; i++) {
         
         UIView *blank = [[UIView alloc] initWithFrame:CGRectMake(0, 19.5*i+45, SCREEN_WIGHT, 12)];
@@ -116,13 +122,13 @@
     UIView *mainView = [[UIView alloc] initWithFrame:self.view.bounds];
     mainView.backgroundColor = [UIColor Grey_BackColor1];
     
-    UIView *content = [[UIView alloc] initWithFrame:CGRectMake(0, 10, SCREEN_WIGHT, 215)];
+    UIView *content = [[UIView alloc] initWithFrame:CGRectMake(0, 10, SCREEN_WIGHT, 200)];
     content.backgroundColor = [UIColor whiteColor];
     [mainView addSubview:content];
     UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIGHT, 1)];
     line1.backgroundColor = [UIColor Grey_LineColor];
     [content addSubview:line1];
-    UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(0, 214, SCREEN_WIGHT, 1)];
+    UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(0, 199, SCREEN_WIGHT, 1)];
     line2.backgroundColor = [UIColor Grey_LineColor];
     [content addSubview:line2];
     
@@ -163,7 +169,7 @@
     
     
     
-    for (NSInteger i=0; i<2; i++) {
+    for (NSInteger i=0; i<1; i++) {
         UIView *blank = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tf.frame)+10+40*i, SCREEN_WIGHT, 40)];
         
         UIView *linee = [[UIView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIGHT-20, 1)];
@@ -171,21 +177,21 @@
         [blank addSubview:linee];
         
         UILabel *label = [UILabel lableWithText:[self.nameArr objectAtIndex:3+i] Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
-        label.frame = CGRectMake(15, 14, 55, 12);
+        label.frame = CGRectMake(15, 24, 55, 12);
         [blank addSubview:label];
         
-        UILabel *showLab = [UILabel lableWithText:@"" Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
+        UIButton *showLab = [UIButton buttonWithTitle:@"请选择" andFont:FONT_ArialMT(13) andtitleNormaColor:[UIColor mianColor:2] andHighlightedTitle:[UIColor mianColor:2] andNormaImage:nil andHighlightedImage:nil];
+        showLab.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+//        showLab.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail
+        showLab.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 5);
         showLab.tag = 888+i;
-        showLab.backgroundColor = [UIColor purpleColor];
-        showLab.frame = CGRectMake(75, 14, 180, 12);
+        showLab.layer.cornerRadius = 5;
+        showLab.layer.borderColor = [UIColor colorWithR:205 G:205 B:205 A:1].CGColor;
+        showLab.layer.borderWidth = 0.5;
+        showLab.clipsToBounds = YES;
+        showLab.frame = CGRectMake(75, 15, SCREEN_WIGHT-140, 30);
+        [showLab addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         [blank addSubview:showLab];
-        
-        UIButton *button = [UIButton buttonWithTitle:nil andFont:nil andtitleNormaColor:nil andHighlightedTitle:nil andNormaImage:IMG(@"") andHighlightedImage:IMG(@"")];
-        [blank addSubview:button];
-        button.frame = CGRectMake(SCREEN_WIGHT-30, 10, 20, 20);
-        button.backgroundColor = [UIColor mianColor:1];
-        button.tag = 999+i;
-        [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         
         
         [content addSubview:blank];
@@ -200,23 +206,71 @@
 
 - (void)ediAction:(UIBarButtonItem *)sender {
     [[UtilsData sharedInstance] certificateController:self success:^{
-        NSLog(@"修改");
-        self.isEdite = YES;
-        [self.tabView reloadData];
+        if (!_isEdite) {
+            
+            self.isEdite = YES;
+            [self.tabView reloadData];
+        } else {
+            
+            [self changeCardInfomation];
+        }
     }];
 }
 
 - (void)buttonClick:(UIButton *)sender {
-    NSLog(@"%ld", sender.tag);
-    
-    
+    UIButton *button = [self.view viewWithTag:sender.tag];
+    BankSearchViewController *search = [BankSearchViewController new];
+    search.PassBankNameBlock = ^(BankModel *bank) {
+        [button setTitle:bank.bankName forState:UIControlStateNormal];
+        self.bankNo = bank.tid;
+    };
+    [self.navigationController pushViewController:search animated:YES];
 }
 
-- (void)doneAction:(UIButton *)sender {
-//    [[UserData currentUser] removeMe];
-    [self.navigationController popViewControllerAnimated:YES];
+
+- (void)getDataSource {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+        
+        self.dataModel = [[RealCertificateModel alloc] initWithDictionary:resultDic[@"resultData"] error:nil];
+        self.dataModel.tid = [NSString stringWithFormat:@"%@", resultDic[@"resultData"][@"id"]];
+        [self.tabView reloadData];
+        
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
 }
 
+- (void)changeCardInfomation {//修改信息
+    NSLog(@"----%d++++%@", [tf.userInputContent checkBankCardNumber:tf.userInputContent],tf.userInputContent);
+    
+    if (!self.bankNo.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请选择所属支行" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return;
+    }
+    if (!tf.userInputContent.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请输入结算卡号" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return;
+    }
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"bankId":self.bankNo,@"cardNumber":tf.userInputContent}] forKey:@"user.modifySettlementCard"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"%@", resultDic);
+        self.isEdite = NO;
+        [self getDataSource];
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+}
 
 
 - (void)didReceiveMemoryWarning {

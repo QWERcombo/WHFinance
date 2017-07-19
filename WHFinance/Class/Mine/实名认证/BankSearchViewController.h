@@ -9,5 +9,5 @@
 #import "BaseViewController.h"
 
 @interface BankSearchViewController : BaseViewController
-@property (nonatomic, copy) void(^PassBankNameBlock)(NSString *bankName);
+@property (nonatomic, copy) void(^PassBankNameBlock)(BankModel *bank);
 @end

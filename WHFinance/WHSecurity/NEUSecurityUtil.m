@@ -54,7 +54,7 @@
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     //使用密码对nsdata进行加密
 //    NSData *encryptedData = [data AES128EncryptWithKey:KEY gIv:Iv];
-    NSLog(@"6*******%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]);
+//    NSLog(@"6*******%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]);
 //    NSData *encryptedData = [data AES256EncryptWithKey:KEY];
     NSData *encryptedData = [data AES256EncryptWithKey:[[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]];
     
@@ -67,11 +67,13 @@
 +(NSString*)neu_decryptAESData:(NSString *)string
 {
     //base64解密
-    NSData *decodeBase64Data=[NEUBase64 decodeString:string];
+    NSData *decodeBase64Data=nil;
+    decodeBase64Data=[NEUBase64 decodeString:string];
+    
     //使用密码对data进行解密
 //    NSData *decryData = [decodeBase64Data AES128DecryptWithKey:KEY gIv:Iv];
     
-    NSLog(@"7*******%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]);
+//    NSLog(@"7*******%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"secret_key"]);
     
     //256解密
 //    NSData *decryData = [decodeBase64Data AES256DecryptWithKey:KEY];
@@ -79,7 +81,8 @@
     
     //将解了密码的nsdata转化为nsstring
     NSString *str = [[NSString alloc] initWithData:decryData encoding:NSUTF8StringEncoding];
-    
+//    ret = [[NSString alloc]initWithData:responseData encoding:enc];
+//    NSString *str = [decryData utf8String];
     
 //    NSLog(@"wwwwww%@", [[PublicFuntionTool sharedInstance] valueForKey:@"secret_key"]);
     return str;

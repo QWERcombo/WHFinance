@@ -86,7 +86,7 @@
 #import "LQXSwitch.h"
 #import "SharePopView.h"
 #import "LineView.h"
-
+#import "PickerView.h"
 
 
 
@@ -101,9 +101,9 @@
 #import "BankModel.h"
 #import "BankCardModel.h"
 #import "MyProfitModel.h"
-
-
-
+#import "RealCertificateModel.h"
+#import "MyProfitDetailModel.h"
+#import "WithdrawModel.h"
 
 
 

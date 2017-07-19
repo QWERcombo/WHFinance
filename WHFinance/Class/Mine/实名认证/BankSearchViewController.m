@@ -11,7 +11,7 @@
 @interface BankSearchViewController ()<UISearchBarDelegate>{
     UISearchBar * bar;
 }
-@property (nonatomic, strong) UISearchBar * bar;
+//@property (nonatomic, strong) UISearchBar * bar;
 @property (nonatomic, assign) NSInteger pageNum;
 @property (nonatomic, strong) NSString *keyWord;
 @end
@@ -46,7 +46,10 @@
     return self.dataMuArr.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    BaseCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell == nil) {
+        cell = [[BaseCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+    }
     BankModel *model = [self.dataMuArr objectAtIndex:indexPath.row];
     cell.textLabel.text = model.bankName;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -63,7 +66,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     BankModel *model = [self.dataMuArr objectAtIndex:indexPath.row];
-    self.PassBankNameBlock(model.bankName);
+    self.PassBankNameBlock(model);
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -132,10 +135,10 @@
             
             [self.tabView.mj_footer endRefreshingWithNoMoreData];
         }
-        [self.tabView.mj_footer endRefreshing];
         [self.tabView reloadData];
     } failure:^(NSString *error, NSInteger code) {
-        
+        [self.tabView.mj_footer endRefreshing];
+        [self.tabView.mj_header endRefreshing];
     }];    
     
 }

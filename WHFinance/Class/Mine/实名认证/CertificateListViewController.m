@@ -13,7 +13,10 @@
 #import "BankSearchViewController.h"
 
 @interface CertificateListViewController ()
-@property (nonatomic, strong) NSArray *nameArr;
+@property (nonatomic, strong) NSString *identiNo;//身份证号
+@property (nonatomic, strong) NSString *realName;//姓名
+@property (nonatomic, strong) NSString *cardNo;//结算卡号
+@property (nonatomic, strong) NSString *bankNo;//所属支行
 @end
 
 @implementation CertificateListViewController
@@ -23,9 +26,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"实名认证";
-    
-    
-    self.nameArr = @[@"银行卡信息",@"照片信息"];
     [self setUpSubviews];
 }
 
@@ -193,14 +193,20 @@
 - (void)uploadAction:(UIButton *)sender {
     CertificatePhotoViewController *photo = [CertificatePhotoViewController new];
     [self.navigationController pushViewController:photo animated:YES];
+    
+    if (![self chechInfomation]) {
+        return;
+    }
+    
     [self uploadCer];
 }
 - (void)buttonClick:(UIButton *)sender {
     BankSearchViewController *bank = [BankSearchViewController new];
-    bank.PassBankNameBlock = ^(NSString *bankName) {
+    bank.PassBankNameBlock = ^(BankModel *bankName) {
+        NSLog(@"%@", bankName);
         UIButton *button = [self.tabView viewWithTag:111];
-        [button setTitle:bankName forState:UIControlStateNormal];
-        
+        [button setTitle:bankName.bankName forState:UIControlStateNormal];
+        self.bankNo = bankName.bankNo;
     };
     [self.navigationController pushViewController:bank animated:YES];
 }
@@ -209,11 +215,11 @@
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"userRealName":@{@"bankCardNo":@"622222222222222222",@"bankNoId":@"1",@"identityCardNo":@"440402198810019299",@"realName":@"ceshi"}}] forKey:@"user.realNameSave"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"userRealName":@{@"bankCardNo":self.cardNo,@"bankNoId":self.bankNo,@"identityCardNo":self.identiNo,@"realName":self.realName}}] forKey:@"user.realNameSave"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"%@", resultDic);
+        NSLog(@"----++%@", resultDic);
         
     } failure:^(NSString *error, NSInteger code) {
         
@@ -221,6 +227,45 @@
     
     
 }
+
+- (BOOL)chechInfomation {
+    CustomTextField *identf = [self.view viewWithTag:1000];
+    CustomTextField *nametf = [self.view viewWithTag:1001];
+    CustomTextField *cardtf = [self.view viewWithTag:1002];
+    UIButton *button = [self.view viewWithTag:111];
+    NSLog(@"%@---%@+++%@---%@", identf.text,nametf.text,cardtf.text,button.currentTitle);
+    
+    
+    if (![self.identiNo judgeIdentityStringValid]) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请填写正确身份证号" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    if (!self.cardNo.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请填写正确结算卡号" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    if (!self.bankNo.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请选择所属支行" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    if (!self.realName.length) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确填写姓名" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    
+//    self.cardNo = cardtf.text;
+//    self.realName = nametf.text;
+//    self.identiNo = identf.text;
+    
+    self.cardNo = @"622222222222222223";
+    self.bankNo = @"1";
+    self.realName = @"二狗子";
+    self.identiNo = @"440402198810019288";
+    
+    return YES;
+}
+
+
 
 
 

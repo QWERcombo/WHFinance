@@ -90,8 +90,7 @@
     
     UIImageView *imgv = [UIImageView new];
     [content addSubview:imgv];
-    imgv.image = IMG(@"");
-    imgv.backgroundColor = [UIColor mianColor:1];
+    imgv.image = IMG(@"FAQ_0");
     [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@(20));
         make.left.equalTo(content.mas_left).offset(13);
@@ -101,7 +100,7 @@
     [content addSubview:titleLab];
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(imgv.mas_right).offset(13);
-        make.top.equalTo(content.mas_top).offset(10);
+        make.centerY.equalTo(imgv.mas_centerY);
         make.height.equalTo(@(15));
     }];
     

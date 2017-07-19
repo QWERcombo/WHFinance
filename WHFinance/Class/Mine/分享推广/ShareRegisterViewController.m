@@ -25,8 +25,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"推广赚钱";
-    self.nameArray = [NSArray arrayWithObjects:@"login_phone",@"login_code",@"login_phone",@"login_code", nil];
+    self.title = @"帮朋友注册";
+    self.nameArray = [NSArray arrayWithObjects:@"login_phone",@"login_protect",@"login_code",@"login_code", nil];
     self.placeholderArray = [NSArray arrayWithObjects:@"请输入手机号码",@"请输入验证码",@"请输入8-12位数字与字母的组合",@"请再次输入密码", nil];
     [self setUpSubviews];
 }
@@ -165,23 +165,11 @@
 - (void)codeAction:(UIButton *)sender {
     [self.view endEditing:YES];
     [self startTimer:sender];
-    
-    
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"param":@{@"mobile":self.phone,@"type":@"register"}}] forKey:@"common.sendMsgCode"];
-    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
-    [dict setObject:json forKey:@"key"];
-    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"+++++%@", resultDic);
-        if (resultDic) {
-            [[UtilsData sharedInstance] showAlertTitle:@"短信验证码" detailsText:@" 已发送!" time:2 aboutType:MBProgressHUDModeText state:YES];
-            self.codeToken = resultDic[@"resultData"];
-        }
-        
-    } failure:^(NSString *error, NSInteger code) {
-        
-    }];
+    if (!self.phone.length||![self.phone isValidateMobile]) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请输入正确的手机号" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return;
+    }
+    [[PublicFuntionTool sharedInstance] getSmsCodeByPhoneString:self.phone];
     
 }
 - (void)startTimer:(UIButton *)btnCoder
@@ -216,6 +204,23 @@
 }
 - (void)doneAction:(UIButton *)sender {
     NSLog(@"%@", sender.currentTitle);
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"smsCode":self.checkcode,@"token":self.codeToken,@"referenceMobileNumber":@"",@"userInfo":@{@"mobileNumber":self.phone,@"password":self.confirmcode,@"userName":self.phone}}] forKey:@"user.regin"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"+++++%@", resultDic);
+        [[UtilsData sharedInstance] showAlertTitle:@"注册成功,请登录" detailsText:nil time:2 aboutType:MBProgressHUDModeText state:YES];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
     
 }
 

@@ -9,10 +9,12 @@
 #import "GatheringViewController.h"
 #import "MessageViewController.h"
 #import "CertificateViewController.h"
-#import "BankPayViewController.h"
+#import "NoCardInfamationViewController.h"
 #import "PayWaysViewController.h"
 #import "ChoosePayWaysViewController.h"
-#import "NoCardPayViewController.h"
+#import "BindedCardViewController.h"
+
+
 
 @interface GatheringViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>{
     NSInteger lastSelected;
@@ -201,8 +203,11 @@
 #pragma mark - Action
 - (void)titleButtonClick:(UIButton *)sender {
 //    [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"敬请期待..." doneTitle:@"确定" cancelTitle:nil haveCancel:NO doneAction:nil controller:self];
-    NoCardPayViewController *bank = [NoCardPayViewController new];
+    
+//    BindedCardViewController *bank = [BindedCardViewController new];
+    NoCardInfamationViewController *bank = [NoCardInfamationViewController new];
     [self.navigationController pushViewController:bank animated:YES];
+    
 }
 - (void)messageAction:(UIButton *)sender {
     MessageViewController *message = [MessageViewController new];
@@ -235,23 +240,27 @@
 }
 
 - (void)getMoneyClick:(UIButton *)click {
-//    [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"您要进行实名认证才能进行收款，是否进入实名认证" doneTitle:@"是" cancelTitle:@"否" haveCancel:YES doneAction:^{
-//        CertificateViewController *cer = [CertificateViewController new];
-//        [self.navigationController pushViewController:cer animated:YES];
-//    } controller:self];
-//    [self getRealName];
     
-    if (!self.selectedModel) {
-        [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"您还未选择收款方式" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
-            
-        } controller:self];
-        return;
-    }
-    ChoosePayWaysViewController *choose = [ChoosePayWaysViewController new];
-    choose.productId = self.selectedModel.tid;
-    choose.cashCount = self.showString;
-    [self.navigationController pushViewController:choose animated:YES];
-    
+    [[UtilsData sharedInstance] certificateController:self success:^{
+        
+        if (!self.selectedModel) {
+            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"您还未选择收款方式" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+                
+            } controller:self];
+            return;
+        }
+        if ([self.showString integerValue]==0) {
+            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"您还未输入金额" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+                
+            } controller:self];
+            return;
+        }
+        
+        ChoosePayWaysViewController *choose = [ChoosePayWaysViewController new];
+        choose.productId = self.selectedModel.tid;
+        choose.cashCount = self.showString;
+        [self.navigationController pushViewController:choose animated:YES];
+    }];
 }
 
 - (void)operateBtnAction:(UIButton *)sender {
@@ -347,7 +356,6 @@
     } failure:^(NSString *error, NSInteger code) {
         
     }];
-    
     
 }
 

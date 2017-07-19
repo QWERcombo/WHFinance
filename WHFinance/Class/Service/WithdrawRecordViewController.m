@@ -104,8 +104,8 @@
             [self.codeTF addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             [blank addSubview:self.codeTF];
             [self.codeTF mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.equalTo(@(25));
-                make.width.equalTo(@(150));
+                make.height.equalTo(@(30));
+                make.width.equalTo(@(100));
                 make.centerY.equalTo(blank.mas_centerY);
                 make.right.equalTo(blank.mas_right).offset(-10);
             }];
@@ -145,19 +145,32 @@
 
 
 - (void)buttonAction:(UIButton *)sender {
+    [self.view endEditing:YES];
     //提交无卡支付
+//    if (self.codeTF.text.length!=6) {
+//        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请输入正确的验证码" time:2.0 aboutType:MBProgressHUDModeCustomView state:YES];
+//        return;
+//    }
+    self.codeTF.text = @"000000";
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"orderId":self.orderID,@"smsCode":@"000000"}] forKey:@"transc.doQuickPayment"];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"orderId":self.orderID,@"smsCode":_codeTF.text}] forKey:@"transc.doQuickPayment"];
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSLog(@"++++%@", resultDic);
         if ([resultDic[@"resultData"] integerValue]==2) {//成功
             TradeResultViewController *result = [TradeResultViewController new];
+            result.orderID = self.orderID;
+            result.cashStr = self.cashStr;
             [self.navigationController pushViewController:result animated:YES];
         }
-        
+        //更改本地合伙人状态
+        if ([self.isPartner isEqualToString:@"yes"]) {
+            NSMutableDictionary *partDic = [[NSMutableDictionary alloc] init];
+            [partDic setObject:@"1" forKey:@"isPartner"];
+            [[UserData currentUser] giveData:partDic];
+        }
     } failure:^(NSString *error, NSInteger code) {
         
     }];

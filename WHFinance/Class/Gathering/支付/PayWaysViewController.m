@@ -240,6 +240,13 @@
             TradeResultViewController *result = [TradeResultViewController new];
             result.cashStr = self.moneyStr;
             [self.navigationController pushViewController:result animated:YES];
+            
+            //更改本地合伙人状态
+            if ([self.isParter isEqualToString:@"yes"]) {
+                NSMutableDictionary *partDic = [[NSMutableDictionary alloc] init];
+                [partDic setObject:@"1" forKey:@"isPartner"];
+                [[UserData currentUser] giveData:partDic];
+            }
         }
         if ([statusStr integerValue]==3) {
             [self.timer setFireDate:[NSDate distantFuture]];

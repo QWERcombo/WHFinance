@@ -13,10 +13,6 @@
 - (void)initSubView {
     self.contentView.backgroundColor = [UIColor whiteColor];
     
-    self.line = [[UIView alloc] initWithFrame:CGRectMake(12.5, 54, SCREEN_WIGHT-25, 1)];
-    self.line.backgroundColor = [UIColor Grey_LineColor];
-    [self.contentView addSubview:self.line];
-    
     self.payImgv = [UIImageView new];
     self.payImgv.backgroundColor = COLOR_TEMP;
     self.payImgv.layer.cornerRadius = 33/2;

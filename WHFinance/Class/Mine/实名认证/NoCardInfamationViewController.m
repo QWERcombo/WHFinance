@@ -105,7 +105,6 @@
     
     UIView *photoView = [UIView new];
     [content addSubview:photoView];
-//    photoView.backgroundColor = [UIColor mianColor:1];
     [photoView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(content.mas_left).offset(34);
         make.right.equalTo(content.mas_right).offset(-34);

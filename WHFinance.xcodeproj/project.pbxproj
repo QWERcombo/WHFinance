@@ -68,6 +68,8 @@
 		DA22D4591EFB928000BB0F0E /* UITableView+TB.m in Sources */ = {isa = PBXBuildFile; fileRef = DA22D4351EFB8D8700BB0F0E /* UITableView+TB.m */; };
 		DA22D45A1EFB928000BB0F0E /* UIView+UIViewAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = DA22D43F1EFB8D8700BB0F0E /* UIView+UIViewAddition.m */; };
 		DA22D4621EFBBE8A00BB0F0E /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA22D4611EFBBE8A00BB0F0E /* BaseModel.m */; };
+		DA2DAFFC1F1C9321005A76B9 /* RealCertificateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2DAFFB1F1C9321005A76B9 /* RealCertificateModel.m */; };
+		DA2DB0031F1C9EE1005A76B9 /* PickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2DB0011F1C9EB9005A76B9 /* PickerView.m */; };
 		DA3F0BBD1F186BA7007EF470 /* MyProfitModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0BBC1F186BA7007EF470 /* MyProfitModel.m */; };
 		DA3F0BC01F18726A007EF470 /* MyProfitDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0BBF1F18726A007EF470 /* MyProfitDetailViewController.m */; };
 		DA4C9A961F0B9AED0041527B /* CIImage+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFD93AB1F0B99CC000155DF /* CIImage+Extension.m */; };
@@ -155,7 +157,8 @@
 		DAD605701F106FA200F63165 /* UMSocialSDKPromptResources.bundle in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD605651F106F2D00F63165 /* UMSocialSDKPromptResources.bundle */; };
 		DAD605731F108D7B00F63165 /* TradeResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD605721F108D7B00F63165 /* TradeResultViewController.m */; };
 		DAD605761F10974B00F63165 /* BankCardChooseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD605751F10974B00F63165 /* BankCardChooseCell.m */; };
-		DAD605791F10B11F00F63165 /* ShareMoneyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD605781F10B11F00F63165 /* ShareMoneyViewController.m */; };
+		DADBAEE91F1DF85800B7763E /* MyProfitDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DADBAEE81F1DF85800B7763E /* MyProfitDetailModel.m */; };
+		DADBAEEC1F1E166D00B7763E /* WithdrawModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DADBAEEB1F1E166D00B7763E /* WithdrawModel.m */; };
 		DADDE0541F00BCDC00BD0056 /* BillViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DADDE0531F00BC3200BD0056 /* BillViewController.m */; };
 		DADDE0551F00BCE100BD0056 /* GatheringViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DADDE04A1F00BC3200BD0056 /* GatheringViewController.m */; };
 		DADDE0561F00BCE900BD0056 /* ServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DADDE04D1F00BC3200BD0056 /* ServiceViewController.m */; };
@@ -335,6 +338,10 @@
 		DA22D44B1EFB8F0E00BB0F0E /* MainLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainLoginViewController.m; sourceTree = "<group>"; };
 		DA22D4601EFBBE8A00BB0F0E /* BaseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseModel.h; sourceTree = "<group>"; };
 		DA22D4611EFBBE8A00BB0F0E /* BaseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseModel.m; sourceTree = "<group>"; };
+		DA2DAFFA1F1C9321005A76B9 /* RealCertificateModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealCertificateModel.h; sourceTree = "<group>"; };
+		DA2DAFFB1F1C9321005A76B9 /* RealCertificateModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RealCertificateModel.m; sourceTree = "<group>"; };
+		DA2DB0011F1C9EB9005A76B9 /* PickerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PickerView.m; sourceTree = "<group>"; };
+		DA2DB0021F1C9EB9005A76B9 /* PickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PickerView.h; sourceTree = "<group>"; };
 		DA3F0BBB1F186BA7007EF470 /* MyProfitModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyProfitModel.h; sourceTree = "<group>"; };
 		DA3F0BBC1F186BA7007EF470 /* MyProfitModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyProfitModel.m; sourceTree = "<group>"; };
 		DA3F0BBE1F18726A007EF470 /* MyProfitDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyProfitDetailViewController.h; sourceTree = "<group>"; };
@@ -485,8 +492,10 @@
 		DAD605721F108D7B00F63165 /* TradeResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TradeResultViewController.m; sourceTree = "<group>"; };
 		DAD605741F10974B00F63165 /* BankCardChooseCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BankCardChooseCell.h; sourceTree = "<group>"; };
 		DAD605751F10974B00F63165 /* BankCardChooseCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BankCardChooseCell.m; sourceTree = "<group>"; };
-		DAD605771F10B11F00F63165 /* ShareMoneyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareMoneyViewController.h; sourceTree = "<group>"; };
-		DAD605781F10B11F00F63165 /* ShareMoneyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareMoneyViewController.m; sourceTree = "<group>"; };
+		DADBAEE71F1DF85800B7763E /* MyProfitDetailModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyProfitDetailModel.h; sourceTree = "<group>"; };
+		DADBAEE81F1DF85800B7763E /* MyProfitDetailModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyProfitDetailModel.m; sourceTree = "<group>"; };
+		DADBAEEA1F1E166D00B7763E /* WithdrawModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WithdrawModel.h; sourceTree = "<group>"; };
+		DADBAEEB1F1E166D00B7763E /* WithdrawModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WithdrawModel.m; sourceTree = "<group>"; };
 		DADDE0491F00BC3200BD0056 /* GatheringViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GatheringViewController.h; sourceTree = "<group>"; };
 		DADDE04A1F00BC3200BD0056 /* GatheringViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GatheringViewController.m; sourceTree = "<group>"; };
 		DADDE04C1F00BC3200BD0056 /* ServiceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServiceViewController.h; sourceTree = "<group>"; };
@@ -886,6 +895,7 @@
 		DA22D3A21EFB81BF00BB0F0E /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				DA2DAFFD1F1C9D13005A76B9 /* PickerView */,
 				DA10B8C11F16133900671DBF /* LineView */,
 				DAC844B91F14E13A00FF2B8B /* SharePopView */,
 				DA1A13DC1F1360E400AFD3F7 /* Switch */,
@@ -954,6 +964,15 @@
 				DA61DA071EFD104000DE95B4 /* RegisterViewController.m */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		DA2DAFFD1F1C9D13005A76B9 /* PickerView */ = {
+			isa = PBXGroup;
+			children = (
+				DA2DB0021F1C9EB9005A76B9 /* PickerView.h */,
+				DA2DB0011F1C9EB9005A76B9 /* PickerView.m */,
+			);
+			path = PickerView;
 			sourceTree = "<group>";
 		};
 		DA7A56461F09DC0800B2DAC9 /* GuideView */ = {
@@ -1432,6 +1451,8 @@
 			children = (
 				DA10B8C51F162D2500671DBF /* BankModel.h */,
 				DA10B8C61F162D2500671DBF /* BankModel.m */,
+				DA2DAFFA1F1C9321005A76B9 /* RealCertificateModel.h */,
+				DA2DAFFB1F1C9321005A76B9 /* RealCertificateModel.m */,
 			);
 			path = "我的";
 			sourceTree = "<group>";
@@ -1456,6 +1477,10 @@
 				DAFF8E961F0E463700963AC0 /* MessageModel.m */,
 				DA3F0BBB1F186BA7007EF470 /* MyProfitModel.h */,
 				DA3F0BBC1F186BA7007EF470 /* MyProfitModel.m */,
+				DADBAEE71F1DF85800B7763E /* MyProfitDetailModel.h */,
+				DADBAEE81F1DF85800B7763E /* MyProfitDetailModel.m */,
+				DADBAEEA1F1E166D00B7763E /* WithdrawModel.h */,
+				DADBAEEB1F1E166D00B7763E /* WithdrawModel.m */,
 			);
 			path = "服务";
 			sourceTree = "<group>";
@@ -1529,8 +1554,6 @@
 				DA7A56541F0A2A2F00B2DAC9 /* ShareRegisterViewController.m */,
 				DAFF8E7F1F0DE18B00963AC0 /* ShareDetailViewController.h */,
 				DAFF8E801F0DE18B00963AC0 /* ShareDetailViewController.m */,
-				DAD605771F10B11F00F63165 /* ShareMoneyViewController.h */,
-				DAD605781F10B11F00F63165 /* ShareMoneyViewController.m */,
 			);
 			path = "分享推广";
 			sourceTree = "<group>";
@@ -1815,6 +1838,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA2DB0031F1C9EE1005A76B9 /* PickerView.m in Sources */,
 				DA15D39F1F16FC3C00910D12 /* DataForFMDB.m in Sources */,
 				DA1A13F11F1373C800AFD3F7 /* UIButton+Badge.m in Sources */,
 				DA10B8BD1F15E6A300671DBF /* TransOrder.m in Sources */,
@@ -1855,7 +1879,6 @@
 				DA7A564D1F09DC1500B2DAC9 /* TBFuideViewCell.m in Sources */,
 				DA7A56A61F0A42C500B2DAC9 /* PicsCell.m in Sources */,
 				DA22D44F1EFB928000BB0F0E /* NSMutableDictionary+YXP.m in Sources */,
-				DAD605791F10B11F00F63165 /* ShareMoneyViewController.m in Sources */,
 				DA9F3DD41F009CDF0002BE29 /* WebViewController.m in Sources */,
 				DAF48F1D1F0F16F100A98794 /* FixCodeViewController.m in Sources */,
 				DA7A56C51F0A42C500B2DAC9 /* ZZPhoto.m in Sources */,
@@ -1887,6 +1910,8 @@
 				DA22D4521EFB928000BB0F0E /* UICollectionView+TB.m in Sources */,
 				DA22D4531EFB928000BB0F0E /* UIColor+YXP.m in Sources */,
 				DA22D4541EFB928000BB0F0E /* UIFont+YXP.m in Sources */,
+				DA2DAFFC1F1C9321005A76B9 /* RealCertificateModel.m in Sources */,
+				DADBAEEC1F1E166D00B7763E /* WithdrawModel.m in Sources */,
 				DAFD93B01F0B9A21000155DF /* CustomTextField.m in Sources */,
 				DA22D4551EFB928000BB0F0E /* UIImage+YXP.m in Sources */,
 				DA0A4CA41F06309F0066BAFA /* WithdrawCompleteViewController.m in Sources */,
@@ -1900,6 +1925,7 @@
 				DA7A56CD1F0A42C500B2DAC9 /* ZZPhotoPickerFooterView.m in Sources */,
 				DA7A56C41F0A42C500B2DAC9 /* ZZPhotoPickerViewController.m in Sources */,
 				DA22D4571EFB928000BB0F0E /* UILabel+YXP.m in Sources */,
+				DADBAEE91F1DF85800B7763E /* MyProfitDetailModel.m in Sources */,
 				DA1A13E31F13627800AFD3F7 /* LQXSwitch.m in Sources */,
 				DA7A56521F0A275B00B2DAC9 /* ShareViewController.m in Sources */,
 				DA10B8B71F15AC6000671DBF /* BillModel.m in Sources */,
@@ -2120,7 +2146,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = WHFinance/WHFinance.entitlements;
-				DEVELOPMENT_TEAM = 7T64MT2TJY;
+				DEVELOPMENT_TEAM = F66NLE8FYB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WHFinance/Vendors/UMSocial/UMSocialSDK",
@@ -2137,7 +2163,7 @@
 					"$(PROJECT_DIR)/WHFinance/Vendors/UMSocial/SocialLibraries/WeChat",
 					"$(PROJECT_DIR)/WHFinance/Vendors/UMSocial/UMSocialSDKPlugin",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = WH.WHFinance;
+				PRODUCT_BUNDLE_IDENTIFIER = WHFinance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2149,7 +2175,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = WHFinance/WHFinance.entitlements;
-				DEVELOPMENT_TEAM = 7T64MT2TJY;
+				DEVELOPMENT_TEAM = F66NLE8FYB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WHFinance/Vendors/UMSocial/UMSocialSDK",
@@ -2166,7 +2192,7 @@
 					"$(PROJECT_DIR)/WHFinance/Vendors/UMSocial/SocialLibraries/WeChat",
 					"$(PROJECT_DIR)/WHFinance/Vendors/UMSocial/UMSocialSDKPlugin",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = WH.WHFinance;
+				PRODUCT_BUNDLE_IDENTIFIER = WHFinance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

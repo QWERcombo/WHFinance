@@ -8,6 +8,7 @@
 
 #import "ShareViewController.h"
 #import "ShareRegisterViewController.h"
+#import "ShareDetailViewController.h"
 
 @interface ShareViewController ()
 @property (nonatomic, strong) NSArray *nameArray;
@@ -65,17 +66,16 @@
     return view;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    ShareDetailViewController *detail = [ShareDetailViewController new];
     if (indexPath.row==0) {
-        
+        detail.type = @"1";
+        [self.navigationController pushViewController:detail animated:YES];
     }
     if (indexPath.row==1) {
-        
+        detail.type = @"2";
+        [self.navigationController pushViewController:detail animated:YES];
     }
     if (indexPath.row==2) {
-        
-    }
-    if (indexPath.row==3) {
         ShareRegisterViewController *regi = [ShareRegisterViewController new];
         [self.navigationController pushViewController:regi animated:YES];
     }

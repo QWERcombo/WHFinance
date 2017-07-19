@@ -11,7 +11,6 @@
 @interface OpenProductListCell : BaseCell
 @property (nonatomic, strong) UIImageView *typeImgv;
 @property (nonatomic, strong) UILabel *typeTitle;
-@property (nonatomic, strong) UIView *line;
 @property (nonatomic, strong) UILabel *leftLab, *rightLab;
 
 - (void)loadData:(NSObject *)model andCliker:(ClikBlock)clue;

@@ -165,28 +165,33 @@
 - (void)buttonClick:(UIButton *)sender {
     NSLog(@"%@", [self.dataMuArr objectAtIndex:self.lastSelectNum]);
     
-    PayWaysViewController *pay = [PayWaysViewController new];
-    if (self.lastSelectNum ==1) {//微信
-        pay.mainColor = [UIColor colorWithR:77 G:168 B:65 A:1];
-        pay.payWay = @"0";
-        pay.proudctDetailId = @"65500";
-    } else if (self.lastSelectNum==2) {//支付宝
-        pay.mainColor = [UIColor colorWithR:85 G:166 B:229 A:1];
-        pay.payWay = @"2";
-        pay.proudctDetailId = @"65501";
-    } else if (self.lastSelectNum==0) {//银联
-        NoCardPayViewController *no = [NoCardPayViewController new];
-        no.isPartner = @"yes";
-        no.cashCount = @"399";
-        pay.proudctDetailId = @"65502";
-        [self.navigationController pushViewController:no animated:YES];
-        return;
-    } else {
-        
-    }
-    pay.navIMG = [UIImage imageWithColor:pay.mainColor];
-    pay.moneyStr = @"399";
-    [self.navigationController pushViewController:pay animated:YES];
+    [[UtilsData sharedInstance] certificateController:self success:^{
+        PayWaysViewController *pay = [PayWaysViewController new];
+        if (self.lastSelectNum ==1) {//微信
+            pay.mainColor = [UIColor colorWithR:77 G:168 B:65 A:1];
+            pay.payWay = @"0";
+            pay.proudctDetailId = @"65500";
+        } else if (self.lastSelectNum==2) {//支付宝
+            pay.mainColor = [UIColor colorWithR:85 G:166 B:229 A:1];
+            pay.payWay = @"2";
+            pay.proudctDetailId = @"65501";
+        } else if (self.lastSelectNum==0) {//银联
+            NoCardPayViewController *no = [NoCardPayViewController new];
+            no.isPartner = @"yes";
+            no.cashCount = @"399";
+            pay.proudctDetailId = @"65502";
+            [self.navigationController pushViewController:no animated:YES];
+            return;
+        } else {
+            
+        }
+        pay.navIMG = [UIImage imageWithColor:pay.mainColor];
+        pay.moneyStr = @"399";
+        pay.isParter = @"yes";
+        [self.navigationController pushViewController:pay animated:YES];
+    }];
+    
+    
     
 }
 

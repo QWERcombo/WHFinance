@@ -10,5 +10,7 @@
 
 @interface NoCardInfamationViewController : BaseViewController
 @property (nonatomic, strong) NSString *orderID;
+@property (nonatomic, strong) NSString *nameStr;
+@property (nonatomic, strong) NSString *identiNo;
 
 @end

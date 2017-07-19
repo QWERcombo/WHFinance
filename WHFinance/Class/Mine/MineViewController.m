@@ -18,7 +18,7 @@
 #import "MyRateViewController.h"
 #import "JoinParterViewController.h"
 #import "CardInformationViewController.h"
-
+#import "CertificatePhotoViewController.h"
 
 @interface MineViewController ()
 @property (nonatomic, strong) NSArray *nameArray1;
@@ -30,11 +30,14 @@
 @property (nonatomic, strong) UILabel *phoneLab;
 @property (nonatomic, strong) UILabel *stastusLab;
 @property (nonatomic, strong) UIImageView *headerImgv;
+
+@property (nonatomic, strong) NSString *realStatus;
 @end
 
 @implementation MineViewController
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    [self.tabView reloadData];
     self.navigationController.navigationBar.hidden = YES;
 }
 - (void)viewWillDisappear:(BOOL)animated {
@@ -48,8 +51,13 @@
     // Do any additional setup after loading the view.
     self.nameArray1 = @[@"我的费率",@"分享推广",@"我的结算卡",@"常见问题"];
     self.nameArray2 = @[@[@"mine_choose_0",@"实名认证"],@[@"mine_choose_1",@"客服电话"],@[@"mine_choose_2",@"设置"]];
+    [self.dataMuArr addObjectsFromArray:self.nameArray2];
     self.nameArr = @[@"享受收款超低费率",@"享受100元每人直推返佣",@"办大额信用卡快速贷款",@"享受客服热线等更多服务"];
     
+    [[PublicFuntionTool sharedInstance] getRealName:^(NSString *status) {
+        self.realStatus = [NSString stringWithFormat:@"%@",status];//获取实名认证状态
+        [self.tabView reloadData];
+    }];
     [self setUpSubviews];
 }
 
@@ -69,7 +77,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section==3) {
-        return self.nameArray2.count;
+        return self.dataMuArr.count;
     } else {
         return 0;
     }
@@ -79,20 +87,29 @@
     MineListCell *cell = (MineListCell *)[UtilsMold creatCell:@"MineListCell" table:tableView deledate:self model:namestr data:nil andCliker:^(NSDictionary *clueDic) {
         
     }];
-    if (indexPath.row==2) {
-        [cell.line removeFromSuperview];
-    }
+    
     if (indexPath.row==0) {
+        if (self.realStatus.length) {
+            cell.rightLab.text = [UserData currentUser].readName.length>0?[self.realStatus integerValue]>1?@"已认证":@"待提交图片":@"待提交结算卡";
+        } else {
+            cell.rightLab.text = @"";
+        }
+        
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [cell.line mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.height.equalTo(@(1));
-            make.left.equalTo(cell.contentView.mas_left).offset(15);
-            make.right.equalTo(cell.contentView.mas_right).offset(15);
+            make.left.equalTo(cell.contentView.mas_left).offset(12.5);
+            make.right.equalTo(cell.contentView.mas_right).offset(17.5);
             make.bottom.equalTo(cell.contentView.mas_bottom);
         }];
     }
+    
     return cell;
 }
+
+
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [UtilsMold getCellHight:@"MineListCell" data:nil model:nil indexPath:indexPath];
 }
@@ -121,8 +138,18 @@
         } controller:self];
     }
     if (indexPath.row==0) {
-        CertificateListViewController *cer = [CertificateListViewController new];
-        [self.navigationController pushViewController:cer animated:YES];
+        if ([self.realStatus integerValue]==0) {//未认证
+            CertificateListViewController *cer = [CertificateListViewController new];
+            [self.navigationController pushViewController:cer animated:YES];
+        }
+        if ([self.realStatus integerValue]==1) {//未传图片
+            CertificatePhotoViewController *cer = [CertificatePhotoViewController new];
+            [self.navigationController pushViewController:cer animated:YES];
+        }
+        if ([self.realStatus integerValue]==2) {//已认证
+            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"实名认证已完成" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+            } controller:self];
+        }
     }
     if (indexPath.row==2) {
         SettingViewController *newcard = [SettingViewController new];
@@ -150,7 +177,6 @@
         make.top.equalTo(mainView.mas_top).offset(33);
     }];
     if ([[UserData currentUser].isPartner integerValue]!=1) {
-        
         UIButton *right_f = [UIButton buttonWithTitle:@"加入合伙人" andFont:FONT_ArialMT(13) andtitleNormaColor:[UIColor whiteColor] andHighlightedTitle:[UIColor whiteColor] andNormaImage:nil andHighlightedImage:nil];
         [right_f setImage:IMG(@"mine_join") forState:UIControlStateNormal];
         right_f.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
@@ -279,7 +305,6 @@
 
 #pragma mark - Action
 - (void)right_f_Action:(UIButton *)sender {
-//    [[UtilsData sharedInstance] postCertificateNotice];
     JoinParterViewController *join = [JoinParterViewController new];
     [self.navigationController pushViewController:join animated:YES];
 }
@@ -315,11 +340,15 @@
         [self.navigationController pushViewController:faq animated:YES];
     }
     if ([sender.currentTitle isEqualToString:@"我的结算卡"]) {
-        CardInformationViewController *bind = [CardInformationViewController new];
-        [self.navigationController pushViewController:bind animated:YES];
+        [[UtilsData sharedInstance] certificateController:self success:^{
+            CardInformationViewController *bind = [CardInformationViewController new];
+            [self.navigationController pushViewController:bind animated:YES];
+        }];
     }
     
 }
+
+
 
 
 - (void)didReceiveMemoryWarning {
