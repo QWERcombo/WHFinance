@@ -12,7 +12,6 @@
 
 
 - (void)initSubView {
-    self.contentView.backgroundColor = [UIColor whiteColor];
     
     self.typeImgv = [UIImageView new];
     [self.contentView addSubview:self.typeImgv];
@@ -62,9 +61,6 @@
     self.statusBtn.clipsToBounds = YES;
     self.statusBtn.layer.cornerRadius = 5;
     [self.statusBtn addTarget:self action:@selector(contactAction:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.statusBtn setImage:IMG(@"login_check_y") forState:UIControlStateNormal];
-//    self.statusBtn.imageEdgeInsets = UIEdgeInsetsMake(0.0, -10.0, 0.0, 0.0);
-//    self.statusBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [self.statusBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@(25));
         make.width.equalTo(@(63));
@@ -76,6 +72,7 @@
 
 - (void)contactAction:(UIButton *)sender {
     _clikBlock(@"1");
+    
 }
 
 
@@ -86,6 +83,17 @@
 
 - (void)loadData:(NSObject *)model andCliker:(ClikBlock)clue {
     _clikBlock = clue;
+    MyCustomerModel *dataM = (MyCustomerModel *)model;
+    if ([dataM.userReadNameFlag integerValue]>0) {
+        self.typeImgv.image = IMG(@"customer_0");//已认证
+        self.nameLab.text = [NSString stringWithFormat:@"%@:  %@", dataM.userLeveCn,dataM.readName];
+    } else {
+        self.typeImgv.image = IMG(@"customer_1");//未认证
+        self.nameLab.text = [NSString stringWithFormat:@"%@:  %@", dataM.userLeveCn,dataM.userName];
+    }
+    self.numberLab.text = [NSString stringWithFormat:@"电       话:  %@", dataM.mobileNumber];
+    self.timeLab.text = [NSString stringWithFormat:@"日       期:  %@", [dataM.createTime NSTimeIntervalTransToYear_Month_Day]];
+    self.typeTitle.text = [NSString stringWithFormat:@"认       证:  %@",[dataM.userReadNameFlag integerValue]>0?@"已认证":@"未认证"];
     
     
 }

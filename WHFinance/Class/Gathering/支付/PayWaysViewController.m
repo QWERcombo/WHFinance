@@ -20,21 +20,24 @@
 @property (nonatomic, strong) NSString *QRCodeDataSorceStr;//生成二维码信息
 @property (nonatomic, strong) NSString *orderID;//查询订单状态的ID
 @property (nonatomic, strong) NSTimer *timer;//定时器
-
+@property (nonatomic, strong) NSString *normal, *pratnner;
 @end
 
 @implementation PayWaysViewController
 
 - (void)viewWillDisappear:(BOOL)animated {//关闭定时器
     [super viewWillDisappear:YES];
-    
     if (self.timer) {
         [self.timer setFireDate:[NSDate distantFuture]];
         [self.timer invalidate];
         self.timer = nil;
     }
-    
 }
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    [self changeRateINfomation];
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,6 +46,7 @@
     
     [self setUpSubviews];
     [self getDataSource];
+    
 }
 
 - (void)setUpSubviews {
@@ -128,8 +132,20 @@
         make.top.equalTo(line.mas_bottom).offset(13);
     }];
     
-    
-    self.detailLab = [UILabel lableWithText:[NSString stringWithFormat:@"普通级会员手续费0.03元\n创业合伙人手续费0.03元"] Font:FONT_ArialMT(12) TextColor:[UIColor Grey_WordColor]];
+    self.detailLab = [UILabel lableWithText:@"" Font:FONT_ArialMT(11) TextColor:[UIColor mianColor:2]];
+    if (self.normal.length) {
+        self.detailLab.text = [NSString stringWithFormat:@"普通级会员手续费%@元\n创业合伙人手续费%@元", self.normal, self.pratnner];
+    } else {
+        self.detailLab.text = [NSString stringWithFormat:@"普通级会员手续费      元\n创业合伙人手续费      元"];
+    }
+    NSMutableParagraphStyle *para = [[NSMutableParagraphStyle alloc] init];
+    para.lineSpacing = 5;
+    NSRange rang = NSMakeRange(self.detailLab.text.length/2, self.detailLab.text.length/2+1);
+    NSMutableAttributedString *attstr = [[NSMutableAttributedString alloc] initWithString:self.detailLab.text];
+    [attstr addAttribute:NSFontAttributeName value:FONT_ArialMT(11) range:rang];
+    [attstr addAttribute:NSForegroundColorAttributeName value:[UIColor Grey_OrangeColor] range:rang];
+    [attstr addAttribute:NSParagraphStyleAttributeName value:para range:NSMakeRange(0, self.detailLab.text.length)];
+    self.detailLab.attributedText = attstr;
     [content addSubview:self.detailLab];
     self.detailLab.numberOfLines = 2;
     self.detailLab.textAlignment = NSTextAlignmentCenter;
@@ -138,7 +154,6 @@
         make.centerX.equalTo(content.mas_centerX);
         make.top.equalTo(self.moneyLab.mas_bottom).offset(14);
     }];
-    self.detailLab.attributedText = [UILabel labGetAttributedStringFrom:0 toEnd:self.detailLab.text.length/2 WithColor:[UIColor colorWithR:79 G:174 B:234 A:1] andFont:FONT_ArialMT(12) allFullText:self.detailLab.text];
     
     
     UIView *tempView = [UIView new];
@@ -215,6 +230,13 @@
         [self.timer setFireDate:[NSDate distantPast]];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];//加入主循环池中
         
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(300 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.timer setFireDate:[NSDate distantFuture]];
+            [self.timer invalidate];
+            self.timer = nil;
+        });
+        
         [self.tabView reloadData];
     } failure:^(NSString *error, NSInteger code) {
         
@@ -230,7 +252,7 @@
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
         NSString *statusStr = resultDic[@"resultData"][@"orderStatus"];
-//        NSLog(@"-----%@", statusStr);
+        NSLog(@"-----%@", statusStr);
         //status  0等待支付 1支付中 2支付成功 3支付失败
         if ([statusStr integerValue]==2) {
             [self.timer setFireDate:[NSDate distantFuture]];
@@ -239,6 +261,7 @@
             
             TradeResultViewController *result = [TradeResultViewController new];
             result.cashStr = self.moneyStr;
+            result.orderID = self.orderID;
             [self.navigationController pushViewController:result animated:YES];
             
             //更改本地合伙人状态
@@ -253,12 +276,23 @@
             [self.timer invalidate];
             self.timer = nil;
             [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"支付失败" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
         }
+        
         
     } failure:^(NSString *error, NSInteger code) {
         
     }];
     
+}
+
+- (void)changeRateINfomation {
+    [[PublicFuntionTool sharedInstance] getOrderRate:^(NSString *normalRate, NSString *partnerRate) {
+        self.normal = normalRate;
+        self.pratnner = partnerRate;
+    } WithCashAmount:self.moneyStr andSubProductId:self.proudctDetailId];
 }
 
 

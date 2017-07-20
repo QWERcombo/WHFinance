@@ -103,6 +103,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MineCustomerListViewController *list = [MineCustomerListViewController new];
+    list.userLeve = SINT(indexPath.row+1);
     [self.navigationController pushViewController:list animated:YES];
 }
 

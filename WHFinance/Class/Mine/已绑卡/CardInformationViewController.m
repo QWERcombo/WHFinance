@@ -246,7 +246,7 @@
 }
 
 - (void)changeCardInfomation {//修改信息
-    NSLog(@"----%d++++%@", [tf.userInputContent checkBankCardNumber:tf.userInputContent],tf.userInputContent);
+//    NSLog(@"----%d++++%@", [tf.userInputContent checkBankCardNumber:tf.userInputContent],tf.userInputContent);
     
     if (!self.bankNo.length) {
         [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请选择所属支行" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];

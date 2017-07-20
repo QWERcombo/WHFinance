@@ -52,7 +52,7 @@
 -(void)setupchildVc:(NSObject *)model
 {
     NSArray *tabBarItemImages = @[@"first", @"second",@"third",@"four"];
-    NSArray *tabBarItemTitle = @[@"收款",@"账单",@"服务",@"我的"];
+    NSArray *tabBarItemTitle = @[@"收款",@"账单",@"服务",@"我"];
     
     for (int i = 0;i < 4 ; i ++ ) {
         NSString *titleString = [tabBarItemTitle objectAtIndex:i];

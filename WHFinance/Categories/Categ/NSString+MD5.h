@@ -84,8 +84,8 @@
 - (BOOL)checkBankCardNumber:(NSString* )cardNo;
 //输入的是否都是中文
 - (BOOL)IsChinese;
-
-
+//输入纯数字
+- (BOOL)deptNumInputShouldNumber;
 
 
 

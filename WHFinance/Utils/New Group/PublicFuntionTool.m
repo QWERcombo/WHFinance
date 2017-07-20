@@ -7,6 +7,8 @@
 //
 
 #import "PublicFuntionTool.h"
+#import "TransOrder.h"
+
 
 @implementation PublicFuntionTool
 DEF_SINGLETON(PublicFuntionTool);
@@ -40,7 +42,7 @@ DEF_SINGLETON(PublicFuntionTool);
     
     //创建网页内容对象
 //    NSString* thumbURL =  IMG(@"");
-    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:@"贪财猫" descr:@"贪财猫贪财猫" thumImage:IMG(@"login_logo")];
+    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:@"e万呗" descr:@"这是e万呗这是e万呗这是e万呗这是e万呗" thumImage:IMG(@"icon")];
     //设置网页地址
 //    shareObject.webpageUrl = @"http://www.wanhongpay.com";
     shareObject.webpageUrl = @"http://115.182.112.97:10001/evolution-merchant-service/app_regin.jsp";
@@ -186,6 +188,43 @@ DEF_SINGLETON(PublicFuntionTool);
     }];
 }
 
+//查询订单状态
+- (void)getOrderStatus:(PassOrderStatusBlock)order byOrderID:(NSString *)orderid {
+    _orderBlock = order;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"orderId":orderid}] forKey:@"transc.queryOrder"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"++++%@", resultDic);
+        TransOrder *order = [[TransOrder alloc] initWithDictionary:resultDic[@"resultData"] error:nil];
+        _orderBlock(order);
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+}
+
+
+//获取支付手续费
+- (void)getOrderRate:(PassPayRateBlock)payRate WithCashAmount:(NSString *)cashA andSubProductId:(NSString *)subProID  {
+    _rateBlock = payRate;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"transAmount":cashA,@"subProductId":subProID}] forKey:@"transqury.queryOrderFee"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        NSArray *dataArr = resultDic[@"resultData"];
+        NSLog(@"%@0", dataArr);
+        NSString *normal = [NSString stringWithFormat:@"%@", dataArr.firstObject];
+        NSString *partner = [NSString stringWithFormat:@"%@", dataArr.lastObject];
+        _rateBlock([normal handleDataSourceTail],[partner handleDataSourceTail]);
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+}
 
 
 @end

@@ -12,8 +12,10 @@
 #import "BindedCardViewController.h"
 #import "JoinParterViewController.h"
 
+
 @interface NoCardPayViewController ()<RadioSelectDelegate> {
     NSIndexPath* preSelect;
+    UILabel *textLab;
 }
 @property (nonatomic, strong) BankCardModel *selectedCard;
 @property (nonatomic, strong) NSIndexPath *lastIndexPath;//选中的银行卡tid
@@ -24,6 +26,18 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [self getCardInfomationList];
+    
+    [[PublicFuntionTool sharedInstance] getOrderRate:^(NSString *normalRate, NSString *partnerRate) {
+        textLab.text = [NSString stringWithFormat:@"普通级会员手续费%@元\n创业合伙人手续费%@元", normalRate, partnerRate];
+        NSMutableParagraphStyle *para = [[NSMutableParagraphStyle alloc] init];
+        para.lineSpacing = 5;
+        NSRange rang = NSMakeRange(textLab.text.length/2, textLab.text.length/2+1);
+        NSMutableAttributedString *attstr = [[NSMutableAttributedString alloc] initWithString:textLab.text];
+        [attstr addAttribute:NSFontAttributeName value:FONT_ArialMT(11) range:rang];
+        [attstr addAttribute:NSForegroundColorAttributeName value:[UIColor mianColor:1] range:rang];
+        [attstr addAttribute:NSParagraphStyleAttributeName value:para range:NSMakeRange(0, textLab.text.length)];
+        textLab.attributedText = attstr;
+    } WithCashAmount:self.cashCount andSubProductId:@"3"];
 }
 
 - (void)viewDidLoad {
@@ -172,7 +186,7 @@
     UITapGestureRecognizer *vvvtap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(vvvTap:)];
     [vvv addGestureRecognizer:vvvtap];
     
-    UILabel *textLab = [UILabel lableWithText:@"普通级会员手续费0.02元\n创业合伙人手续费0.02元" Font:FONT_ArialMT(11) TextColor:[UIColor mianColor:2]];
+    textLab = [UILabel lableWithText:[NSString stringWithFormat:@"普通级会员手续费  元\n创业合伙人手续费  元"] Font:FONT_ArialMT(11) TextColor:[UIColor mianColor:2]];
     textLab.numberOfLines = 2;
     [topView addSubview:textLab];
     [textLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -180,13 +194,6 @@
         make.top.equalTo(topView.mas_top).offset(0);
         make.bottom.equalTo(topView.mas_bottom).offset(5);
     }];
-    NSMutableParagraphStyle *para = [[NSMutableParagraphStyle alloc] init];
-    para.lineSpacing = 5;
-    NSRange rang = NSMakeRange(0, textLab.text.length/2);
-    NSMutableAttributedString *attstr = [[NSMutableAttributedString alloc] initWithString:textLab.text attributes:@{NSParagraphStyleAttributeName:para}];
-    [attstr addAttribute:NSFontAttributeName value:FONT_ArialMT(11) range:rang];
-    [attstr addAttribute:NSForegroundColorAttributeName value:[UIColor mianColor:1] range:rang];
-    textLab.attributedText = attstr;
     
     
     self.tabView.backgroundColor = [UIColor whiteColor];
@@ -236,7 +243,6 @@
         with.cashStr = self.cashCount;
         with.isPartner = self.isPartner;
         [self.navigationController pushViewController:with animated:YES];
-        
     } failure:^(NSString *error, NSInteger code) {
         
     }];
@@ -277,9 +283,7 @@
     } failure:^(NSString *error, NSInteger code) {
         
     }];
-    
 }
-
 
 
 
@@ -287,7 +291,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 /*
 #pragma mark - Navigation
 
@@ -297,5 +300,4 @@
     // Pass the selected object to the new view controller.
 }
 */
-
 @end

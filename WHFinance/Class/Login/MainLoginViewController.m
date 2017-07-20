@@ -98,6 +98,7 @@
     self.codeTF.font = FONT_ArialMT(18);
     self.codeTF.placeholder = @"请输入密码";
     self.codeTF.delegate = self;
+    self.codeTF.secureTextEntry = YES;
     self.codeTF.keyboardType = UIKeyboardTypeEmailAddress;
     [mainView addSubview:self.codeTF];
     UIView *line_c = [[UIView alloc] initWithFrame:CGRectMake(37.5, CGRectGetMaxY(codeImgv.frame)+10, SCREEN_WIGHT-75, 1)];

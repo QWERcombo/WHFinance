@@ -26,6 +26,7 @@
 @property (nonatomic, strong) NSString *CVV2No;//cvv2
 @property (nonatomic, strong) NSString *phoneNo;//手机号
 @property (nonatomic, strong) NSString *codeNo;//验证码
+@property (nonatomic, strong) NSString *orderTime;//订单时间
 @property (nonatomic, strong) RealCertificateModel *model;
 @end
 
@@ -403,7 +404,9 @@
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSLog(@"---%@", resultDic);
         self.orderID = resultDic[@"resultData"];
-        
+        [[PublicFuntionTool sharedInstance] getOrderStatus:^(TransOrder *order) {
+            self.orderTime = order.orderCreateTime;
+        } byOrderID:self.orderID];
     } failure:^(NSString *error, NSInteger code) {
         
     }];
@@ -444,11 +447,12 @@
 
 - (void)payAction:(UIButton *)sender {
     UITextField *codetf = [self.view viewWithTag:1004];
-    self.codeNo = codetf.text = @"0000";
-    if (codetf.text.length!=4) {
+    self.codeNo = codetf.text;
+    if (!codetf.text.length || ![codetf.text deptNumInputShouldNumber]) {
         [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确输入验证码" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
         return;
     }
+    
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
@@ -456,10 +460,14 @@
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-        NSLog(@"++++%@", resultDic);
+//        NSLog(@"++++%@", resultDic);
         if (self.isReal) {//非本人
             NoCardInfamationViewController *infa = [NoCardInfamationViewController new];
             infa.orderID = self.orderID;
+            infa.cashCount = [NSString stringWithFormat:@"￥%@", self.cashCount];
+//            infa.payNameStr = self.cardHolder;
+//            infa.cardNo = self.creditCardNo;
+            infa.timeStr = self.orderTime;
             [self.navigationController pushViewController:infa animated:YES];
         } else {//本人
             if ([resultDic[@"resultData"] integerValue]==2) {//成功
@@ -502,6 +510,7 @@
         } else {//本人
             self.cardHolder = self.model.realName;
             self.identiCardNo = self.model.identityCardNo;
+            
 //        self.cardHolder = @"王五";
 //        self.identiCardNo = @"440402198800000000";
         }
@@ -522,6 +531,10 @@
     }
     if (![phonetf.text isValidateMobile]) {
         [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确输入手机号码" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
+        return NO;
+    }
+    if (![self.cardHolder IsChinese]) {
+        [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"持卡人姓名请填中文" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
         return NO;
     }
     

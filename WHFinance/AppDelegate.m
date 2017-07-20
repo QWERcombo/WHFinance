@@ -57,7 +57,7 @@
     
     /* 设置微信的appKey和appSecret */
 //    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wxdc1e388c3822c80b" appSecret:@"3baf1193c85774b3fd9d18447d76cab0" redirectURL:@"http://mobile.umeng.com/social"];
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx81c026b3f00ca9c1" appSecret:@"43898ddcbf7279214319a47d20f9957f" redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx80ec04f0f986ba6d" appSecret:@"56c57335c94b2f5288f3f47542abe6d5" redirectURL:@"http://www.wanhongpay.com"];
     /*
      * 移除相应平台的分享，如微信收藏
      */
@@ -65,7 +65,7 @@
     /* 设置分享到QQ互联的appID
      * U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。
      */
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1106274944"/*设置QQ平台的appID*/  appSecret:@"HxYpYjsjpUyBsvzU" redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1106222757"/*设置QQ平台的appID*/  appSecret:@"FPKNuWW15egGptIG" redirectURL:@"http://www.wanhongpay.com"];
     
 }
 

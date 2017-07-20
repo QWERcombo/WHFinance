@@ -66,7 +66,7 @@ static NSOperationQueue *queue;
 //    NSDictionary *valueDic = [DataSend getPostByParameters:dict];
     NSMutableDictionary *valueDic = [[NSMutableDictionary alloc] init];
     NSString *httpStr = [NSString stringWithFormat:@"%@/%@",baseUrl,type];
-    NSLog(@"链接 🔗🔗 == %@>>&cookie:%@,参数 == %@",httpStr,cookie,dict);
+//    NSLog(@"链接 🔗🔗 == %@>>&cookie:%@,参数 == %@",httpStr,cookie,dict);
     //加密
     NSString *jsonValueStr = dict[@"key"];
     NSString *head = [[NSUserDefaults standardUserDefaults] valueForKey:@"request_head"];
@@ -179,9 +179,9 @@ static NSOperationQueue *queue;
                     if ([code integerValue]==36866) {//重新登录
                         [[UtilsData sharedInstance] postLogoutNotice];
                     }
-//                    if ([code integerValue]==36867) {
-//
-//                    }
+                    if ([code integerValue]==36865) {//重新握手
+                        [[PublicFuntionTool sharedInstance] hangShake];
+                    }
                 });
             }
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -192,7 +192,8 @@ static NSOperationQueue *queue;
         }];
     });
     if (animation == YES) {
-        [[UtilsData sharedInstance]showAlertTitle:@"加载中..." detailsText:nil time:0 aboutType:MBProgressHUDModeIndeterminate state:NO];
+        
+        [[UtilsData sharedInstance]showAlertTitle:@"加载中..." detailsText:nil time:30.0 aboutType:MBProgressHUDModeIndeterminate state:NO];
     }
 }
 

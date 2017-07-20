@@ -11,4 +11,5 @@
 @interface NoCardPayViewController : BaseViewController
 @property (nonatomic, strong) NSString *cashCount;
 @property (nonatomic, strong) NSString *isPartner;
+@property (nonatomic, strong) NSString *proudctDetailId;
 @end

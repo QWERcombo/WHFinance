@@ -263,7 +263,12 @@
         
         [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
             NSLog(@"%@",resultDic);
-            
+            if ([resultDic[@"resultCode"] integerValue]==0) {
+                [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"上传成功，审核中" time:2.0 aboutType:MBProgressHUDModeCustomView state:YES];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            }
         } failure:^(NSString *error, NSInteger code) {
             
         }];

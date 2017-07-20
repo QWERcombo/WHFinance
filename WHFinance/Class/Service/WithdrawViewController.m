@@ -96,7 +96,7 @@
         
         NSArray *temp = nil;
         if (self.dataModel) {
-            temp = @[self.dataModel.userName,self.dataModel.userLeve,[self.dataModel.withdrawCashAmount handleDataSourceTail], [self.dataModel.withdrawCashFee handleDataSourceTail],self.dataModel.withdrawCashCard,self.dataModel.withdrawCashBankName];
+            temp = @[self.dataModel.userName,self.dataModel.userLeve,[NSString stringWithFormat:@"￥%@", [self.dataModel.withdrawCashAmount handleDataSourceTail]], [NSString stringWithFormat:@"￥%@", [self.dataModel.withdrawCashFee handleDataSourceTail]],self.dataModel.withdrawCashCard,self.dataModel.withdrawCashBankName];
         } else {
             temp = @[@"",@"",@"",@"",@"",@""];
         }

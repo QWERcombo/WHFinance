@@ -8,6 +8,7 @@
 
 #import "TradeDetailViewController.h"
 #import "CertificatePhotoViewController.h"
+#import "NoCardInfamationViewController.h"
 
 @interface TradeDetailViewController ()
 @property (nonatomic, strong) SettlementOrder *settlementOrder;
@@ -256,7 +257,7 @@
     NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
-//        NSLog(@"*****%@", resultDic);
+        NSLog(@"*****%@", resultDic);
         self.settlementOrder = [[SettlementOrder alloc] initWithDictionary:resultDic[@"resultData"][@"settlementOrder"] error:nil];
         self.transOrder = [[TransOrder alloc] initWithDictionary:resultDic[@"resultData"][@"transOrder"] error:nil];
         self.uploadAuditing = [NSString stringWithFormat:@"%@",resultDic[@"resultData"][@"uploadAuditing"]];
@@ -269,8 +270,12 @@
 }
 
 - (void)buttonClick:(UIButton *)sender {
-    CertificatePhotoViewController *photo = [CertificatePhotoViewController new];
-    photo.fromController = @"no_card";
+//    CertificatePhotoViewController *photo = [CertificatePhotoViewController new];
+//    photo.fromController = @"no_card";
+    NoCardInfamationViewController *photo = [NoCardInfamationViewController new];
+    photo.orderID = self.orderID;
+    photo.timeStr = self.transOrder.orderCreateTime;
+    photo.cashCount = self.transOrder.orderAmount;
     [self.navigationController pushViewController:photo animated:YES];
 }
 

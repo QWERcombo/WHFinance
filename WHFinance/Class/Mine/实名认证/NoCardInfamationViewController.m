@@ -14,7 +14,8 @@
     UIImageView *rightImg;//付款人身份证
     UIImageView *backImgv;
 }
-
+@property (nonatomic, strong) NSString *cardNo;
+@property (nonatomic, strong) NSString *cardHolderName;
 @end
 
 @implementation NoCardInfamationViewController
@@ -25,24 +26,46 @@
     self.title = @"提交无卡交易资料";
     [self.dataMuArr addObjectsFromArray:@[@"收款人:",@"金    额:",@"时    间:",@"付款人:",@"卡    号:",@"原    因:"]];
     
-    
-    [self setUpSubViews];
+    [self getdatasource];
+    [self setUpSubviews];
+}
+- (void)setUpSubviews {
+    [self.view addSubview:self.tabView];
+    [self.tabView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.bottom.equalTo(self.view);
+    }];
 }
 
+#pragma mark - UITableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataMuArr.count;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return nil;
+}
 
-- (void)setUpSubViews {
-    self.view.backgroundColor = [UIColor Grey_BackColor1];
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [self createMainView];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return self.view.size.height;
+}
+
+- (UIView *)createMainView  {
+    UIView *mainView = [[UIView alloc] initWithFrame:self.view.bounds];
+    mainView.backgroundColor = [UIColor Grey_BackColor1];
     
     UIView *content = [UIView new];
     content.layer.cornerRadius = 10;
     content.clipsToBounds = YES;
     content.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:content];
+    [mainView addSubview:content];
     [content mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(60);
+        make.top.equalTo(mainView.mas_top).offset(60);
         make.width.equalTo(@(SCREEN_WIGHT-30));
         make.height.equalTo(@(674/2));
-        make.centerX.equalTo(self.view.mas_centerX);
+        make.centerX.equalTo(mainView.mas_centerX);
     }];
     
     
@@ -61,7 +84,13 @@
         make.centerY.equalTo(topView.mas_centerY);
     }];
     
-    NSArray *tempArr = @[@"张三",@"￥558.00",@"2017-07-06 20:20:20",@"李四",@"626565658545454545",@"请上传照片"];
+    
+    NSArray *tempArr = nil;
+    if (self.timeStr) {
+        tempArr = @[[UserData currentUser].readName,self.cashCount,[self.timeStr NSTimeIntervalTransToYear_Month_Day],self.cardHolderName,self.cardNo,@"请上传照片"];
+    } else {
+        tempArr = @[@"",@"",@"",@"",@"",@""];
+    }
     UIView *lastView = nil;
     for (NSInteger i=0; i<6; i++) {
         UIView *blank = [UIView new];
@@ -174,11 +203,9 @@
     [attstr addAttribute:NSFontAttributeName value:FONT_ArialMT(14) range:NSMakeRange(0, 5)];
     [attstr addAttribute:NSForegroundColorAttributeName value:[UIColor mianColor:1] range:NSMakeRange(0, 5)];
     [attstr addAttribute:NSParagraphStyleAttributeName value:para range:NSMakeRange(1, bottomHint.text.length-1)];
-    
-    
-    
     bottomHint.attributedText = attstr;
     
+    return mainView;
 }
 
 
@@ -193,10 +220,7 @@
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSLog(@"---%@", resultDic);
         
-        
     } failure:^(NSString *error, NSInteger code) {
-        
-        
     }];
     
 }
@@ -210,8 +234,23 @@
         leftImg.image = [photoArr firstObject];
         rightImg.image = [photoArr lastObject];
     };
-    
     [self.navigationController pushViewController:photo animated:YES];
+}
+
+
+- (void)getdatasource {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken,@"orderId":self.orderID}] forKey:@"transqury.selectTransUserCardInfo"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"---%@", resultDic);
+        self.cardNo = [NSString stringWithFormat:@"%@", resultDic[@"resultData"][@"cardNo"]];
+        self.cardHolderName = [NSString stringWithFormat:@"%@", resultDic[@"resultData"][@"cardHolderName"]];
+        [self.tabView reloadData];
+    } failure:^(NSString *error, NSInteger code) {
+    }];
     
 }
 

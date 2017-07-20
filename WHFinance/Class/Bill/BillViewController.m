@@ -30,8 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.pageNumber = 1;
-//    self.preDataSource = [NSMutableArray array];
-//    self.preDataSource = [NSMutableArray arrayWithArray:@[@"1",@"1",@"1"]];
+    self.preDataSource = [NSMutableArray array];
     
     [self setUpSubviews];
     [self getDataSource];
@@ -243,6 +242,7 @@
             [self.tabView.mj_header endRefreshing];
             [self.tabView.mj_footer endRefreshing];
         } else {
+            [self.tabView.mj_header endRefreshing];
             [self.tabView.mj_footer endRefreshingWithNoMoreData];
         }
         

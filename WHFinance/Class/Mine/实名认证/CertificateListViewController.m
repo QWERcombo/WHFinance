@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *realName;//姓名
 @property (nonatomic, strong) NSString *cardNo;//结算卡号
 @property (nonatomic, strong) NSString *bankNo;//所属支行
+@property (nonatomic, strong) RealCertificateModel *dataM;
 @end
 
 @implementation CertificateListViewController
@@ -26,6 +27,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"实名认证";
+    [self getRealName];
     [self setUpSubviews];
 }
 
@@ -140,19 +142,34 @@
             make.left.equalTo(blank.mas_left);
         }];
         
-        CustomTextField *customTF = nil;
-        customTF.tag = 1000+i;
+        
+        NSArray *tempArr =nil;
+        if (self.dataM.tid.length) {
+             tempArr = @[self.dataM.identityCardNo,[NSString stringWithFormat:@"  %@",self.dataM.realName],self.dataM.bankCardNo,@""];
+        } else {
+            tempArr = @[@"",@"",@"",@""];
+        }
+        UITextField *customTF = nil;
         customTF.backgroundColor = [UIColor colorWithR:245 G:245 B:245 A:1];
         if (i==0 || i==2) {
+            customTF.tag = 1000+i;
             customTF = [[CustomTextField alloc] initWithFrame:CGRectMake(70, 0, SCREEN_WIGHT-129, 30) withPlaceHolder:@"" withSeparateCount:4 withFont:FONT_ArialMT(12)];
+            customTF.borderStyle = UITextBorderStyleRoundedRect;
+            if (i==0) {
+                customTF.keyboardType = UIKeyboardTypeEmailAddress;
+            }
+            ((CustomTextField *)customTF).placeHolderLabel.backgroundColor = [UIColor Grey_BackColor1];
+            customTF.tag = 1000+i;
         } else {
             if (i==1) {
-                customTF = [[CustomTextField alloc] initWithFrame:CGRectMake(70, 0, i==3?SCREEN_WIGHT-154:SCREEN_WIGHT-129, 30) withPlaceHolder:@"" withSeparateCount:0 withFont:FONT_ArialMT(12)];
+                customTF = [[UITextField alloc] initWithFrame:CGRectMake(70, 0, i==3?SCREEN_WIGHT-154:SCREEN_WIGHT-129, 30)];
+                customTF.font = FONT_ArialMT(12);
+                customTF.backgroundColor = [UIColor Grey_BackColor1];
                 customTF.keyboardType = UIKeyboardTypeDefault;
             }
+            customTF.tag = 1000+i;
         }
-        customTF.borderStyle = UITextBorderStyleRoundedRect;
-        customTF.placeHolderLabel.backgroundColor = [UIColor Grey_BackColor1];
+        customTF.placeholder = [tempArr objectAtIndex:i];
         [blank addSubview:customTF];
         
         if (i==3) {
@@ -191,8 +208,8 @@
 
 
 - (void)uploadAction:(UIButton *)sender {
-    CertificatePhotoViewController *photo = [CertificatePhotoViewController new];
-    [self.navigationController pushViewController:photo animated:YES];
+//    CertificatePhotoViewController *photo = [CertificatePhotoViewController new];
+//    [self.navigationController pushViewController:photo animated:YES];
     
     if (![self chechInfomation]) {
         return;
@@ -203,10 +220,10 @@
 - (void)buttonClick:(UIButton *)sender {
     BankSearchViewController *bank = [BankSearchViewController new];
     bank.PassBankNameBlock = ^(BankModel *bankName) {
-        NSLog(@"%@", bankName);
+//        NSLog(@"%@", bankName);
         UIButton *button = [self.tabView viewWithTag:111];
         [button setTitle:bankName.bankName forState:UIControlStateNormal];
-        self.bankNo = bankName.bankNo;
+        self.bankNo = bankName.tid;
     };
     [self.navigationController pushViewController:bank animated:YES];
 }
@@ -220,7 +237,8 @@
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSLog(@"----++%@", resultDic);
-        
+        CertificatePhotoViewController *photo = [CertificatePhotoViewController new];
+        [self.navigationController pushViewController:photo animated:YES];
     } failure:^(NSString *error, NSInteger code) {
         
     }];
@@ -230,10 +248,36 @@
 
 - (BOOL)chechInfomation {
     CustomTextField *identf = [self.view viewWithTag:1000];
-    CustomTextField *nametf = [self.view viewWithTag:1001];
+    UITextField *nametf = [self.view viewWithTag:1001];
     CustomTextField *cardtf = [self.view viewWithTag:1002];
     UIButton *button = [self.view viewWithTag:111];
-    NSLog(@"%@---%@+++%@---%@", identf.text,nametf.text,cardtf.text,button.currentTitle);
+    NSLog(@"%@---%@+++%@---%@", identf.userInputContent,nametf.text,cardtf.userInputContent,button.currentTitle);
+    
+    if (self.dataM.tid.length) {
+        if (identf.text.length) {
+            self.cardNo = self.dataM.bankCardNo;
+        } else {
+            self.cardNo = self.dataM.bankCardNo;
+        }
+        if (nametf.text.length) {
+            self.realName = nametf.text;
+        } else {
+            self.realName = self.dataM.realName;
+        }
+        if (cardtf.text.length) {
+            self.identiNo = cardtf.text;
+        } else {
+            self.identiNo = self.dataM.identityCardNo;
+        }
+        if (!self.bankNo.length) {
+            self.bankNo = self.dataM.bankNoId;
+        }
+        
+    } else {
+        self.cardNo = cardtf.userInputContent;
+        self.realName = nametf.text;
+        self.identiNo = identf.userInputContent;
+    }
     
     
     if (![self.identiNo judgeIdentityStringValid]) {
@@ -248,23 +292,31 @@
         [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请选择所属支行" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
         return NO;
     }
-    if (!self.realName.length) {
+    if (!self.realName.length || ![self.realName IsChinese]) {
         [[UtilsData sharedInstance] showAlertTitle:@"提示" detailsText:@"请正确填写姓名" time:2.0 aboutType:MBProgressHUDModeCustomView state:NO];
         return NO;
     }
     
-//    self.cardNo = cardtf.text;
-//    self.realName = nametf.text;
-//    self.identiNo = identf.text;
-    
-    self.cardNo = @"622222222222222223";
-    self.bankNo = @"1";
-    self.realName = @"二狗子";
-    self.identiNo = @"440402198810019288";
-    
     return YES;
 }
 
+
+- (void)getRealName{//获取实名认证
+    //status  0待审核 1成功 2审核中
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+    [paramDic setObject:[NEUSecurityUtil FormatJSONString:@{@"userToken":[UserData currentUser].userToken}] forKey:@"user.getRealName"];
+    NSString *json = [NEUSecurityUtil FormatJSONString:paramDic];
+    [dict setObject:json forKey:@"key"];
+    [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:NO success:^(NSDictionary *resultDic, NSString *msg) {
+        NSLog(@"---real---%@", resultDic);
+        self.dataM = [[RealCertificateModel alloc] initWithDictionary:resultDic[@"resultData"] error:nil];
+        [self.tabView reloadData];
+    } failure:^(NSString *error, NSInteger code) {
+        
+    }];
+    
+}
 
 
 

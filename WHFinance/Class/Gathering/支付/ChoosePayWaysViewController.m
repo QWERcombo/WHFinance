@@ -185,6 +185,7 @@
     if ([type isEqualToString:@"80"]) {//银联
         NoCardPayViewController *no = [NoCardPayViewController new];
         no.cashCount = self.cashCount;
+        no.proudctDetailId = model.proudctDetailId;
         [self.navigationController pushViewController:no animated:YES];
         return;
     }
@@ -199,7 +200,7 @@
     
     pay.moneyStr = self.cashCount;
     pay.navIMG = [UIImage imageWithColor:pay.mainColor];
-    pay.proudctDetailId = model.proudctDetailId;
+    pay.proudctDetailId = model.tid;
     [self.navigationController pushViewController:pay animated:YES];
 }
 

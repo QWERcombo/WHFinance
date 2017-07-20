@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UIImageView *headerImgv;
 
 @property (nonatomic, strong) NSString *realStatus;
+
 @end
 
 @implementation MineViewController
@@ -90,7 +91,7 @@
     
     if (indexPath.row==0) {
         if (self.realStatus.length) {
-            cell.rightLab.text = [UserData currentUser].readName.length>0?[self.realStatus integerValue]>1?@"已认证":@"待提交图片":@"待提交结算卡";
+            cell.rightLab.text = [self.realStatus integerValue]>0? [self.realStatus integerValue]>1?@"审核中":@"已认证":@"待认证";
         } else {
             cell.rightLab.text = @"";
         }
@@ -142,12 +143,12 @@
             CertificateListViewController *cer = [CertificateListViewController new];
             [self.navigationController pushViewController:cer animated:YES];
         }
-        if ([self.realStatus integerValue]==1) {//未传图片
-            CertificatePhotoViewController *cer = [CertificatePhotoViewController new];
-            [self.navigationController pushViewController:cer animated:YES];
+        if ([self.realStatus integerValue]==1) {//已认证
+            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"实名认证已认证" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+            } controller:self];
         }
-        if ([self.realStatus integerValue]==2) {//已认证
-            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"实名认证已完成" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
+        if ([self.realStatus integerValue]==2) {//审核中
+            [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"实名认证审核中" doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
             } controller:self];
         }
     }
@@ -202,11 +203,12 @@
     
     for (NSInteger i=0; i<2; i++) {
         for (NSInteger j=0; j<2; j++) {
-            float ww = (SCREEN_WIGHT-50)/2;
+            float ww = 150;
             float hh = 16;
+            float margin = (SCREEN_WIGHT-25-300);
             UIView *blank = [self getInfomationLabWithName:[self.nameArr objectAtIndex:2*i+j] imageName:[NSString stringWithFormat:@"mine_s_%ld", 2*i+j]];
-            blank.frame = CGRectMake(12.5+(ww+25)*i, 22*j+20, ww, hh);
-            
+            blank.frame = CGRectMake(12.5+(ww+margin)*i, 22*j+20, ww, hh);
+//            blank.backgroundColor = [UIColor purpleColor];
             [infoView addSubview:blank];
         }
     }

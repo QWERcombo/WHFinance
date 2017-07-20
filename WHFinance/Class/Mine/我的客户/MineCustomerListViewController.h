@@ -9,5 +9,6 @@
 #import "BaseViewController.h"
 
 @interface MineCustomerListViewController : BaseViewController
-@property (nonatomic, strong) NSString *typeStr;
+@property (nonatomic, strong) NSString *userLeve;//客户等级
+
 @end

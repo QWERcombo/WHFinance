@@ -68,6 +68,7 @@
 #import "DataForFMDB.h"
 #import "RSAEncryptor.h"
 
+
 //Vender
 #import <UMSocialCore/UMSocialCore.h>
 
@@ -104,14 +105,11 @@
 #import "RealCertificateModel.h"
 #import "MyProfitDetailModel.h"
 #import "WithdrawModel.h"
-
+#import "MyCustomerModel.h"
 
 
 //Cell
 #import "PayTypeCollectionViewCell.h"
-
-
-
 
 
 #define DEVICE_TYPE_IPAD  ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)

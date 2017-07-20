@@ -9,13 +9,16 @@
 #import <Foundation/Foundation.h>
 #import <UMSocialCore/UMSocialCore.h>
 
-
+@class TransOrder;
 @interface PublicFuntionTool : NSObject
 
 typedef void (^PassRealStatusBlock)(NSString *status);
+typedef void (^PassOrderStatusBlock)(TransOrder *order);
+typedef void (^PassPayRateBlock)(NSString *normalRate,NSString *partnerRate);
 @property (nonatomic, copy) ClikBlock clikBlock;
-@property (nonatomic, copy) PassRealStatusBlock statusBlock;
-
+@property (nonatomic, copy) PassRealStatusBlock statusBlock;//返回实名认证model
+@property (nonatomic, copy) PassOrderStatusBlock orderBlock;//返回订单状态model
+@property (nonatomic, copy) PassPayRateBlock rateBlock;//获取不同角色支付手续费
 
 AS_SINGLETON(PublicFuntionTool);
 
@@ -36,6 +39,15 @@ AS_SINGLETON(PublicFuntionTool);
 
 //握手
 - (void)hangShake;
+
+//查询订单状态
+- (void)getOrderStatus:(PassOrderStatusBlock)order byOrderID:(NSString *)orderid;
+
+//获取支付手续费
+- (void)getOrderRate:(PassPayRateBlock)payRate WithCashAmount:(NSString *)cashA andSubProductId:(NSString *)subProID;
+
+
+
 
 
 @end

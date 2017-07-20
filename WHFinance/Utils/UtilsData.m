@@ -80,10 +80,10 @@ DEF_SINGLETON(UtilsData);
 }
 -(void)showAlertTitle:(NSString *)titleString detailsText:(NSString *)detailsString time:(float)time aboutType:(MBProgressHUDMode)mode  state:(BOOL)isSuccess
 {
-    [self hideAlert];
+//    [self hideAlert];
     MBProgressHUD *hud =[MBProgressHUD showHUDAddedTo:MY_WINDOW animated:YES];
     hud.removeFromSuperViewOnHide = YES;
-    hud.bezelView.color = [UIColor whiteColor];
+    hud.bezelView.color = [UIColor clearColor];
     
     if (mode == MBProgressHUDModeCustomView) {
         if (isSuccess) {
@@ -143,10 +143,17 @@ DEF_SINGLETON(UtilsData);
     [dict setObject:json forKey:@"key"];
     [DataSend sendPostWastedRequestWithBaseURL:BASE_URL valueDictionary:dict imageArray:nil WithType:@"" andCookie:nil showAnimation:YES success:^(NSDictionary *resultDic, NSString *msg) {
         NSLog(@"---real---%@", resultDic);
-        if ([resultDic[@"resultData"][@"status"] integerValue]>0) {
+        NSString *status = resultDic[@"resultData"][@"status"];
+        if ([status integerValue]==1) {
              _goCertificateBlock();
         } else {
-            [self showAlertControllerWithTitle:@"提示" detail:@"请先进行实名认证" doneTitle:@"确定" cancelTitle:@"取消" haveCancel:YES doneAction:^{
+            NSString *hint = @"";
+            if ([status integerValue]==2) {
+                hint = @"实名认证审核中";
+            } else {
+                hint = @"请先进行实名认证";
+            }
+            [self showAlertControllerWithTitle:@"提示" detail:hint doneTitle:@"确定" cancelTitle:@"取消" haveCancel:YES doneAction:^{
                 CertificateListViewController *cer = [CertificateListViewController new];
                 [delegate.navigationController pushViewController:cer animated:YES];
             } controller:delegate];

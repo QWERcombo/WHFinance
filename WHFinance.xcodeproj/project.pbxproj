@@ -41,6 +41,7 @@
 		DA01CC2F1F1F5B5E00C2E80F /* ZZPhotoPickerFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA01CC121F1F5B1900C2E80F /* ZZPhotoPickerFooterView.m */; };
 		DA01CC351F1F5C5000C2E80F /* TBFuideViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA01CC301F1F5C0E00C2E80F /* TBFuideViewCell.m */; };
 		DA01CC361F1F5C5000C2E80F /* TBGuideViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA01CC311F1F5C0E00C2E80F /* TBGuideViewManager.m */; };
+		DA01CC381F1F6B7F00C2E80F /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CC371F1F6B7E00C2E80F /* logo@2x.png */; };
 		DA06E95E1F01F66D00E30AA7 /* NEUSecurityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E26CEB1F0150E400182BA2 /* NEUSecurityUtil.m */; };
 		DA06E95F1F01F67100E30AA7 /* NSData+NEUAES.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E26CED1F0150E400182BA2 /* NSData+NEUAES.m */; };
 		DA06E9601F01F67F00E30AA7 /* MessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA06E95A1F01F65600E30AA7 /* MessageListCell.m */; };
@@ -120,6 +121,21 @@
 		DAA667141F04D25900D6E9A5 /* BindedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA667131F04D25900D6E9A5 /* BindedCell.m */; };
 		DAA6671A1F04E08800D6E9A5 /* MineCustomerListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA667191F04E08800D6E9A5 /* MineCustomerListCell.m */; };
 		DAA6671D1F04E7ED00D6E9A5 /* MineCustomerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA6671C1F04E7ED00D6E9A5 /* MineCustomerListViewController.m */; };
+		DAC539B11F20A4DB00EBEBCD /* back_button_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBCC1F1F5B1900C2E80F /* back_button_normal.png */; };
+		DAC539B21F20A4DB00EBEBCD /* back_button_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBCD1F1F5B1900C2E80F /* back_button_normal@2x.png */; };
+		DAC539B31F20A4DB00EBEBCD /* camera_focus_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBCE1F1F5B1900C2E80F /* camera_focus_pic.png */; };
+		DAC539B41F20A4DB00EBEBCD /* change_camera_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBCF1F1F5B1900C2E80F /* change_camera_pic.png */; };
+		DAC539B51F20A4DB00EBEBCD /* flash_close_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD01F1F5B1900C2E80F /* flash_close_pic.png */; };
+		DAC539B61F20A4DB00EBEBCD /* flash_open_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD11F1F5B1900C2E80F /* flash_open_pic.png */; };
+		DAC539B71F20A4DB00EBEBCD /* no_data.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD21F1F5B1900C2E80F /* no_data.png */; };
+		DAC539B81F20A4DB00EBEBCD /* photo_add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD31F1F5B1900C2E80F /* photo_add.png */; };
+		DAC539B91F20A4DB00EBEBCD /* remove_btn_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD41F1F5B1900C2E80F /* remove_btn_pic.png */; };
+		DAC539BA1F20A4DB00EBEBCD /* select_no.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD51F1F5B1900C2E80F /* select_no.png */; };
+		DAC539BB1F20A4DB00EBEBCD /* select_yes.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD61F1F5B1900C2E80F /* select_yes.png */; };
+		DAC539BC1F20A4DB00EBEBCD /* take_photo_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD71F1F5B1900C2E80F /* take_photo_pic.png */; };
+		DAC539BD1F20A4DB00EBEBCD /* take_photo_pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD81F1F5B1900C2E80F /* take_photo_pic@2x.png */; };
+		DAC539BE1F20A4DB00EBEBCD /* trash_btn_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBD91F1F5B1900C2E80F /* trash_btn_pic.png */; };
+		DAC539BF1F20A4DB00EBEBCD /* zz_alumb_rightCell.png in Resources */ = {isa = PBXBuildFile; fileRef = DA01CBDA1F1F5B1900C2E80F /* zz_alumb_rightCell.png */; };
 		DAC844B51F14568E00FF2B8B /* NoCardInfamationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC844B41F14568E00FF2B8B /* NoCardInfamationViewController.m */; };
 		DAC844B81F14B13A00FF2B8B /* BankSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC844B71F14B13A00FF2B8B /* BankSearchViewController.m */; };
 		DAC844BC1F14E14D00FF2B8B /* SharePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC844BB1F14E14D00FF2B8B /* SharePopView.m */; };
@@ -154,6 +170,7 @@
 		DAECF3C31F0098B00046ECF1 /* TBNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAECF3C01F0098B00046ECF1 /* TBNavigationController.m */; };
 		DAECF3C41F0098B00046ECF1 /* TBTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DAECF3C11F0098B00046ECF1 /* TBTabBar.m */; };
 		DAECF3D31F009B490046ECF1 /* SlideSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAECF3D21F009B490046ECF1 /* SlideSwitchView.m */; };
+		DAF143191F203F9D00CA2B5C /* MyCustomerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF143181F203F9D00CA2B5C /* MyCustomerModel.m */; };
 		DAF313911F19AF8B006E0426 /* rsa_public_key.der in Resources */ = {isa = PBXBuildFile; fileRef = DAF313901F19AF81006E0426 /* rsa_public_key.der */; };
 		DAF48F1D1F0F16F100A98794 /* FixCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF48F1C1F0F16F100A98794 /* FixCodeViewController.m */; };
 		DAF48F221F0F1B1200A98794 /* ChoosePayWaysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF48F211F0F1B1200A98794 /* ChoosePayWaysViewController.m */; };
@@ -288,6 +305,7 @@
 		DA01CC321F1F5C0E00C2E80F /* TBGuideViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBGuideViewManager.h; sourceTree = "<group>"; };
 		DA01CC331F1F5C0E00C2E80F /* TBGuideView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBGuideView.h; sourceTree = "<group>"; };
 		DA01CC341F1F5C0E00C2E80F /* TBFuideViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBFuideViewCell.h; sourceTree = "<group>"; };
+		DA01CC371F1F6B7E00C2E80F /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo@2x.png"; path = "../../../切图/7.13 lOGO/logo@2x.png"; sourceTree = "<group>"; };
 		DA06E9591F01F65600E30AA7 /* MessageListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageListCell.h; sourceTree = "<group>"; };
 		DA06E95A1F01F65600E30AA7 /* MessageListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageListCell.m; sourceTree = "<group>"; };
 		DA06E9611F01F6FF00E30AA7 /* WithdrawRecordCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WithdrawRecordCell.h; sourceTree = "<group>"; };
@@ -506,6 +524,8 @@
 		DAECF3CF1F009B290046ECF1 /* BannerPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BannerPageControl.m; sourceTree = "<group>"; };
 		DAECF3D11F009B490046ECF1 /* SlideSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideSwitchView.h; sourceTree = "<group>"; };
 		DAECF3D21F009B490046ECF1 /* SlideSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideSwitchView.m; sourceTree = "<group>"; };
+		DAF143171F203F9D00CA2B5C /* MyCustomerModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyCustomerModel.h; sourceTree = "<group>"; };
+		DAF143181F203F9D00CA2B5C /* MyCustomerModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyCustomerModel.m; sourceTree = "<group>"; };
 		DAF313901F19AF81006E0426 /* rsa_public_key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = rsa_public_key.der; sourceTree = "<group>"; };
 		DAF48F1B1F0F16F100A98794 /* FixCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FixCodeViewController.h; sourceTree = "<group>"; };
 		DAF48F1C1F0F16F100A98794 /* FixCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FixCodeViewController.m; sourceTree = "<group>"; };
@@ -1045,6 +1065,7 @@
 		DA22D3A01EFB81BE00BB0F0E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DA01CC371F1F6B7E00C2E80F /* logo@2x.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1463,6 +1484,8 @@
 				DADBAEE81F1DF85800B7763E /* MyProfitDetailModel.m */,
 				DADBAEEA1F1E166D00B7763E /* WithdrawModel.h */,
 				DADBAEEB1F1E166D00B7763E /* WithdrawModel.m */,
+				DAF143171F203F9D00CA2B5C /* MyCustomerModel.h */,
+				DAF143181F203F9D00CA2B5C /* MyCustomerModel.m */,
 			);
 			path = "服务";
 			sourceTree = "<group>";
@@ -1729,6 +1752,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAC539B11F20A4DB00EBEBCD /* back_button_normal.png in Resources */,
+				DAC539B21F20A4DB00EBEBCD /* back_button_normal@2x.png in Resources */,
+				DAC539B31F20A4DB00EBEBCD /* camera_focus_pic.png in Resources */,
+				DAC539B41F20A4DB00EBEBCD /* change_camera_pic.png in Resources */,
+				DAC539B51F20A4DB00EBEBCD /* flash_close_pic.png in Resources */,
+				DAC539B61F20A4DB00EBEBCD /* flash_open_pic.png in Resources */,
+				DAC539B71F20A4DB00EBEBCD /* no_data.png in Resources */,
+				DAC539B81F20A4DB00EBEBCD /* photo_add.png in Resources */,
+				DAC539B91F20A4DB00EBEBCD /* remove_btn_pic.png in Resources */,
+				DAC539BA1F20A4DB00EBEBCD /* select_no.png in Resources */,
+				DAC539BB1F20A4DB00EBEBCD /* select_yes.png in Resources */,
+				DAC539BC1F20A4DB00EBEBCD /* take_photo_pic.png in Resources */,
+				DAC539BD1F20A4DB00EBEBCD /* take_photo_pic@2x.png in Resources */,
+				DAC539BE1F20A4DB00EBEBCD /* trash_btn_pic.png in Resources */,
+				DAC539BF1F20A4DB00EBEBCD /* zz_alumb_rightCell.png in Resources */,
+				DA01CC381F1F6B7F00C2E80F /* logo@2x.png in Resources */,
 				DAF313911F19AF8B006E0426 /* rsa_public_key.der in Resources */,
 				DA22D3751EFB74FE00BB0F0E /* LaunchScreen.storyboard in Resources */,
 				DA22D3721EFB74FE00BB0F0E /* Assets.xcassets in Resources */,
@@ -1871,6 +1910,7 @@
 				DA06E9661F01F78100E30AA7 /* WithdrawRecordViewController.m in Sources */,
 				DAFFEF7C1F03BB7C00817E6B /* OpenProductListCell.m in Sources */,
 				DA22D44F1EFB928000BB0F0E /* NSMutableDictionary+YXP.m in Sources */,
+				DAF143191F203F9D00CA2B5C /* MyCustomerModel.m in Sources */,
 				DAF48F1D1F0F16F100A98794 /* FixCodeViewController.m in Sources */,
 				DA22D4501EFB928000BB0F0E /* NSString+MD5.m in Sources */,
 				DA10B8C01F15E6B400671DBF /* SettlementOrder.m in Sources */,
