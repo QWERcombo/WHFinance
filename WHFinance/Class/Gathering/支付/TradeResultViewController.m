@@ -87,6 +87,7 @@
     
     
     UILabel *hint = [UILabel lableWithText:[NSString stringWithFormat:@"已成功收款%@元", self.orderModel.orderAmount.length ?[self.orderModel.orderAmount handleDataSourceTail]:self.cashStr] Font:FONT_ArialMT(13) TextColor:[UIColor Grey_WordColor]];
+    
     [content addSubview:hint];
     [hint mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(label.mas_bottom);
@@ -203,6 +204,7 @@
         self.orderModel = order;
         [self.tabView reloadData];
     } byOrderID:self.orderID];
+
 }
 
 

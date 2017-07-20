@@ -204,6 +204,7 @@
 - (void)titleButtonClick:(UIButton *)sender {
     [[UtilsData sharedInstance] showAlertControllerWithTitle:@"提示" detail:@"敬请期待..." doneTitle:@"确定" cancelTitle:@"" haveCancel:NO doneAction:^{
     } controller:self];
+    
 //    TradeResultViewController *bank = [TradeResultViewController new];
 //    NoCardInfamationViewController *bank = [NoCardInfamationViewController new];
 //    [self.navigationController pushViewController:bank animated:YES];
